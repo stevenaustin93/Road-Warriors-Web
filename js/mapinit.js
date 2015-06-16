@@ -21,6 +21,7 @@ function initialize() {
     // Actual map variable (local for now - make this global)
     map = new google.maps.Map(mapCanvas, mapOptions);
 }
+// I edited it
 
 // Add listener to call initialize function once page has loaded
 google.maps.event.addDomListener(window, 'load', initialize);
