@@ -1,36 +1,102 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
+		
+			<!-- Latest compiled and minified JavaScript -->
+			<script src="jquery-1.11.3.min.js"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    	 	<script src="js/bootstrap.min.js"></script>
+
 		<title>Road Warriors: Innovating the Roads of Tomorrow</title>
+		<link rel= "stylesheet" type="text/css" href="css/stylesheet.css">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link href="css/startbootstrap-simple-sidebar-1.0.4/css/simple-sidebar.css" rel="stylesheet">
+
 
 		<style type="text/css">
-	    	html, body, #map-canvas { height: 90%; width: 75%; margin: 0; padding: 0; }
+	    	html, body, #map-canvas { height: 700px; width: 1200px; margin: 0; padding: 0; }
 	    </style>
 
 	    
-	    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZCvB7znSd96KaA7vxEAumHmvweDXVRMU"></script>
+	    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZCvB7znSd96KaA7vxEAumHmvweDXVRMU">
+	    </script>
 
-	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-
-	    <script type="text/javascript" src="js/jquery-csv.js"></script>
 	    <script type="text/javascript" src="js/mapinit.js"></script>
-	    <script type="text/javascript" src="js/loadanomalies.js"></script>
 
 	</head>
 
 	<body>
+		<div id="wrapper">
 
-		<div id="sidebar">
-			<h1>Sidebar:</h1>
-			<button onclick="placeMarkers()">Place Markers</button>
-		</div>
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Controls
+                    </a>
+                </li>
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#">Shortcuts</a>
+                </li>
+                <li>
+                    <a href="#">Overview</a>
+                </li>
+                <li>
+                    <a href="#">Events</a>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="#">Services</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
 
-		<div id="map-canvas"></div>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+						<div id="map-canvas"></div>
+						<!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>JACKIE I DID IT!!</h1>
+                        <p>IT WORKS! <code>#page-content-wrapper</code>.</p>
+                        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
 
-		<script>
-			// Nothing here
-		</script>
+    </div>
+    <!-- /#wrapper -->
 
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
 	</body>
 
 </html>
