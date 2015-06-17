@@ -51,22 +51,33 @@ function populateArray() {
 }
 
 //
-// Function to create anomaly markers
+// Function to place markers on map
 function placeMarkers() {
-	alert
+	//////
+	// The follow are optimization steps, to be taken later:
+	// 	Check to see if the marker data has been loaded
+	// 	Load marker data if needed
+	//	Check to see if the marker arrays exist
+	//////
+
 
 	// Variable Declarations
 	var anomaliesArray;
-	
+
+	var standStillMarkers;
+	var crashMarkers;
+	var swerveMarkers;
+	var rapidAccelMarkers;
+	var rapidDecelMarkers;
+	var generalMarkers;
+
 	// Get .csv data into 2D array
 	anomaliesArray = populateArray();
-
 
 	// Loop through array and create markers
 	for (var i = 0; i < anomaliesArray.length; i++) {
 		var marker;
 		var markPos;
-		var markMap;
 		var markIcon;
 		var markTitle;
 
@@ -75,27 +86,64 @@ function placeMarkers() {
 		switch (anomaliesArray[i][2]) {
 			case "b":
 				markIcon = BREAKING_ICON;
+				markTitle = "Rapid breaking event detected here!";
 				break;
 			case "y":
 				markIcon = SWERVE_ICON;
+				markTitle = "Swerving event detected here!";
 				break;
 			case "a":
 				markIcon = FAST_ACCEL_ICON;
+				markTitle = "Fast acceleration event detected here!";
 				break;
 			default:
+				markTitle = "General anomaly detected here!";
 				markIcon = GENERAL_ALERT_ICON;
 		}
 
-		markMap = map;
-
-		markTitle = "Anomaly detected here!";
-
 		marker = new google.maps.Marker({
 	    	position: 	markPos,
-	    	map: 		markMap,
 	    	title: 		markTitle,
 	    	icon: 		markIcon
 	  	});
-	}
 
+	  	switch (anomaliesArray[i][2]) {
+	  		case "b":
+				rapidDecelMarkers.push(marker);
+				break;
+			case "y":
+				swerveMarkers.push(marker);
+				break;
+			case "a":
+				rapidAccelMarkers.push(marker);
+				break;
+			default:
+				generalMarkers.push(marker);
+
+	  	}
+
+	  	clearMarkers();
+
+	  	if ( document.getElementById('rapidDecel').checked ) {
+	  		for (int i = 0; i < rapidDecelMarkers.length; i++) {
+	  			rapidDecelMarkers[i].setMap(map);
+	  		}
+	  	}
+
+	  	if ( document.getElementById('swerve').checked ) {
+	  		for (int i = 0; i < swerveMarkers.length; i++) {
+	  			swerveMarkers[i].setMap(map);
+	  		}
+	  	}
+
+	  	if ( document.getElementById('rapidAccel').checked ) {
+	  		for (int i = 0; i < rapidAccelMarkers.length; i++) {
+	  			rapidAccelMarkers[i].setMap(map);
+	  		}
+	  	}
+	}
+}
+
+function clearMarkers() {
+	map.clearOverlays();
 }
