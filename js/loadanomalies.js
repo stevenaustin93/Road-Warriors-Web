@@ -32,7 +32,7 @@ function readFile(inputFile) {
 }
 */
 
-alert( jQuery.ready() );
+//alert( jQuery.ready() );
 
 //
 // Function to convert .csv input to a useable 2D array
