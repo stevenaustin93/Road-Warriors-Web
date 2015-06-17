@@ -4,6 +4,7 @@
 // (.csv file is loaded into a JS array)
 //
 
+// Icon paths:
 var BASE_PATH = "C:\\Users\\576879\\Documents\\GitHub\\RoadWarriors\\Road-Warriors-Web"
 var CRASH_ICON = BASE_PATH + "\\images\\crash_icon.png";
 var SWERVE_ICON = BASE_PATH + "\\images\\swerve_icon.png";
@@ -31,6 +32,8 @@ function readFile(inputFile) {
 }
 */
 
+alert( jQuery.ready() );
+
 //
 // Function to convert .csv input to a useable 2D array
 function populateArray() {
@@ -51,8 +54,14 @@ function populateArray() {
 }
 
 //
+// Testing?
+$(document).on("click", "rapidDecel", function() {
+	placeMarkers();
+});
+//
 // Function to place markers on map
 function placeMarkers() {
+
 	//////
 	// The follow are optimization steps, to be taken later:
 	// 	Check to see if the marker data has been loaded
@@ -64,12 +73,12 @@ function placeMarkers() {
 	// Variable Declarations
 	var anomaliesArray;
 
-	var standStillMarkers;
-	var crashMarkers;
-	var swerveMarkers;
-	var rapidAccelMarkers;
-	var rapidDecelMarkers;
-	var generalMarkers;
+	var standStillMarkers = new Array();
+	var crashMarkers = new Array();
+	var swerveMarkers = new Array();
+	var rapidAccelMarkers = new Array();
+	var rapidDecelMarkers = new Array();
+	var generalMarkers = new Array();
 
 	// Get .csv data into 2D array
 	anomaliesArray = populateArray();
@@ -121,27 +130,41 @@ function placeMarkers() {
 				generalMarkers.push(marker);
 
 	  	}
-
-	  	clearMarkers();
-
-	  	if ( document.getElementById('rapidDecel').checked ) {
-	  		for (int i = 0; i < rapidDecelMarkers.length; i++) {
-	  			rapidDecelMarkers[i].setMap(map);
-	  		}
-	  	}
-
-	  	if ( document.getElementById('swerve').checked ) {
-	  		for (int i = 0; i < swerveMarkers.length; i++) {
-	  			swerveMarkers[i].setMap(map);
-	  		}
-	  	}
-
-	  	if ( document.getElementById('rapidAccel').checked ) {
-	  		for (int i = 0; i < rapidAccelMarkers.length; i++) {
-	  			rapidAccelMarkers[i].setMap(map);
-	  		}
-	  	}
 	}
+
+	if ( document.getElementById('rapidDecel') == null) {
+		alert("Uh oh, the element 'rapidDecel' doesn't exist!");
+	}
+  	if ( document.getElementById('rapidDecel').checked ) {
+  		for (var i = 0; i < rapidDecelMarkers.length; i++) {
+  			rapidDecelMarkers[i].setMap(map);
+  		}
+  	} else {
+  		for (var i = 0; i < rapidDecelMarkers.length; i++) {
+  			rapidDecelMarkers[i].setMap(null);
+  		}
+  	}
+
+  	if ( document.getElementById('swerve').checked ) {
+  		for (var i = 0; i < swerveMarkers.length; i++) {
+  			swerveMarkers[i].setMap(map);
+  		}
+  	} else {
+  		for (var i = 0; i < swerveMarkers.length; i++) {
+  			swerveMarkers[i].setMap(null);
+  		}
+  	}
+
+  	if ( document.getElementById('rapidAccel').checked ) {
+  		for (var i = 0; i < rapidAccelMarkers.length; i++) {
+  			rapidAccelMarkers[i].setMap(map);
+  		}
+  	} else {
+  		for (var i = 0; i < rapidAccelMarkers.length; i++) {
+  			rapidAccelMarkers[i].setMap(null);
+  		}
+  	}
+	
 }
 
 function clearMarkers() {
