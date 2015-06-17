@@ -1,12 +1,18 @@
 //
 // loadanomalies.js
-// This file handles the loading of a set of anomalies
+// This file handles the checkbox selection display of anomalies on the map
 // (.csv file is loaded into a JS array)
 //
 
 var BASE_PATH = "C:\\Users\\576879\\Documents\\GitHub\\RoadWarriors\\Road-Warriors-Web"
 var CRASH_ICON = BASE_PATH + "\\images\\crash_icon.png";
 var SWERVE_ICON = BASE_PATH + "\\images\\swerve_icon.png";
+
+//
+// Function to take data from .csv file into an input
+function readCSVFile() {
+	
+}
 
 //
 // Function to convert .csv input to a useable 2D array
@@ -43,7 +49,6 @@ function placeMarkers() {
 
 	// Loop through array and create markers
 	for (var i = 0; i < anomaliesArray.length; i++) {
-		alert("Anomalies array length: " + anomaliesArray.length)
 		var marker;
 		var markPos;
 		var markMap;
