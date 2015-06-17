@@ -36,34 +36,67 @@
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <div class="sidebar-nav">
-                <h2 style="color: white">Controls</h2>
+                <h3 style="color: white">Controls</h3>
                 <div>
-                    <h3><a href="#">Dashboard</a></h3>
+                    <h4><a href="#">Dashboard</a></h4>
                 </div>
                 <div>
-                    <h3><a href="#">Data Analytics</a></h3>
+                    <h4><a href="#">Data Analytics</a></h4>
                 </div>
-                <h2 style="color: white"> Display Events </h2>
+                <h3 style="color: white"> Display Events </h3>
                 <div class="checkbox">
-                        <input id="standStill" type="checkbox" value=""> <h4 style="color: darkred">Standstill Traffic</h4>
-                </div>
-                <div class="checkbox">
-                        <input id="crash" type="checkbox" value=""> <h4 style="color: red">Crash</h4>
+                        <input id="standStill" type="checkbox" onclick="placeMarkers()"> <h4 style="color: orangered">Standstill Traffic</h4>
                 </div>
                 <div class="checkbox">
-                       <input id="swerve" type="checkbox" value=""> <h4 style="color: green">Swerving</h4>
+                        <input id="crash" type="checkbox" onClick="placeMarkers()"> <h4 style="color: red">Crash</h4>
+                </div>
+                <div class="checkbox">
+                       <input id="swerve" type="checkbox" onClick="placeMarkers()"> <h4 style="color: green">Swerving</h4>
                 </div>
                  <div class="checkbox">
-                        <input id="rapidAccel" type="checkbox" value=""> <h4 style="color: blue">Rapid Acceleration</h4>
+                        <input id="rapidAccel" type="checkbox" onClick="placeMarkers()"> <h4 style="color: blue">Rapid Acceleration</h4>
                 </div>
                  <div class="checkbox">
-                        <input id="radidDecel" type="checkbox" value=""> <h4 style="color: crimson">Rapid Deceleration</h4>
+                        <input id="radidDecel" type="checkbox" onClick="placeMarkers()"> <h4 style="color: crimson">Rapid Deceleration</h4>
                 </div>
                 <div>
                     <a href="#">Clear Map</a>
                 </div>
-            </div>
+                <div>
+                    <div>
+                        <h3 style="color:white"> Mapping Frame </h3>
+                    </div>
+                       <div class="radio">
+                          <label><input type="radio" name="optradio"><h4 style="color:turquoise">Live</h4></label>
+                       </div>
+                       <div class="radio">
+                        <label><input type="radio" name="optradio"><h4 style="color:turquoise">Historic</h4></label>
+                      </div>
+                </div>
+                <div>
+                    <div id="creatAlertDiv">
+                        <div>
+                            <h3 style="color:white"> Manage Alerts </h3>
+                        </div>
+                            <button id="createAlert" type="button" class="btn btn-primary">Create Alert</button>
+                            <button type="button" class="btn btn-primary">Delete Alert</button>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="color:white"> Map View Options </h4>
+                    <div class="dropdown">
+                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Map View
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu">
+                        <li><a href="#"><strong>Speed</strong></a></li>
+                        <li><a href="#"><strong>Yaw Rate</strong></a></li>
+                        <li><a href="#"><strong>Acceleration</strong></a></li>
+                      </ul>
+                    </div>
+                </div>
+
         </div>
+    </div>
         <!-- /#sidebar-wrapper -->
 
         <div id="page-content-wrapper">
