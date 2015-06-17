@@ -7,28 +7,43 @@
 var BASE_PATH = "C:\\Users\\576879\\Documents\\GitHub\\RoadWarriors\\Road-Warriors-Web"
 var CRASH_ICON = BASE_PATH + "\\images\\crash_icon.png";
 var SWERVE_ICON = BASE_PATH + "\\images\\swerve_icon.png";
+var BREAKING_ICON = BASE_PATH + "\\images\\breaking_icon.png";
+var FAST_ACCEL_ICON = BASE_PATH + "\\images\\fast_accel_icon.png";
+var GENERAL_ALERT_ICON = BASE_PATH + "\\images\\general_alert.png";
 
+/*
 //
-// Function to take data from .csv file into an input
-function readCSVFile() {
-	
+// Function to read file data from a server-side file using jquery
+function readFile(inputFile) {
+    
+    // Input variable
+	var input;
+
+	// Load content of file into local input var
+	jQuery.get(ANOMALIES_FILE, function(data) {
+		alert(data);
+		input = data;
+	});
+
+	// Return input
+    return (input);
+
 }
+*/
 
 //
 // Function to convert .csv input to a useable 2D array
 function populateArray() {
 
-	//var reader = new FileReader();
-    //var data = reader.readAsText("../csv/anomalies.csv");
-
 	// Variable Declarations
 	var anomaliesArr;	// 2D array of lat,long,type for each anomaly detected
 	var input;			// .csv input
 
-	// Sample input .csv
-	input = "Lat,Long,Identifier\n42.25,-83.7,1\n42.255,-83.75,1\n42.252,-83.72,1\n42.215,-83.76,2\n42.252,-83.67,2\n42.235,-83.57,2\n42.245,-83.597,3\n42.285,-83.798,3\n42.265,-83.77,3";
+	// Get data input from the anomalies csv
+	//input = readFile(ANOMALIES_FILE);
+	input = "42.18133163,-83.93299103,b\n42.43674088,-83.88913727,b\n42.28501892,-83.74581146,b\n42.23044968,-83.69557953,y\n42.2589798,-83.708992,y\n42.2589798,-83.70900726,y";
 
-	// Use jquery-csv to populate "anomaliesArr" with 
+	// Convert that csv to an array
 	anomaliesArr = $.csv.toArrays(input);
 
 	// Return the array of information
@@ -38,11 +53,11 @@ function populateArray() {
 //
 // Function to create anomaly markers
 function placeMarkers() {
+	alert
 
 	// Variable Declarations
 	var anomaliesArray;
 	
-
 	// Get .csv data into 2D array
 	anomaliesArray = populateArray();
 
@@ -58,14 +73,17 @@ function placeMarkers() {
 		markPos = new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]);
 
 		switch (anomaliesArray[i][2]) {
-			case "1":
-				markIcon = CRASH_ICON;
+			case "b":
+				markIcon = BREAKING_ICON;
 				break;
-			case "2":
+			case "y":
 				markIcon = SWERVE_ICON;
+				break;
+			case "a":
+				markIcon = FAST_ACCEL_ICON;
 				break;
 			default:
-				markIcon = SWERVE_ICON;
+				markIcon = GENERAL_ALERT_ICON;
 		}
 
 		markMap = map;
