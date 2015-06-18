@@ -10,7 +10,7 @@ $(document).ready(function() {
 	var polySegArray = new Array();
 
 	// On the click of a button, input the route and display it
-	$('#routeButton').click(function() {
+	$('#createRoute').click(function() {
 		// Load .csv data into array
 		var routeArray = populateRouteArray();
 
@@ -71,7 +71,7 @@ $(document).ready(function() {
 
 
 	// Place the line segments on the click of a button
-	$('#hideRouteButton').click(function() {
+	$('#clearRoute').click(function() {
 		for (var i = 0; i < polySegArray.length; i++) {
 			polySegArray[i].setMap(null);
 		}

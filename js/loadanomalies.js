@@ -11,19 +11,9 @@ var BREAKING_ICON = BASE_PATH + "\\images\\breaking_icon.png";
 var FAST_ACCEL_ICON = BASE_PATH + "\\images\\fast_accel_icon.png";
 var GENERAL_ALERT_ICON = BASE_PATH + "\\images\\general_alert.png";
 
-
-<<<<<<< HEAD
-//
-// Function to convert .csv input to a useable 2D array
-$(document).ready(function populateArray() {
-
-	// Variable Declarations
-	var anomaliesArr;	// 2D array of lat,long,type for each anomaly detected
-	var input;			// .csv input
-=======
+// On document ready
 $(document).ready(function() {
 	// The DOM is ready
->>>>>>> origin/master
 
 	// Load .csv data into array
 	var anomaliesArray = populateArray();
@@ -34,45 +24,8 @@ $(document).ready(function() {
 	var rapidAccelArray = new Array();
 	var generalArray = new Array();
 
-<<<<<<< HEAD
-	// Return the array of information
-	return(anomaliesArr);
-});
 
-//
-// Testing?
-$(document).on("click", "rapidDecel", function() {
-	placeMarkers();
-});
-//
-// Function to place markers on map
-$(document).ready(function placeMarkers() {
-
-	//////
-	// The follow are optimization steps, to be taken later:
-	// 	Check to see if the marker data has been loaded
-	// 	Load marker data if needed
-	//	Check to see if the marker arrays exist
-	//////
-
-
-	// Variable Declarations
-	var anomaliesArray;
-
-	var standStillMarkers = new Array();
-	var crashMarkers = new Array();
-	var swerveMarkers = new Array();
-	var rapidAccelMarkers = new Array();
-	var rapidDecelMarkers = new Array();
-	var generalMarkers = new Array();
-
-	// Get .csv data into 2D array
-	anomaliesArray = populateArray();
-
-	// Loop through array and create markers
-=======
 	// Loop through anomaliesArray and create a marker in respective arrays
->>>>>>> origin/master
 	for (var i = 0; i < anomaliesArray.length; i++) {
 
 		// GPS Position
@@ -120,46 +73,6 @@ $(document).ready(function placeMarkers() {
 	  	}
 	}
 
-<<<<<<< HEAD
-	if ( document.getElementById('rapidDecel') == null) {
-		alert("Uh oh, the element 'rapidDecel' doesn't exist!");
-	}
-  	if ( document.getElementById('rapidDecel').checked ) {
-  		for (var i = 0; i < rapidDecelMarkers.length; i++) {
-  			rapidDecelMarkers[i].setMap(map);
-  		}
-  	} else {
-  		for (var i = 0; i < rapidDecelMarkers.length; i++) {
-  			rapidDecelMarkers[i].setMap(null);
-  		}
-  	}
-
-  	if ( document.getElementById('swerve').checked ) {
-  		for (var i = 0; i < swerveMarkers.length; i++) {
-  			swerveMarkers[i].setMap(map);
-  		}
-  	} else {
-  		for (var i = 0; i < swerveMarkers.length; i++) {
-  			swerveMarkers[i].setMap(null);
-  		}
-  	}
-
-  	if ( document.getElementById('rapidAccel').checked ) {
-  		for (var i = 0; i < rapidAccelMarkers.length; i++) {
-  			rapidAccelMarkers[i].setMap(map);
-  		}
-  	} else {
-  		for (var i = 0; i < rapidAccelMarkers.length; i++) {
-  			rapidAccelMarkers[i].setMap(null);
-  		}
-  	}
-	
-})
-
-function clearMarkers() {
-	map.clearOverlays();
-}
-=======
 	// Swerve checkbox event handler
 	$('#swerve').click(function() {
 		for (var i = 0; i < swerveArray.length; i++) {
@@ -247,4 +160,3 @@ function populateArray() {
 	// Return the array of information
 	return(anomaliesArr);
 }
->>>>>>> origin/master
