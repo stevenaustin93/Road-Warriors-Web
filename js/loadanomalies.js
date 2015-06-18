@@ -14,7 +14,6 @@ var GENERAL_ALERT_ICON = BASE_PATH + "\\images\\general_alert.png";
 
 $(document).ready(function() {
 	// The DOM is ready
-	alert("DOM ready!");
 
 	// Load .csv data into array
 	var anomaliesArray = populateArray();
@@ -72,8 +71,6 @@ $(document).ready(function() {
 				generalArray.push(marker);
 	  	}
 	}
-
-	alert("Marker arrays successfuly populated!");
 
 	// Swerve checkbox event handler
 	$('#swerve').click(function() {
