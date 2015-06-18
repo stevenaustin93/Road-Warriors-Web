@@ -4,12 +4,11 @@
 //
 
 // Icon paths:
-var BASE_PATH = "C:\\Users\\576879\\Documents\\GitHub\\RoadWarriors\\Road-Warriors-Web"
-var CRASH_ICON = BASE_PATH + "\\images\\crash_icon.png";
-var SWERVE_ICON = BASE_PATH + "\\images\\swerve_icon.png";
-var BREAKING_ICON = BASE_PATH + "\\images\\breaking_icon.png";
-var FAST_ACCEL_ICON = BASE_PATH + "\\images\\fast_accel_icon.png";
-var GENERAL_ALERT_ICON = BASE_PATH + "\\images\\general_alert.png";
+var CRASH_ICON = "images/crash_icon.png";
+var SWERVE_ICON = "images/swerve_icon.png";
+var BREAKING_ICON = "images/breaking_icon.png";
+var FAST_ACCEL_ICON = "images/fast_accel_icon.png";
+var GENERAL_ALERT_ICON = "images/general_alert.png";
 
 // On document ready
 $(document).ready(function() {
