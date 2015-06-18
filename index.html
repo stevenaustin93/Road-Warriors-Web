@@ -43,24 +43,25 @@
                     <h4><a href="#">Data Analytics</a></h4>
                 </div>
                 <h3 style="color: white"> Display Events </h3>
+                
                 <div class="checkbox">
-                        <input id="standStill" type="checkbox" onclick="placeMarkers()"> <h4 style="color: orangered">Standstill Traffic</h4>
+                        <input id="crash" type="checkbox" class="chckbx"> <h4 style="color: red">Crash</h4>
                 </div>
                 <div class="checkbox">
-                        <input id="crash" type="checkbox" onClick="placeMarkers()"> <h4 style="color: red">Crash</h4>
-                </div>
-                <div class="checkbox">
-                       <input id="swerve" type="checkbox" onClick="placeMarkers()"> <h4 style="color: green">Swerving</h4>
+                       <input id="swerve" type="checkbox" class="chckbx"> <h4 style="color: green">Swerving</h4>
                 </div>
                  <div class="checkbox">
-                        <input id="rapidAccel" type="checkbox" onClick="placeMarkers()"> <h4 style="color: blue">Rapid Acceleration</h4>
+                        <input id="rapidAccel" type="checkbox" class="chckbx"> <h4 style="color: blue">Rapid Acceleration</h4>
                 </div>
                  <div class="checkbox">
-                        <input id="rapidDecel" type="checkbox" onClick="placeMarkers()"> <h4 style="color: crimson">Rapid Deceleration</h4>
+                        <input id="rapidDecel" type="checkbox" class="chckbx"> <h4 style="color: crimson">Rapid Deceleration</h4>
                     </div>
+                <div class="checkbox">
+                        <input id="general" type="checkbox" class="chckbx"> <h4 style="color: orangered">Other Anomalies</h4>
+                </div>
 
                 <div>
-                    <a href="#" onclick="clearMarkers()">Clear Map</a>
+                    <a href="#" id="clearMap">Clear Map</a>
                 </div>
                 <div>
                     <div>
