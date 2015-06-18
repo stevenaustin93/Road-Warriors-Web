@@ -1,7 +1,6 @@
 //
 // loadanomalies.js
-// This file handles the checkbox selection display of anomalies on the map
-// (.csv file is loaded into a JS array)
+// This (revamped) script handles the checkbox input of anomalies on the map
 //
 
 // Icon paths:
@@ -12,28 +11,8 @@ var BREAKING_ICON = BASE_PATH + "\\images\\breaking_icon.png";
 var FAST_ACCEL_ICON = BASE_PATH + "\\images\\fast_accel_icon.png";
 var GENERAL_ALERT_ICON = BASE_PATH + "\\images\\general_alert.png";
 
-/*
-//
-// Function to read file data from a server-side file using jquery
-function readFile(inputFile) {
-    
-    // Input variable
-	var input;
 
-	// Load content of file into local input var
-	jQuery.get(ANOMALIES_FILE, function(data) {
-		alert(data);
-		input = data;
-	});
-
-	// Return input
-    return (input);
-
-}
-*/
-
-//alert( jQuery.ready() );
-
+<<<<<<< HEAD
 //
 // Function to convert .csv input to a useable 2D array
 $(document).ready(function populateArray() {
@@ -41,14 +20,21 @@ $(document).ready(function populateArray() {
 	// Variable Declarations
 	var anomaliesArr;	// 2D array of lat,long,type for each anomaly detected
 	var input;			// .csv input
+=======
+$(document).ready(function() {
+	// The DOM is ready
+>>>>>>> origin/master
 
-	// Get data input from the anomalies csv
-	//input = readFile(ANOMALIES_FILE);
-	input = "42.18133163,-83.93299103,b\n42.43674088,-83.88913727,b\n42.28501892,-83.74581146,b\n42.23044968,-83.69557953,y\n42.2589798,-83.708992,y\n42.2589798,-83.70900726,y";
+	// Load .csv data into array
+	var anomaliesArray = populateArray();
 
-	// Convert that csv to an array
-	anomaliesArr = $.csv.toArrays(input);
+	// Create and populate array for each type of marker
+	var swerveArray = new Array();
+	var rapidDecelArray = new Array();
+	var rapidAccelArray = new Array();
+	var generalArray = new Array();
 
+<<<<<<< HEAD
 	// Return the array of information
 	return(anomaliesArr);
 });
@@ -84,14 +70,15 @@ $(document).ready(function placeMarkers() {
 	anomaliesArray = populateArray();
 
 	// Loop through array and create markers
+=======
+	// Loop through anomaliesArray and create a marker in respective arrays
+>>>>>>> origin/master
 	for (var i = 0; i < anomaliesArray.length; i++) {
-		var marker;
-		var markPos;
-		var markIcon;
-		var markTitle;
 
-		markPos = new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]);
+		// GPS Position
+		var markPos = new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]);
 
+		// Set icon and title (label) accordingly
 		switch (anomaliesArray[i][2]) {
 			case "b":
 				markIcon = BREAKING_ICON;
@@ -106,32 +93,34 @@ $(document).ready(function placeMarkers() {
 				markTitle = "Fast acceleration event detected here!";
 				break;
 			default:
-				markTitle = "General anomaly detected here!";
 				markIcon = GENERAL_ALERT_ICON;
+				markTitle = "General anomaly detected here!";
 		}
 
-		marker = new google.maps.Marker({
+		// Create the marker
+		var marker = new google.maps.Marker({
 	    	position: 	markPos,
 	    	title: 		markTitle,
 	    	icon: 		markIcon
 	  	});
 
+		// Add the marker to respective array
 	  	switch (anomaliesArray[i][2]) {
 	  		case "b":
-				rapidDecelMarkers.push(marker);
+				rapidDecelArray.push(marker);
 				break;
 			case "y":
-				swerveMarkers.push(marker);
+				swerveArray.push(marker);
 				break;
 			case "a":
-				rapidAccelMarkers.push(marker);
+				rapidAccelArray.push(marker);
 				break;
 			default:
-				generalMarkers.push(marker);
-
+				generalArray.push(marker);
 	  	}
 	}
 
+<<<<<<< HEAD
 	if ( document.getElementById('rapidDecel') == null) {
 		alert("Uh oh, the element 'rapidDecel' doesn't exist!");
 	}
@@ -170,3 +159,92 @@ $(document).ready(function placeMarkers() {
 function clearMarkers() {
 	map.clearOverlays();
 }
+=======
+	// Swerve checkbox event handler
+	$('#swerve').click(function() {
+		for (var i = 0; i < swerveArray.length; i++) {
+			if(document.getElementById('swerve').checked){
+				swerveArray[i].setMap(map);
+			}
+			else {
+				swerveArray[i].setMap(null);
+			}
+		}
+	});
+
+	// Rapid decel checkbox event handler
+	$('#rapidDecel').click(function() {
+		for (var i = 0; i < rapidDecelArray.length; i++) {
+			if(document.getElementById('rapidDecel').checked){
+				rapidDecelArray[i].setMap(map);
+			}
+			else {
+				rapidDecelArray[i].setMap(null);
+			}
+		}
+	});
+
+	// Rapid accel checkbox event handler
+	$('#rapidAccel').click(function() {
+		for (var i = 0; i < rapidAccelArray.length; i++) {
+			if(document.getElementById('rapidAccel').checked){
+				rapidAccelArray[i].setMap(map);
+			}
+			else {
+				rapidAccelArray[i].setMap(null);
+			}
+		}
+	});
+
+	// General anomaly checkbox event handler
+	$('#general').click(function() {
+		for (var i = 0; i < generalArray.length; i++) {
+			if(document.getElementById('general').checked){
+				generalArray[i].setMap(map);
+			}
+			else {
+				generalArray[i].setMap(null);
+			}
+		}
+	});
+
+	// Clear map event handler
+	$('#clearMap').click( function() {
+		for (var i = 0; i < swerveArray.length; i++) {
+			swerveArray[i].setMap(null);
+		}
+		for (var i = 0; i < rapidDecelArray.length; i++) {
+			rapidDecelArray[i].setMap(null);
+		}
+		for (var i = 0; i < rapidAccelArray.length; i++) {
+			rapidAccelArray[i].setMap(null);
+		}
+		for (var i = 0; i < generalArray.length; i++) {
+			generalArray[i].setMap(null);
+		}
+
+		$('.chckbx').each(function() {
+			this.checked = false;
+		});
+
+	})
+
+});
+
+function populateArray() {
+
+	// Variable Declarations
+	var anomaliesArr;	// 2D array of lat,long,type for each anomaly detected
+	var input;			// .csv input
+
+	// Get data input from the anomalies csv
+	//input = readFile(ANOMALIES_FILE);
+	input = "42.18133163,-83.93299103,b\n42.43674088,-83.88913727,b\n42.28501892,-83.74581146,b\n42.23044968,-83.69557953,y\n42.2589798,-83.708992,y\n42.2589798,-83.70900726,y";
+
+	// Convert that csv to an array
+	anomaliesArr = $.csv.toArrays(input);
+
+	// Return the array of information
+	return(anomaliesArr);
+}
+>>>>>>> origin/master
