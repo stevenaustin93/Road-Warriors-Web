@@ -43,27 +43,33 @@
                 <div>
                     <h4><a href="#">Data Analytics</a></h4>
                 </div>
-                <h3 style="color: white"> Display Events </h3>
-                
-                <div class="checkbox">
-                        <input id="crash" type="checkbox" class="chckbx"> <h4 style="color: red">Crash</h4>
-                </div>
-                <div class="checkbox">
-                       <input id="swerve" type="checkbox" class="chckbx"> <h4 style="color: green">Swerving</h4>
-                </div>
-                 <div class="checkbox">
-                        <input id="rapidAccel" type="checkbox" class="chckbx"> <h4 style="color: blue">Rapid Acceleration</h4>
-                </div>
-                 <div class="checkbox">
-                        <input id="rapidDecel" type="checkbox" class="chckbx"> <h4 style="color: crimson">Rapid Deceleration</h4>
-                    </div>
-                <div class="checkbox">
-                        <input id="general" type="checkbox" class="chckbx"> <h4 style="color: orangered">Other Anomalies</h4>
-                </div>
+               
+                <div class="panel list-group">
 
+                 <a href="#" class="list-group-item" data-toggle="collapse" data-target="#sm" data-parent="#menu"><h3 style="color:white">Display Events</h3></a>
+                 <div id="sm" class="sublinks collapse">
+                <div class="checkbox">
+                  <input id="crash" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Crash</h4>
+              </div>
+                  <div class="checkbox">
+                  <input id="swerve" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Swerving</h4>
+              </div>
+              <div class="checkbox">
+                  <input id="rapidAccel" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Rapid Acceleration</h4>
+              </div>
+              <div class="checkbox">
+                  <input id="rapidDecel" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Rapid Deceleration</h4>
+              </div>
+              <div class="checkbox">
+                  <input id="general" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Other Activity</h4>
+              </div>
+                 </div>
+                </div>
+                
                 <div>
                     <a href="#" id="clearMap">Clear Map</a>
                 </div>
+           
                 <div>
                     <div>
                         <h3 style="color:white"> Mapping Frame </h3>
@@ -97,7 +103,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                  <label for="comment">Input Coordiates</label>
+                  <h5 style="color:white">Input Coordinates</h5>
                   <textarea class="form-control" rows="5" id="plottedPoints"></textarea>
                   <button id="createRoute" type="button" class="btn btn-primary">Create Route</button>
                   <button id="clearRoute" type="button" class="btn btn-primary">Clear Route</button>
