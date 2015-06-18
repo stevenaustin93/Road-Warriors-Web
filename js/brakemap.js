@@ -40,6 +40,6 @@ function mapBreaks() {
 	}
 
 	for (var i = 0; i < brakeCircleArray.length; i++) {
-		brakeCircleArray[i].setMap(map);
+		brake
 	}
 }
