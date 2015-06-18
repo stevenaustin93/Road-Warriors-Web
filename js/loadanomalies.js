@@ -36,7 +36,7 @@ function readFile(inputFile) {
 
 //
 // Function to convert .csv input to a useable 2D array
-function populateArray() {
+$(document).ready(function populateArray() {
 
 	// Variable Declarations
 	var anomaliesArr;	// 2D array of lat,long,type for each anomaly detected
@@ -51,7 +51,7 @@ function populateArray() {
 
 	// Return the array of information
 	return(anomaliesArr);
-}
+});
 
 //
 // Testing?
@@ -60,7 +60,7 @@ $(document).on("click", "rapidDecel", function() {
 });
 //
 // Function to place markers on map
-function placeMarkers() {
+$(document).ready(function placeMarkers() {
 
 	//////
 	// The follow are optimization steps, to be taken later:
@@ -165,7 +165,7 @@ function placeMarkers() {
   		}
   	}
 	
-}
+})
 
 function clearMarkers() {
 	map.clearOverlays();
