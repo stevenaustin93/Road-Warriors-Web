@@ -42,7 +42,8 @@ function funcHeatmap() {
 	var MVCpointArray = new google.maps.MVCArray(heatmapData);
 
 	heatmap = new google.maps.visualization.HeatmapLayer({
-	    data: MVCpointArray
+	    data: MVCpointArray,
+	    radius: 20
 	});
 
 	heatmap.setMap(map);
