@@ -25,18 +25,16 @@ function mapBrakes() {
 	// Get brake data from input box
 	var brakeArray = populateRouteArray();
 
-	alert(brakeArray[0][0]);
-
 	for (var i = 0; i < brakeArray.length; i++) {
-		var brakeCircle = {
-			strokeColor: 'Blue',
-			strokeOpacity: 0.5,
-			strokeWeight: 2,
+		var brakeCircle = new google.maps.Circle({
+			strokeColor: '#0000FF',	// blue
+			strokeOpacity: 0.25,
+			strokeWeight: 0,
 			fillColor:  '#0000FF',	// blue
 			fillOpacity: 0.25,
 			center: new google.maps.LatLng(brakeArray[i][1],brakeArray[i][0]),
 			radius: brakeArray[i][2] * 10
-		};
+		});
 
 		brakeCircleArray.push(brakeCircle);
 	}
