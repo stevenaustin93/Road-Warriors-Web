@@ -18,20 +18,20 @@
 }
 
 #sidebar_element {
-	color: red;
+	color: #00FFFF;
 	text-align: left;
 	font-family: roboto;
 
 	
 }
 #statistic {
-	color: blue;
+	color: #00FFFF;
 	text-align: left;
 	font-family: roboto
 }
 
 #safety {
-	color: purple;
+	color: #00FFFF;
 	text-align: left;
 	font-family: roboto
 }
