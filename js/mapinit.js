@@ -15,7 +15,15 @@ function initialize() {
 	mapOptions = {
     	center: homePos,
         zoom: 12,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        panControl: false,
+        zoomControlOptions: {
+        	position: google.maps.ControlPosition.RIGHT_TOP
+        },
+        streetViewControlOptions: {
+        	position: google.maps.ControlPosition.RIGHT_TOP
+        }
+
     };
     
     // Actual map variable (local for now - make this global)
