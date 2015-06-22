@@ -10,12 +10,40 @@ var BREAKING_ICON = "images/breaking_icon.png";
 var FAST_ACCEL_ICON = "images/fast_accel_icon.png";
 var GENERAL_ALERT_ICON = "images/general_alert.png";
 
+
 // On document ready
 $(document).ready(function() {
-	// The DOM is ready
 
-	// Load .csv data into array
-	var anomaliesArray = populateArray();
+	// Get array of query results from server
+	var anomalies = Parse.Object.extend("anomalies");
+	var query = new Parse.Query(anomalies);
+
+	query.find({
+
+		success: function(results) {
+
+			// Formatted "return" array (actually pushed forward)
+			var anomaliesArray = new Array();
+
+			// Do something with the returned Parse.Object values
+			for (var i = 0; i < results.length; i++) {
+				var object = results[i];
+				anomaliesArray.push([object.get('Lat'), object.get('Long'), object.get('Type')]);
+			}
+
+			AnomalyQueryCallback(anomaliesArray);
+		},
+
+		error: function(error) {
+			alert("Error: " + error.code + " " + error.message);
+		}
+
+	});
+
+});
+
+// Function to be called that sets up listeners for stuff
+function AnomalyQueryCallback(anomaliesArray) {
 
 	// Create and populate array for each type of marker
 	var swerveArray = new Array();
@@ -51,14 +79,14 @@ $(document).ready(function() {
 
 		// Create the marker
 		var marker = new google.maps.Marker({
-	    	position: 	markPos,
-	    	title: 		markTitle,
-	    	icon: 		markIcon
-	  	});
+			position: markPos,
+			title: markTitle,
+			icon: markIcon
+		});
 
 		// Add the marker to respective array
-	  	switch (anomaliesArray[i][2]) {
-	  		case "b":
+		switch (anomaliesArray[i][2]) {
+			case "b":
 				rapidDecelArray.push(marker);
 				break;
 			case "y":
@@ -69,16 +97,15 @@ $(document).ready(function() {
 				break;
 			default:
 				generalArray.push(marker);
-	  	}
+		}
 	}
 
 	// Swerve checkbox event handler
 	$('#swerve').click(function() {
 		for (var i = 0; i < swerveArray.length; i++) {
-			if(document.getElementById('swerve').checked){
+			if (document.getElementById('swerve').checked) {
 				swerveArray[i].setMap(map);
-			}
-			else {
+			} else {
 				swerveArray[i].setMap(null);
 			}
 		}
@@ -87,10 +114,9 @@ $(document).ready(function() {
 	// Rapid decel checkbox event handler
 	$('#rapidDecel').click(function() {
 		for (var i = 0; i < rapidDecelArray.length; i++) {
-			if(document.getElementById('rapidDecel').checked){
+			if (document.getElementById('rapidDecel').checked) {
 				rapidDecelArray[i].setMap(map);
-			}
-			else {
+			} else {
 				rapidDecelArray[i].setMap(null);
 			}
 		}
@@ -99,10 +125,9 @@ $(document).ready(function() {
 	// Rapid accel checkbox event handler
 	$('#rapidAccel').click(function() {
 		for (var i = 0; i < rapidAccelArray.length; i++) {
-			if(document.getElementById('rapidAccel').checked){
+			if (document.getElementById('rapidAccel').checked) {
 				rapidAccelArray[i].setMap(map);
-			}
-			else {
+			} else {
 				rapidAccelArray[i].setMap(null);
 			}
 		}
@@ -111,17 +136,16 @@ $(document).ready(function() {
 	// General anomaly checkbox event handler
 	$('#general').click(function() {
 		for (var i = 0; i < generalArray.length; i++) {
-			if(document.getElementById('general').checked){
+			if (document.getElementById('general').checked) {
 				generalArray[i].setMap(map);
-			}
-			else {
+			} else {
 				generalArray[i].setMap(null);
 			}
 		}
 	});
 
 	// Clear map event handler
-	$('#clearMap').click( function() {
+	$('#clearMap').click(function() {
 		for (var i = 0; i < swerveArray.length; i++) {
 			swerveArray[i].setMap(null);
 		}
@@ -140,14 +164,15 @@ $(document).ready(function() {
 		});
 
 	})
+}
 
-});
 
+/* --- Functions No Longer Used ---
 function populateArray() {
 
 	// Variable Declarations
-	var anomaliesArr;	// 2D array of lat,long,type for each anomaly detected
-	var input;			// .csv input
+	var anomaliesArr; // 2D array of lat,long,type for each anomaly detected
+	var input; // .csv input
 
 	// Get data input from the anomalies csv
 	//input = readFile(ANOMALIES_FILE);
@@ -157,5 +182,37 @@ function populateArray() {
 	anomaliesArr = $.csv.toArrays(input);
 
 	// Return the array of information
-	return(anomaliesArr);
+	return (anomaliesArr);
 }
+
+
+function ParsePopArr() {
+
+	// Get array of query results from server
+	var anomalies = Parse.Object.extend("anomalies");
+	var query = new Parse.Query(anomalies);
+
+	query.find({
+
+		success: function(results) {
+
+			// Formatted "return" array (actually pushed forward)
+			var anomaliesArray = new Array();
+
+			// Do something with the returned Parse.Object values
+			for (var i = 0; i < results.length; i++) {
+				var object = results[i];
+				anomaliesArray.push([object.get('Lat'), object.get('Long'), object.get('Type')]);
+			}
+
+			QueryCallBack(anomaliesArray);
+		},
+
+		error: function(error) {
+			alert("Error: " + error.code + " " + error.message);
+		}
+
+	});
+
+}
+*/
