@@ -3,117 +3,122 @@
 
 	<head>
 		
-			<!-- Latest compiled and minified JavaScript -->
-                <!-- jQuery -->
+    <!-- jQuery -->
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-                <!-- Bootstrap Core JavaScript -->
+    <!-- Bootstrap Core JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!-- Google Maps API -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZCvB7znSd96KaA7vxEAumHmvweDXVRMU&libraries=visualization"></script>
 
+    <!-- Title -->
 		<title>Road Warriors: Innovating the Roads of Tomorrow</title>
+
+    <!-- CSS Files -->
 		<link rel= "stylesheet" type="text/css" href="css/stylesheet.css">
 		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<link href="css/startbootstrap-simple-sidebar-1.0.4/css/simple-sidebar.css" rel="stylesheet">
 
-
 		<style type="text/css">
-	    	html, body, #map-canvas { height: 700px; width: 99%; margin: 0; padding: 0; }
-	    </style>
+      html, body, #map-canvas { height: 700px; width: 99%; margin: 0; padding: 0; }
+    </style>
 
-	    
-	    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZCvB7znSd96KaA7vxEAumHmvweDXVRMU&libraries=visualization">
-	    </script>
-	    <script type="text/javascript" src="js/mapinit.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
-        
+    <!-- Local Scripts -->
+    <script type="text/javascript" src="js/mapinit.js"></script>
+    <script type="text/javascript" src="js/jquery-csv.js"></script>
+    <script type="text/javascript" src="js/loadanomalies.js"></script>
+    <script type="text/javascript" src="js/colorroute.js"></script>
+    <script type="text/javascript" src="js/brakemap.js"></script>
+    <script type="text/javascript" src="js/heatmap.js"></script>
 
 	</head>
 
 	<body>
 		<div id="wrapper">
+      <!-- Sidebar -->
+      <div id="sidebar-wrapper">
+        <div class="sidebar-nav">
+          <h3 style="color: white">Controls</h3>
+          
+          <div>
+              <h4><a href="#">Dashboard</a></h4>
+          </div>
 
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            <div class="sidebar-nav">
-                <h3 style="color: white">Controls</h3>
-                <div>
-                    <h4><a href="#">Dashboard</a></h4>
-                </div>
-                <div>
-                    <h4><a href="#">Data Analytics</a></h4>
-                </div>
-               
-                <div class="panel list-group">
+          <div>
+              <h4><a href="#">Data Analytics</a></h4>
+          </div>
+             
+          <div class="panel list-group">
 
-                 <a href="#" class="list-group-item" data-toggle="collapse" data-target="#sm" data-parent="#menu"><h3 style="color:white">Display Events</h3></a>
-            <div id="sm" class="sublinks collapse">
-                <div class="checkbox">
-                  <input id="crash" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Crash</h4>
-              </div>
-                <div class="checkbox">
-                  <input id="swerve" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Swerving</h4>
-              </div>
+           <a href="#" class="list-group-item" data-toggle="collapse" data-target="#sm" data-parent="#menu"><h3 style="color:white">Display Events</h3></a>
+          <div id="sm" class="sublinks collapse">
               <div class="checkbox">
-                  <input id="rapidAccel" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Rapid Acceleration</h4>
-              </div>
+                <input id="crash" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Crash</h4>
+            </div>
               <div class="checkbox">
-                  <input id="rapidDecel" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Rapid Deceleration</h4>
+                <input id="swerve" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Swerving</h4>
+            </div>
+            <div class="checkbox">
+                <input id="rapidAccel" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Rapid Acceleration</h4>
+            </div>
+            <div class="checkbox">
+                <input id="rapidDecel" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Rapid Deceleration</h4>
+            </div>
+            <div class="checkbox">
+                <input id="general" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Other Activity</h4>
+            </div>
+               </div>
               </div>
-              <div class="checkbox">
-                  <input id="general" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Other Activity</h4>
+              
+              <div>
+                  <a href="#" id="clearMap">Clear Map</a>
               </div>
-                 </div>
-                </div>
-                
-                <div>
-                    <a href="#" id="clearMap">Clear Map</a>
-                </div>
-           
-                <div>
-                    <div>
-                        <h3 style="color:white"> Mapping Frame </h3>
+         
+              <div>
+                  <div>
+                      <h3 style="color:white"> Mapping Frame </h3>
+                  </div>
+                     <div class="radio">
+                        <label><input type="radio" name="optradio"><h4 style="color:turquoise">Live</h4></label>
+                     </div>
+                     <div class="radio">
+                      <label><input type="radio" name="optradio"><h4 style="color:turquoise">Historic</h4></label>
                     </div>
-                       <div class="radio">
-                          <label><input type="radio" name="optradio"><h4 style="color:turquoise">Live</h4></label>
-                       </div>
-                       <div class="radio">
-                        <label><input type="radio" name="optradio"><h4 style="color:turquoise">Historic</h4></label>
+              </div>
+              <div>
+                  <div id="creatAlertDiv">
+                      <div>
+                          <h3 style="color:white"> Manage Alerts </h3>
                       </div>
-                </div>
-                <div>
-                    <div id="creatAlertDiv">
-                        <div>
-                            <h3 style="color:white"> Manage Alerts </h3>
-                        </div>
-                            <button id="createAlert" type="button" class="btn btn-primary">Create Alert</button>
-                            <button type="button" class="btn btn-primary">Delete Alert</button>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 style="color:white"> Map View Options </h4>
-                    <div class="dropdown">
-                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Map View
-                      <span class="caret"></span></button>
-                      <ul class="dropdown-menu">
-                        <li><a href="#"><strong>Speed</strong></a></li>
-                        <li><a href="#"><strong>Yaw Rate</strong></a></li>
-                        <li><a href="#"><strong>Acceleration</strong></a></li>
-                      </ul>
-                    </div>
-                </div>
-                <div class="form-group">
-                  <h5 style="color:white">Input Coordinates</h5>
-                  <textarea class="form-control" rows="5" id="plottedPoints"></textarea>
-                  <button id="createRoute" type="button" class="btn btn-primary">Create Route</button>
-                  <button id="clearRoute" type="button" class="btn btn-primary">Clear Route</button>
-                  <p></p>
-                  <button id="createBrake" type="button" class="btn btn-danger">Create Brake</button>
-                  <button id="clearBrake" type="button" class="btn btn-danger">Clear Brake</button>
-                  <p></p>
-                  <button id="createHeatmap" type="button" class="btn btn-warning">Heat Map</button>
-                  <button id="clearHeatmap" type="button" class="btn btn-warning">Clear Heat Map</button>
-                </div>
+                          <button id="createAlert" type="button" class="btn btn-primary">Create Alert</button>
+                          <button type="button" class="btn btn-primary">Delete Alert</button>
+                      </div>
+                  </div>
+                  <div>
+                      <h4 style="color:white"> Map View Options </h4>
+                  <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Map View
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                      <li><a href="#"><strong>Speed</strong></a></li>
+                      <li><a href="#"><strong>Yaw Rate</strong></a></li>
+                      <li><a href="#"><strong>Acceleration</strong></a></li>
+                    </ul>
+                  </div>
+              </div>
+              <div class="form-group">
+                <h5 style="color:white">Input Coordinates</h5>
+                <textarea class="form-control" rows="5" id="plottedPoints"></textarea>
+                <button id="createRoute" type="button" class="btn btn-primary">Create Route</button>
+                <button id="clearRoute" type="button" class="btn btn-primary">Clear Route</button>
+                <p></p>
+                <button id="createBrake" type="button" class="btn btn-danger">Create Brake</button>
+                <button id="clearBrake" type="button" class="btn btn-danger">Clear Brake</button>
+                <p></p>
+                <button id="createHeatmap" type="button" class="btn btn-warning">Heat Map</button>
+                <button id="clearHeatmap" type="button" class="btn btn-warning">Clear Heat Map</button>
+              </div>
 
-        </div>
+      </div>
     </div>
         <!-- /#sidebar-wrapper -->
 
