@@ -41,12 +41,12 @@
 		display: block;
 		width: 100%;
 		margin: 5px 0px 0px 0px;
+		text-align: center;
 	}
-
 	
 
 
-  </style>
+	</style>
 
 	<!-- Google maps -->
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZCvB7znSd96KaA7vxEAumHmvweDXVRMU&libraries=visualization"></script>
@@ -68,6 +68,7 @@
 		Parse.initialize("6s0wYYKZR2sQU8zMV304cL8jv5Pdmp3PzOIwKLOp", "7C1XQAKjUdhiH6k25tRIbVOweuNMoFy0n0An4LJf");
 	</script>
 
+
 	<!-- Local Scripts -->
 	<!-- <script type="text/javascript" src="js/mapinit.js"></script> -->
 	<script type="text/javascript" src="js/jquery-csv.js"></script>
@@ -82,7 +83,7 @@
 	function initialize() {
 		var mapOptions = {
 			zoom: 12,
-			center: new google.maps.LatLng(42.2813, -83.7483),
+			center: new google.maps.LatLng(31.7767, 35.2345),
 			mapTypeControl: true,
 			mapTypeControlOptions: {
 				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
@@ -139,16 +140,17 @@
 		</div>	
 
 
-				
-        <button id="swerve" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/swerve_icon.png" align="left"></span>Swerve</button>
+				<button id="swerve" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/swerve_icon.png" align="left"></span>Swerve</button>
 
-        <button id="rapidAccel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/fast_accel_icon.png" align="left"></span>Acceleration</button>
+				<button id="rapidAccel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/fast_accel_icon.png" align="left"></span>Acceleration</button>
 
-        <button id="rapidDecel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/breaking_icon.png" align="left"></span>Deceleration</button>
+				<button id="rapidDecel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/breaking_icon.png" align="left"></span>Deceleration</button>
 
-        <button id="rapidDecel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/crash_icon.png" align="left"></span>Crash</button>
+				<button id="rapidDecel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/crash_icon.png" align="left"></span>Crash</button>
 
-        <button id="general" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/general_alert.png" align="left"></span>Other</button>
+				<button id="general" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/general_alert.png" align="left"></span>Other</button>
+		
+
 		
 
 	</div>
