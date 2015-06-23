@@ -1,159 +1,163 @@
 <!DOCTYPE html>
-<html style="height: 100%">
-
+<html>
 <head>
+	<title>Traffic Management</title>
+	
+	<style>
+	html, body, #map-canvas {
+		height: 100%;
+		margin: 0px;
+		padding: 0px;
+		z-index:0;
+	}
 
-  <!-- jQuery -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <!-- Bootstrap Core JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-  <!-- Google Maps API -->
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZCvB7znSd96KaA7vxEAumHmvweDXVRMU&libraries=visualization"></script>
+	.side-bar {
+		width: 280px;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		background-color: rgba(255, 255, 255, 0.83);
+		border-style: solid;
+		border-color: lightgray;
+		border-width: 1px;
+		padding: 10px 20px 10px 20px;
+	}
 
-  <!-- Title -->
-  <title>Road Warriors: Innovating the Roads of Tomorrow</title>
+	#dropdownbutton {
+		display: block;
+		width: 100%;
+		margin: 10px 0px 10px 0px;
+	}
 
-  <!-- CSS Files -->
-  <link rel= "stylesheet" type="text/css" href="css/stylesheet.css">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link href="css/startbootstrap-simple-sidebar-1.0.4/css/simple-sidebar.css" rel="stylesheet">
+	#selectorButton {
+		display: block;
+		width: 100%;
+		margin: 10px 0px 10px 0px;
+	}
 
-  <style type="text/css">
-  html, body, #map-canvas { height: 100vh; width: 100%; margin: 0; padding: 0; }
-  </style>
+	</style>
 
-  <!-- Local Scripts -->
-  <script type="text/javascript" src="js/mapinit.js"></script>
-  <script type="text/javascript" src="js/jquery-csv.js"></script>
-  <script type="text/javascript" src="js/loadanomalies.js"></script>
-  <script type="text/javascript" src="js/colorroute.js"></script>
-  <script type="text/javascript" src="js/brakemap.js"></script>
-  <script type="text/javascript" src="js/heatmap.js"></script>
+	<!-- Google maps -->
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZCvB7znSd96KaA7vxEAumHmvweDXVRMU&libraries=visualization"></script>
 
-  <style type="text/css">
-    body { margin: 10px 0; background: url(images/bglight.png); }
-    .well { background-color: #fff; }
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
-    .fixme { position: fixed; }
-    /* Landscape phone to portrait tablet */
-    @media (max-width: 767px) {
-      .fixme { width: 100%; position: static; }
-    }
-  </style>
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
+	<!-- Latest compiled JavaScript -->
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<!-- Local Scripts -->
+	<!-- <script type="text/javascript" src="js/mapinit.js"></script> -->
+	<script type="text/javascript" src="js/jquery-csv.js"></script>
+	<script type="text/javascript" src="js/loadanomalies.js"></script>
+	<script type="text/javascript" src="js/colorroute.js"></script>
+	<script type="text/javascript" src="js/brakemap.js"></script>
+	<script type="text/javascript" src="js/heatmap.js"></script>
+
+	<script>
+	var map;
+
+	function initialize() {
+		var mapOptions = {
+			zoom: 12,
+			center: new google.maps.LatLng(31.7767, 35.2345),
+			mapTypeControl: true,
+			mapTypeControlOptions: {
+				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+				position: google.maps.ControlPosition.TOP_CENTER
+			},
+			zoomControl: true,
+			zoomControlOptions: {
+				style: google.maps.ZoomControlStyle.SMALL,
+				position: google.maps.ControlPosition.RIGHT_CENTER
+			},
+			scaleControl: true,
+			streetViewControl: true,
+			streetViewControlOptions: {
+				position: google.maps.ControlPosition.RIGHT_TOP
+			},
+			panControl: false
+		}
+
+		map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	}
+
+	google.maps.event.addDomListener(window, 'load', initialize);
+
+	</script>
 </head>
-
 <body>
-  <div id="wrapper">
-    <!-- Sidebar -->
-    <div id="sidebar-wrapper" style="opacity: 0.78">
-      <div class="sidebar-nav">
-        <h3 style="color: white">Navigation</h3>
+	<div class="side-bar">
+		<h3>Traffic Information System</h3>
 
-      <ul class="nav nav-pills nav-stacked">
-        <li class="active"><a href="#dashboard" data-toggle="tab">Dashboard</a></li>
-        <li><a href="#dataAnalytics" data-toggle="tab">Data Analytics</a></li>
-      </ul>
+		<ul class="nav nav-pills nav-stacked">
+			<li role="presentation" class="active"><a href="#dashboard" data-toggle="tab">Dashboard</a></li>
+			<li><a href="#dataAnalytics" data-toggle="tab">Data Analytics</a></li>
+		</ul>
 
-        <div class="panel list-group">
+		<!-- Active dropdown -->
 
-         <a href="#" class="list-group-item" data-toggle="collapse" data-target="#sm" data-parent="#menu"><h3 style="color:white">Display Events</h3></a>
-         <div id="sm" class="sublinks collapse">
-          <div class="checkbox">
-            <input id="crash" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Crash</h4>
-          </div>
-          <div class="checkbox">
-            <input id="swerve" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Swerving</h4>
-          </div>
-          <div class="checkbox">
-            <input id="rapidAccel" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Rapid Acceleration</h4>
+		<div class="dropdown">
+			<button id="dropdownbutton" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				Map Options
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				<li id="heatMap"><a href="#">Heat Map</a></li>
+				<li id="hazard"><a href="#">Road Hazards</a></li>
+				<li id="traffic"><a>Road Traffic</a></li>
+			</ul>
+		</div>	
 
-          </div>
-          <div class="checkbox">
-            <input id="rapidDecel" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Rapid Deceleration</h4>
-          </div>
-          <div class="checkbox">
-            <input id="general" type="checkbox" class="chckbx"> <h4 style="color:darkturquoise">Other Activity</h4>
-          </div>
-        </div>
-      </div>
+		<div class="btn-group input-group btn-group-justified" data-toggle="buttons">
+			<div class="btn-group" role="group">
 
-      <div>
-        <a href="#" id="clearMap">Clear Map</a>
-      </div>
+				<button id="swerve" type="button" class="btn btn-default">Swerve</button>
+			</div>
+			<div class="btn-group" role="group">
 
-      <div>
-        <div>
-          <h3 style="color:white"> Mapping Frame </h3>
-        </div>
-        <div class="radio">
-          <label><input type="radio" name="optradio"><h4 style="color:turquoise">Live</h4></label>
-        </div>
-        <div class="radio">
-          <label><input type="radio" name="optradio"><h4 style="color:turquoise">Historic</h4></label>
-        </div>
-      </div>
-      <div>
-        <div id="creatAlertDiv">
-          <div>
-            <h3 style="color:white"> Manage Alerts </h3>
-          </div>
-          <button id="createAlert" type="button" class="btn btn-primary">Create Alert</button>
-          <button type="button" class="btn btn-primary">Delete Alert</button>
-        </div>
-      </div>
-      <div>
-        <h4 style="color:white"> Map View Options </h4>
-        <div class="dropdown">
-          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Map View
-            <span class="caret"></span></button>
-            <ul class="dropdown-menu">
-              <li><a href="#"><strong>Speed</strong></a></li>
-              <li><a href="#"><strong>Yaw Rate</strong></a></li>
-              <li><a href="#"><strong>Acceleration</strong></a></li>
-            </ul>
-          </div>
-        </div>
-        <p></p>
-          <button id="createRoute" type="button" class="btn btn-primary">Create Route</button>
-          <button id="clearRoute" type="button" class="btn btn-primary">Clear Route</button>
-          <p></p>
-        </div>
+				<button id="potHole" type="button" class="btn btn-default">Pothole</button>
+			</div>
+			<div class="btn-group" role="group">
 
-      </div>
-    </div>
-    <!-- /#sidebar-wrapper -->
+				<button id="dui" type="button" class="btn btn-default">DUI</button>
+			</div>
+		</div>
+		<div class="btn-group input-group btn-group-justified" data-toggle="buttons">
+			<div class="btn-group" role="group">
 
-    <div id="page-content-wrapper">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-lg-12">
-            <div id="map-canvas"></div>
-            <!-- Page Content -->
-            <div id="page-content-wrapper">
-              <div class="container-fluid">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <h2>Traffic Management System</h2>
-                      <a href="#menu-toggle" class="btn btn-success" id="menu-toggle">Toggle Menu</a>
-                    </div>
+				<button id="crash" type="button" class="btn btn-default">Crash</button>
+			</div>
+			<div class="btn-group" role="group">
 
-                  </div>
-                </div>
-              </div>
-              <!-- /#page-content-wrapper -->
+				<button id="rapidAccel" type="button" class="btn btn-default">Accel</button>
+			</div>
+			<div class="btn-group" role="group">
 
-            </div>
-            <!-- /#wrapper -->
+				<button id="rapidDecel" type="button" class="btn btn-default">Decel</button>
+			</div>
+		</div>
+		<div id="creatAlertDiv">
+			<div>
+				<h3> Manage Alerts </h3>
+			</div>
+			<button id="createAlert" type="button" class="btn btn-default" style="width: 50%">Create Alert</button>
+			<button id="deleteAlert" type="button" class="btn btn-default" style="width: 48%">Delete Alert</button>
+		</div>
 
+		<div>
+			<h3> Mapping Frame </h3>
+			<ul class="nav nav-pills nav-stacked">
+				<li id="live" role="presentation" class="active"><a data-toggle="tab">Live</a></li>
+				<li id="historic"><a data-toggle="tab">Historic</a></li>
+			</ul>
+		</div>
 
-            <!-- Menu Toggle Script -->
-            <script>
-            $("#menu-toggle").click(function(e) {
-              e.preventDefault();
-              $("#wrapper").toggleClass("toggled");
-            });
-            </script>
-          </body>
-
-          </html>
+	</div>
+	<div id="map-canvas"></div>
+</body>
+</html>
