@@ -103,7 +103,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 	// Swerve checkbox event handler
 	$('#swerve').click(function() {
 		for (var i = 0; i < swerveArray.length; i++) {
-			if (document.getElementById('swerve').checked) {
+			if (document.getElementById('swerve').is(':checked')) {
 				swerveArray[i].setMap(map);
 			} else {
 				swerveArray[i].setMap(null);
