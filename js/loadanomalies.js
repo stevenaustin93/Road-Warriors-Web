@@ -103,7 +103,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 	// Swerve checkbox event handler
 	$('#swerve').click(function() {
 		for (var i = 0; i < swerveArray.length; i++) {
-			if (document.getElementById('swerve').is(':checked')) {
+			if ($('#swerve').is(':focus')) {
 				swerveArray[i].setMap(map);
 			} else {
 				swerveArray[i].setMap(null);
@@ -114,7 +114,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 	// Rapid decel checkbox event handler
 	$('#rapidDecel').click(function() {
 		for (var i = 0; i < rapidDecelArray.length; i++) {
-			if (document.getElementById('rapidDecel').checked) {
+			if ($('#rapidDecel').is(':focus')) {
 				rapidDecelArray[i].setMap(map);
 			} else {
 				rapidDecelArray[i].setMap(null);
@@ -125,7 +125,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 	// Rapid accel checkbox event handler
 	$('#rapidAccel').click(function() {
 		for (var i = 0; i < rapidAccelArray.length; i++) {
-			if (document.getElementById('rapidAccel').checked) {
+			if ($('#rapidAccel').is(':focus')) {
 				rapidAccelArray[i].setMap(map);
 			} else {
 				rapidAccelArray[i].setMap(null);
