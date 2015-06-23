@@ -50,6 +50,15 @@
 
 	<!-- Latest compiled JavaScript -->
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+	<!-- Parse Scripts -->
+	<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
+
+	<!-- Parse initialization -->
+	<script>
+		Parse.initialize("4aSSrXBse7eNPvZbVQWlOshE7Ahr4WusbgtG910x", "7C1XQAKjUdhiH6k25tRIbVOweuNMoFy0n0An4LJf");
+	</script>
+
 	<!-- Local Scripts -->
 	<!-- <script type="text/javascript" src="js/mapinit.js"></script> -->
 	<script type="text/javascript" src="js/jquery-csv.js"></script>
@@ -64,7 +73,7 @@
 	function initialize() {
 		var mapOptions = {
 			zoom: 12,
-			center: new google.maps.LatLng(31.7767, 35.2345),
+			center: new google.maps.LatLng(42.2813, -83.7483),
 			mapTypeControl: true,
 			mapTypeControlOptions: {
 				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
