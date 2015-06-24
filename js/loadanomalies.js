@@ -100,6 +100,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 		}
 	}
 
+	/*
 	// Swerve checkbox event handler
 	$('#swerve').click(function() {
 		for (var i = 0; i < swerveArray.length; i++) {
@@ -110,25 +111,71 @@ function AnomalyQueryCallback(anomaliesArray) {
 			}
 		}
 	});
-
+	*/
+	/*
 	// Rapid decel checkbox event handler
 	$('#rapidDecel').click(function() {
 		for (var i = 0; i < rapidDecelArray.length; i++) {
-			if ($('#rapidDecel').is(':focus')) {
+			if ($('#rapidDecel').is(':active')) {
 				rapidDecelArray[i].setMap(map);
 			} else {
 				rapidDecelArray[i].setMap(null);
 			}
 		}
 	});
+	*/
+
+	// Swerve checkbox event handler
+	var swerveClicked = false;
+	$('#swerve').click(function() {
+		if (swerveClicked) {
+			swerveClicked = false;
+			for (var i = 0; i < swerveArray.length; i++) {
+				swerveArray[i].setMap(null);
+			}
+			this.blur();
+		}
+		else {
+			swerveClicked = true;
+			for (var i = 0; i < swerveArray.length; i++) {
+				swerveArray[i].setMap(map);
+			}
+		}
+
+	});
+
+	// Rapid decel checkbox event handler
+	var decelClicked = false;
+	$('#rapidDecel').click(function() {
+		if (decelClicked) {
+			decelClicked = false;
+			for (var i = 0; i < rapidDecelArray.length; i++) {
+				rapidDecelArray[i].setMap(null);
+			}
+			this.blur();
+		}
+		else {
+			decelClicked = true;
+			for (var i = 0; i < rapidDecelArray.length; i++) {
+				rapidDecelArray[i].setMap(map);
+			}
+		}
+	});
 
 	// Rapid accel checkbox event handler
+	var accelClicked = false;
 	$('#rapidAccel').click(function() {
-		for (var i = 0; i < rapidAccelArray.length; i++) {
-			if ($('#rapidAccel').is(':focus')) {
-				rapidAccelArray[i].setMap(map);
-			} else {
+		if (accelClicked) {
+			accelClicked = false;
+			for (var i = 0; i < rapidAccelArray.length; i++) {
 				rapidAccelArray[i].setMap(null);
+			}
+			this.blur();
+		}
+		else {
+			accelClicked = true;
+			for (var i = 0; i < rapidAccelArray.length; i++) {
+				rapidAccelArray[i].setMap(map);
 			}
 		}
 	});
