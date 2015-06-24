@@ -46,7 +46,7 @@
 	
 
 
-  </style>
+	</style>
 
 	<!-- Google maps -->
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZCvB7znSd96KaA7vxEAumHmvweDXVRMU&libraries=visualization"></script>
@@ -65,7 +65,7 @@
 
 	<!-- Parse initialization -->
 	<script>
-		Parse.initialize("6s0wYYKZR2sQU8zMV304cL8jv5Pdmp3PzOIwKLOp", "7C1XQAKjUdhiH6k25tRIbVOweuNMoFy0n0An4LJf");
+	Parse.initialize("6s0wYYKZR2sQU8zMV304cL8jv5Pdmp3PzOIwKLOp", "7C1XQAKjUdhiH6k25tRIbVOweuNMoFy0n0An4LJf");
 	</script>
 
 	<!-- Local Scripts -->
@@ -112,20 +112,20 @@
 <body>
 	<div class="side-bar">
 		<h3>Traffic Information System</h3>
-
+		<div>
+			<ul class="nav nav-tabs">
+				<li role="presentation" class="active"><a href="#" data-toggle="tab">Dashboard</a></li>
+				<li role="presentation"><a href="#" data-toggle="tab">Data Analytics</a></li>
+			</ul>
+		</div>
 		<div>
 			<ul class="nav nav-pills nav-stacked">
 				<li id="live" role="presentation" class="active"><a data-toggle="tab">Live</a></li>
 				<li id="historic"><a data-toggle="tab">Historic</a></li>
+				<li id="historic"><a data-toggle="tab">Forecast</a></li>
+
 			</ul>
 		</div>
-
-		<!-- <ul class="nav nav-pills nav-stacked">
-			<li role="presentation" class="active"><a href="#dashboard" data-toggle="tab">Dashboard</a></li>
-			<li><a href="#dataAnalytics" data-toggle="tab">Data Analytics</a></li>
-		</ul>
-		-->
-		<!-- Active dropdown -->
 
 		<div class="dropdown">
 			<button id="dropdownbutton" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -140,16 +140,38 @@
 		</div>	
 
 
-				
-        <button id="swerve" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/swerve_icon.png" align="left"></span>Swerve</button>
 
-        <button id="rapidAccel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/fast_accel_icon.png" align="left"></span>Acceleration</button>
+		<button id="swerve" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/swerve_icon.png" align="left"></span>Swerve</button>
 
-        <button id="rapidDecel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/breaking_icon.png" align="left"></span>Deceleration</button>
+		<button id="rapidAccel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/fast_accel_icon.png" align="left"></span>Acceleration</button>
 
-        <button id="crash" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/crash_icon.png" align="left"></span>Crash</button>
+		<button id="rapidDecel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/breaking_icon.png" align="left"></span>Deceleration</button>
 
-        <button id="general" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/general_alert.png" align="left"></span>Other</button>
+		<button id="crash" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/crash_icon.png" align="left"></span>Crash</button>
+
+		<button id="general" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/general_alert.png" align="left"></span>Other</button>
+
+		<div class="dropdown">
+			<h4>Start:</h4>
+			<button id="dropdownbutton" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Select
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				<li id="heatMap"><a href="#">PF Changs</a></li>
+			</ul>
+		</div>
+
+		<div class="dropdown">
+			<h4>End:</h4>
+			<button id="dropdownbutton" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Select
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				<li id="heatMap"><a href="#">Stadium</a></li>
+			</ul>
+		</div>
+
+		<button id="calcRoute" type="button" class="btn btn-primary">Calculate Route</button>
 		
 
 	</div>
