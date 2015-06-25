@@ -12,6 +12,7 @@ var endMarker;
 var infowindow;
 var plottedRoute;
 
+var routed = false;
 
 // On document ready
 $(document).ready(function() {
@@ -19,17 +20,28 @@ $(document).ready(function() {
 		if ( ($('#start').val() === "None") || ($('#end').val() === "None")) {
 			alert("Please select start and end points for your route");
 		} else {
+			if (routed) {
+				ClearRoute();
+				routed = false;
+			}
+			routed = true;
 			calcRouteSuccess();
 		}
 	});
 
 	$('#clearRoute').click(function() {
-		startMarker.setMap(null);
-		endMarker.setMap(null);
-		infowindow.close();
-		plottedRoute.setMap(null);
+		ClearRoute();
 	});
 });
+
+//
+// Clears displayed route
+function ClearRoute() {
+	startMarker.setMap(null);
+	endMarker.setMap(null);
+	infowindow.close();
+	plottedRoute.setMap(null);
+}
 
 //
 // When calculate route is clicked successfully
@@ -47,17 +59,22 @@ function calcRouteSuccess() {
 		if (selectedStart === "PF Changs") {
 			startLat = 42.242753;
 			startLong = -83.745882;
-		} else {
-			startLat = 42.242753;
-			startLong = -83.745882;
+		} else if (selectedStart === "Law Quadrangle") {
+			startLat = 42.274460; 
+			startLong = -83.739531;
+		}
+		else {
+			// nothing here?
 		}
 
 		if (selectedEnd === "Stadium") {
 			endLat = 42.266804;
 			endLong = -83.748016;
+		} else if (selectedEnd === "Miller Nature Area") {
+			endLat = 42.287535;
+			endLong = -83.768593;
 		} else {
-			endLat = 42.266804;
-			endLong = -83.748016;
+			// nothing here?
 		}
 
 		var startEndArray = new Array();
@@ -135,8 +152,10 @@ function convertShapesToArray(arrayOfPoints) {
 	});
 	*/
 
-	// Create an info window and marker  
-	showSafetyRating(arrayOfPoints, 5.4);
+	// Create an info window and marker
+	var safetyRating = Math.random() * 10;
+	safetyRating = safetyRating.toPrecision(2);  
+	showSafetyRating(arrayOfPoints, safetyRating);
 	// Plot the route
 	plotroute(arrayOfPoints);
 
