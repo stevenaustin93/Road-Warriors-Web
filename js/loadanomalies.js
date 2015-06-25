@@ -6,7 +6,7 @@
 // Icon paths:
 var CRASH_ICON = "images/crash_icon.png";
 var SWERVE_ICON = "images/swerve_icon.png";
-var BREAKING_ICON = "images/breaking_icon.png";
+var BRAKING_ICON = "images/braking_icon.png";
 var FAST_ACCEL_ICON = "images/fast_accel_icon.png";
 var GENERAL_ALERT_ICON = "images/general_alert.png";
 
@@ -15,9 +15,10 @@ var GENERAL_ALERT_ICON = "images/general_alert.png";
 $(document).ready(function() {
 
 	// Get array of query results from server
-	var anomalies = Parse.Object.extend("anomalies");
-	var query = new Parse.Query(anomalies);
+	var realAnomalies = Parse.Object.extend("realAnomalies");
+	var query = new Parse.Query(realAnomalies);
 
+	query.limit(200);
 	query.find({
 
 		success: function(results) {
@@ -28,7 +29,7 @@ $(document).ready(function() {
 			// Do something with the returned Parse.Object values
 			for (var i = 0; i < results.length; i++) {
 				var object = results[i];
-				anomaliesArray.push([object.get('Lat'), object.get('Long'), object.get('Type')]);
+				anomaliesArray.push([object.get('Lat'), object.get('Long'), object.get('Class')]);
 			}
 
 			AnomalyQueryCallback(anomaliesArray);
@@ -47,10 +48,9 @@ function AnomalyQueryCallback(anomaliesArray) {
 
 	// Create and populate array for each type of marker
 	var swerveArray = new Array();
-	var rapidDecelArray = new Array();
 	var rapidAccelArray = new Array();
-	var generalArray = new Array();
-
+	var rapidDecelArray = new Array();
+	var crashArray = new Array();
 
 	// Loop through anomaliesArray and create a marker in respective arrays
 	for (var i = 0; i < anomaliesArray.length; i++) {
@@ -60,21 +60,27 @@ function AnomalyQueryCallback(anomaliesArray) {
 
 		// Set icon and title (label) accordingly
 		switch (anomaliesArray[i][2]) {
-			case "b":
-				markIcon = BREAKING_ICON;
-				markTitle = "Rapid breaking event detected here!";
-				break;
-			case "y":
+			
+			case "S":
 				markIcon = SWERVE_ICON;
 				markTitle = "Swerving event detected here!";
 				break;
-			case "a":
+			case "A1":
+			case "A2":
 				markIcon = FAST_ACCEL_ICON;
 				markTitle = "Fast acceleration event detected here!";
 				break;
+			case "B1":
+			case "B2":
+				markIcon = BRAKING_ICON;
+				markTitle = "Rapid braking event detected here!";
+				break;
+			case "C":
+				markIcon = CRASH_ICON;
+				markTitle = "Accident detected here!";
+				break;
 			default:
-				markIcon = GENERAL_ALERT_ICON;
-				markTitle = "General anomaly detected here!";
+				// Do nothing on default case
 		}
 
 		// Create the marker
@@ -86,44 +92,24 @@ function AnomalyQueryCallback(anomaliesArray) {
 
 		// Add the marker to respective array
 		switch (anomaliesArray[i][2]) {
-			case "b":
-				rapidDecelArray.push(marker);
-				break;
-			case "y":
+			case "S":
 				swerveArray.push(marker);
 				break;
-			case "a":
+			case "A1":
+			case "A2":
 				rapidAccelArray.push(marker);
 				break;
+			case "B1":
+			case "B2":
+				rapidDecelArray.push(marker);
+				break;		
+			case "C":
+				crashArray.push(marker);
+				break;
 			default:
-				generalArray.push(marker);
+				// Do nothing on default case
 		}
 	}
-
-	/*
-	// Swerve checkbox event handler
-	$('#swerve').click(function() {
-		for (var i = 0; i < swerveArray.length; i++) {
-			if ($('#swerve').is(':focus')) {
-				swerveArray[i].setMap(map);
-			} else {
-				swerveArray[i].setMap(null);
-			}
-		}
-	});
-	*/
-	/*
-	// Rapid decel checkbox event handler
-	$('#rapidDecel').click(function() {
-		for (var i = 0; i < rapidDecelArray.length; i++) {
-			if ($('#rapidDecel').is(':active')) {
-				rapidDecelArray[i].setMap(map);
-			} else {
-				rapidDecelArray[i].setMap(null);
-			}
-		}
-	});
-	*/
 
 	// Swerve checkbox event handler
 	var swerveClicked = false;
@@ -180,13 +166,20 @@ function AnomalyQueryCallback(anomaliesArray) {
 		}
 	});
 
-	// General anomaly checkbox event handler
-	$('#general').click(function() {
-		for (var i = 0; i < generalArray.length; i++) {
-			if (document.getElementById('general').checked) {
-				generalArray[i].setMap(map);
-			} else {
-				generalArray[i].setMap(null);
+	// Rapid accel checkbox event handler
+	var crashClicked = false;
+	$('#crash').click(function() {
+		if (crashClicked) {
+			crashClicked = false;
+			for (var i = 0; i < crashArray.length; i++) {
+				crashArray[i].setMap(null);
+			}
+			this.blur();
+		}
+		else {
+			crashClicked = true;
+			for (var i = 0; i < crashArray.length; i++) {
+				crashArray[i].setMap(map);
 			}
 		}
 	});
@@ -212,54 +205,3 @@ function AnomalyQueryCallback(anomaliesArray) {
 
 	})
 }
-
-
-/* --- Functions No Longer Used ---
-function populateArray() {
-
-	// Variable Declarations
-	var anomaliesArr; // 2D array of lat,long,type for each anomaly detected
-	var input; // .csv input
-
-	// Get data input from the anomalies csv
-	//input = readFile(ANOMALIES_FILE);
-	input = "42.18133163,-83.93299103,b\n42.43674088,-83.88913727,b\n42.28501892,-83.74581146,b\n42.23044968,-83.69557953,y\n42.2589798,-83.708992,y\n42.2589798,-83.70900726,y";
-
-	// Convert that csv to an array
-	anomaliesArr = $.csv.toArrays(input);
-
-	// Return the array of information
-	return (anomaliesArr);
-}
-
-
-function ParsePopArr() {
-
-	// Get array of query results from server
-	var anomalies = Parse.Object.extend("anomalies");
-	var query = new Parse.Query(anomalies);
-
-	query.find({
-
-		success: function(results) {
-
-			// Formatted "return" array (actually pushed forward)
-			var anomaliesArray = new Array();
-
-			// Do something with the returned Parse.Object values
-			for (var i = 0; i < results.length; i++) {
-				var object = results[i];
-				anomaliesArray.push([object.get('Lat'), object.get('Long'), object.get('Type')]);
-			}
-
-			QueryCallBack(anomaliesArray);
-		},
-
-		error: function(error) {
-			alert("Error: " + error.code + " " + error.message);
-		}
-
-	});
-
-}
-*/

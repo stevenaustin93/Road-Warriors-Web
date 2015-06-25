@@ -7,8 +7,18 @@
 
 $(document).ready(function() {
 	$('#calcRoute').click(function() {
+		if ( ($('#start').val() === "None") || ($('#end').val() === "None")) {
+			alert("Please select start and end points for your route");
+		} else {
+			calcRouteSuccess();
+		}
+	});
+});
 
-		// Get Start and End from selection box
+//
+// When calculate route is clicked successfully
+function calcRouteSuccess() {
+	// Get Start and End from selection box
 		var selectedStart = $('#start').val();
 		var selectedEnd = $('#end').val();
 
@@ -56,9 +66,7 @@ $(document).ready(function() {
 		// Query server for shapepoints between these two points
 		// assume cloud function accepts an array of points
 		cloudComputeShapes(startEndArray);
-
-	});
-});
+}
 
 //
 // Function to call cloud function that takes start/end points and returns shapepoints along route
@@ -78,7 +86,6 @@ function cloudComputeShapes(startEndArray) {
 			var convertedArray = new Array();
 			for (var i = 0; i < result.lat.length; i++) {
 				convertedArray.push([result.lat[i],result.lng[i]]);
-				alert(result.lat[i] + "," + result.lng[i]);
 			}
 
 			// Plot the converted 2D array
@@ -159,9 +166,7 @@ function showSafetyRating(arrayOfPoints, safetyRating) {
 
 //
 function plotroute(arrayOfPoints) {
-	//
-	alert("Plotting points!: (" + arrayOfPoints[0][0] + "," + arrayOfPoints[0][1] + ")");
-
+	
 	// Array of polylines
 	var polylineArray = new Array();
 
