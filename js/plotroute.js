@@ -63,31 +63,39 @@ $(document).ready(function() {
 //
 // Function to call cloud function that takes start/end points and returns shapepoints along route
 function cloudComputeShapes(startEndArray) {
-	/*
-	Parse.Cloud.run('getShapePoints', {
-		startEndCoords: 'startEndArray'
+	// Convert input array to start and end strings
+	var startString = "" + startEndArray[0][0] + "," + startEndArray[0][1];
+	var endString = "" + startEndArray[1][0] + "," + startEndArray[1][1];
+
+	// Run cloud function to get array of GPS points along route
+	Parse.Cloud.run("route", {
+		startLocation: startString,
+		endLocation: endString
 	}, {
-		success: function(results) {
-			convertShapesToArray(results);
+		success: function(result) {
+
+			// Convert objects in results to 2D array
+			var convertedArray = new Array();
+			for (var i = 0; i < result.lat.length; i++) {
+				convertedArray.push([result.lat[i],result.lng[i]]);
+				alert(result.lat[i] + "," + result.lng[i]);
+			}
+
+			// Plot the converted 2D array
+			convertShapesToArray(convertedArray);
 		},
 		error: function(error) {
 			alert("Error: " + error.code + " " + error.message);
 		}
 	});
-	*/
-
-	startEndArray.push([42.256804, -83.758016]);
-	startEndArray.push([42.226804, -83.758016]);
-
-	convertShapesToArray(startEndArray);
 }
 
 //
 // Function to take JSON object from query and convert it to array of GPS coordinates
-function convertShapesToArray(arrayOfShapePoints) {
+function convertShapesToArray(arrayOfPoints) {
 
 	// Conver the shape points to array of lat/longs
-		// unnecessary??
+	// unnecessary??
 	//
 
 	// Call server function to determine safety rating
@@ -105,29 +113,29 @@ function convertShapesToArray(arrayOfShapePoints) {
 	*/
 
 	// Create an info window and marker  
-	showSafetyRating(arrayOfShapePoints, 5);
+	showSafetyRating(arrayOfPoints, 5.4);
 	// Plot the route
-	plotroute(arrayOfShapePoints);
+	plotroute(arrayOfPoints);
 
 }
 
 // 
 // Function to put the safety rating on the map in an info window attached to a marker
-function showSafetyRating(arrayOfShapePoints, safetyRating) {
+function showSafetyRating(arrayOfPoints, safetyRating) {
 
 	// Determine the middle of the route
 	var middle;
 
-	if ( (arrayOfShapePoints.length % 2) === 1 ) {
+	if ((arrayOfPoints.length % 2) === 1) {
 		// Odd case
-		middle = (arrayOfShapePoints.length - 1) / 2;
+		middle = (arrayOfPoints.length - 1) / 2;
 	} else {
 		// Even case
-		middle = arrayOfShapePoints.length / 2;
+		middle = arrayOfPoints.length / 2;
 	}
 
 	// Create a marker at the middle
-	var middlePosition = new google.maps.LatLng(arrayOfShapePoints[middle][0], arrayOfShapePoints[middle][1]);
+	var middlePosition = new google.maps.LatLng(arrayOfPoints[middle][0], arrayOfPoints[middle][1]);
 	var middleMarker = new google.maps.Marker({
 		position: middlePosition,
 		//map: map,
@@ -135,7 +143,10 @@ function showSafetyRating(arrayOfShapePoints, safetyRating) {
 	});
 
 	// Create an info window and display it at the middle marker
-	var contentString = '<h3>Safety Rating:</h3>' + '<p><h4>' + safetyRating + '</h4></p>';
+	var contentString = 
+		'<h4><b>Route: </b><i>' + $('#start').val() + "</i> to <i>" + $('#end').val() +
+		'</i><h4><b>Safety Rating: </b><i>' + safetyRating + '/10</i></h4>' +
+		'</i><h4><b>Estimated Time: </b><i>' + 15 + ' min</i></h4>';;
 
 	var infowindow = new google.maps.InfoWindow({
 		content: contentString,
@@ -148,6 +159,8 @@ function showSafetyRating(arrayOfShapePoints, safetyRating) {
 
 //
 function plotroute(arrayOfPoints) {
+	//
+	alert("Plotting points!: (" + arrayOfPoints[0][0] + "," + arrayOfPoints[0][1] + ")");
 
 	// Array of polylines
 	var polylineArray = new Array();
@@ -156,7 +169,7 @@ function plotroute(arrayOfPoints) {
 	for (var i = 0; i < arrayOfPoints.length - 1; i++) {
 
 		// Color of line
-		var color = 'Blue';
+		var color = 'DarkBlue';
 
 		// Set start/end coords
 		var startEndCoords = [

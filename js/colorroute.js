@@ -11,7 +11,7 @@ $(document).ready(function() {
 
 	// On the click of a button, input the route and display it
 	$('#createRoute').click(function() {
-		mapColorRoute();
+		queryRouteArray();
 	});
 
 
@@ -45,9 +45,37 @@ function populateRouteArray() {
 	return(anomaliesArr);
 }
 
-function mapColorRoute() {
-// Load .csv data into array
-	var routeArray = populateRouteArray();
+function queryRouteArray() {
+	// Get array of query results from server
+	var route = Parse.Object.extend("trip1");
+	var query = new Parse.Query(route);
+
+	query.find({
+
+		success: function(results) {
+
+			// Formatted "return" array (actually pushed forward)
+			var routeCoordsArray = new Array();
+
+			// Do something with the returned Parse.Object values
+			for (var i = 0; i < results.length; i++) {
+				var object = results[i];
+				routeCoordsArray.push([object.get('Lat'), object.get('Long'), object.get('Speed')]);
+			}
+
+			mapColorRoute(routeCoordsArray);
+		},
+
+		error: function(error) {
+			alert("Error: " + error.code + " " + error.message);
+		}
+
+	});
+}
+
+function mapColorRoute(routeArray) {
+	// Load .csv data into array
+	//var routeArray = populateRouteArray();
 
 	// Loop through array and create a set of line segments
 	for (var i = 0; i < routeArray.length - 1; i++) {
