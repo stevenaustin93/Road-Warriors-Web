@@ -185,10 +185,12 @@ function showSafetyRating(arrayOfPoints, safetyRating) {
 	});
 
 	// Create an info window and display it at the middle marker
+	var routeTime = Math.random() * 20;
+	routeTime = routeTime.toPrecision(2);
 	var contentString = 
 		'<h4><b>Route: </b><i>' + $('#start').val() + "</i> to <i>" + $('#end').val() +
 		'</i><h4><b>Safety Rating: </b><i>' + safetyRating + '/10</i></h4>' +
-		'</i><h4><b>Estimated Time: </b><i>' + 15 + ' min</i></h4>';;
+		'</i><h4><b>Estimated Time: </b><i>' + routeTime + ' min</i></h4>';;
 
 	infowindow = new google.maps.InfoWindow({
 		content: contentString,
