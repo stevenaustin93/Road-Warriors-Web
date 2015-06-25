@@ -5,6 +5,15 @@
 // It plots the route on the Google Map using polylines, and displays the route time and route safety rating
 //
 
+// Global variables
+	// Used for "clear route" functionality
+var startMarker;
+var endMarker;
+var infowindow;
+var plottedRoute;
+
+
+// On document ready
 $(document).ready(function() {
 	$('#calcRoute').click(function() {
 		if ( ($('#start').val() === "None") || ($('#end').val() === "None")) {
@@ -12,6 +21,13 @@ $(document).ready(function() {
 		} else {
 			calcRouteSuccess();
 		}
+	});
+
+	$('#clearRoute').click(function() {
+		startMarker.setMap(null);
+		endMarker.setMap(null);
+		infowindow.close();
+		plottedRoute.setMap(null);
 	});
 });
 
@@ -50,14 +66,14 @@ function calcRouteSuccess() {
 
 		// Place markers at start and end
 		var startPosition = new google.maps.LatLng(startLat, startLong);
-		var startMarker = new google.maps.Marker({
+		startMarker = new google.maps.Marker({
 			position: startPosition,
 			map: map,
 			title: 'Start: ' + selectedStart
 		});
 
 		var endPosition = new google.maps.LatLng(endLat, endLong);
-		var endMarker = new google.maps.Marker({
+		endMarker = new google.maps.Marker({
 			position: endPosition,
 			map: map,
 			title: 'End: ' + selectedEnd
@@ -155,7 +171,7 @@ function showSafetyRating(arrayOfPoints, safetyRating) {
 		'</i><h4><b>Safety Rating: </b><i>' + safetyRating + '/10</i></h4>' +
 		'</i><h4><b>Estimated Time: </b><i>' + 15 + ' min</i></h4>';;
 
-	var infowindow = new google.maps.InfoWindow({
+	infowindow = new google.maps.InfoWindow({
 		content: contentString,
 		position: middlePosition
 	});
@@ -166,9 +182,31 @@ function showSafetyRating(arrayOfPoints, safetyRating) {
 
 //
 function plotroute(arrayOfPoints) {
-	
+
+	// Array of coordinates
+	var routeCoordinates = new Array();
+
+	for (var i = 0; i < arrayOfPoints.length; i++) {
+		routeCoordinates.push(new google.maps.LatLng(arrayOfPoints[i][0],arrayOfPoints[i][1]));
+	}
+
+	plottedRoute = new google.maps.Polyline({
+		path: routeCoordinates,
+		strokeColor: 'DarkBlue',
+		strokeOpacity: 1.0,
+		strokeWeight: 3
+	});
+
+	plottedRoute.setMap(map);
+
+
+
+
+
+
+	/*	
 	// Array of polylines
-	var polylineArray = new Array();
+	polylineArray = new Array();
 
 	// Loop through array of gps coordinates, create a line segment, add to array of polylines
 	for (var i = 0; i < arrayOfPoints.length - 1; i++) {
@@ -199,5 +237,6 @@ function plotroute(arrayOfPoints) {
 	for (var i = 0; i < polylineArray.length; i++) {
 		polylineArray[i].setMap(map);
 	}
+	*/
 
 }
