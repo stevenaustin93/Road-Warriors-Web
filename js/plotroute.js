@@ -5,19 +5,26 @@
 // It plots the route on the Google Map using polylines, and displays the route time and route safety rating
 //
 
-//
-$('#calcRoute').click(functio() {
-	plotroute();
+$(document).ready(function() {
+	$('#calcRoute').click(function() {
+		
+		var destArray = new Array();
+		destArray.push([42.266804, -83.748016]);
+		destArray.push([42.242753, -83.745882]);
+		destArray.push([45.242753, -84.745882]);
+		plotroute(destArray);
+		
+
+		
+	});
 });
 
 //
-function plotroute() {
-
-	var arrayOfPoints = [ [42.266804, -83.748016],[42.242753, -83.745882] ];
+function plotroute(arrayOfPoints) {
 
 	// Function call to determine safety rating of route
 	// CloudComputeSafetyRating(arrayOfPoints);
-
+	
 	// Array of polylines
 	var polylineArray = new Array();
 
@@ -36,12 +43,15 @@ function plotroute() {
 		// Create polyline segment
 		var lineSegment = new google.maps.Polyline({
 		    path: startEndCoords,
+		    geodesic: true,
 		    strokeColor: color,
 		    strokeOpacity: 1.0,
 		    strokeWeight: 3
 		});
 
+		polylineArray.push(lineSegment);
 	}
+	
 
 	// Plot the polylines
 	for (var i = 0; i < polylineArray.length; i++) {
@@ -49,10 +59,12 @@ function plotroute() {
 	}
 
 	// Add infowindow
+	/*
 	var infowindow = new google.maps.InfoWindow({
 		content: "Info windoooooow"
 	});
 
 	infowindow.open(infowindow);
+	*/
 
 }
