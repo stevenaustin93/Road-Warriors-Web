@@ -26,7 +26,30 @@ $(document).ready(function() {
 	});
 });
 
-function funcHeatmap() {
+function QueryForHeatmap() {
+	// Get array of query results from server
+	var rowColPairs = Parse.Object.extend("generalTable");
+	var query = new Parse.Query(rowColPairs);
+
+	query.greaterThan("Break1", 0);
+
+	query.find({
+
+		success: function(results) {
+
+			alert("Number of nonzero Break1 class anomalies" + results.length);
+			
+		},
+
+		error: function(error) {
+			alert("Error: " + error.code + " " + error.message);
+		}
+
+	});
+
+}
+
+function PlotHeatmap() {
 
 	var heatmapData = new Array();
 
