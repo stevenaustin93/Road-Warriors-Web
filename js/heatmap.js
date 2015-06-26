@@ -11,33 +11,106 @@
 var heatmap;
 
 $(document).ready(function() {
-	$('#createHeatmap').click(function() {
-		alert("called me");
-		funcHeatmap();
+
+	$('#heatMap').on('change', function() {
+		QueryForHeatmap();
 	});
 
 
 	// Place the line segments on the click of a button
 	$('#clearHeatmap').click(function() {
 
-		heatmap.setMap(null);
+		ClearHeatmap();
 
-		$('#plottedPoints').val('');
 	});
 });
 
+function HeatmapType() {
+	// Get the dropdown menu value
+	var heatmapVal = $('#heatMap').val();
+
+	var returnValue = "";
+
+	// Based on dropdown value, return general table column title
+	switch (heatmapVal) {
+		case "accel1":
+			returnValue = "Accel1";
+			break;
+		case "accel2":
+			returnValue = "Accel2";
+			break;
+		case "accel3":
+			returnValue = "Accel3";
+			break;
+		case "brake1":
+			returnValue = "Break1";
+			break;
+		case "brake2":
+			returnValue = "Break2";
+			break;
+		case "brake3":
+			returnValue = "Break3";
+			break;
+		case "swerve":
+			returnValue = "Swerve";
+			break;
+		case "cars":
+			returnValue = "cars";
+			break;
+		default:
+			returnValue = "none";
+	}
+
+	return (returnValue);
+
+}
+
+//
+// Query the general table on parse for the specified column
 function QueryForHeatmap() {
+	// Determine which type of heatmap we want
+	var heatmapCol = HeatmapType();
+
+	// Cancel query if "none" is selected
+	if (heatmapCol === "none") {
+		return;
+	}
+
+	// Set "greater than" value if necessary
+	var greaterThanVal = 0;
+	if (heatmapCol === "cars") {
+		greaterThanVal = 10;
+	}
+
 	// Get array of query results from server
 	var rowColPairs = Parse.Object.extend("generalTable");
 	var query = new Parse.Query(rowColPairs);
 
-	query.greaterThan("Break1", 0);
+	query.greaterThan(heatmapCol, greaterThanVal);
+	query.limit(500);
 
 	query.find({
 
 		success: function(results) {
 
-			alert("Number of nonzero Break1 class anomalies" + results.length);
+			alert("Number of heatmap entries: " + results.length);
+
+			// Create array of lat/longs for the heatmap plot
+			var googleLatLngArray = new Array();
+
+			for (var i = 0; i < results.length; i++) {
+				var object = results[i];
+
+				// Convert row/col to lat/lng
+				var GLat = object.get('row') * 0.00005 + 41.994;
+				var GLng = object.get('col') * 0.00005 - 84.88087;
+
+				// Add point to coords array
+				googleLatLngArray.push(new google.maps.LatLng(GLat, GLng));
+			}
+
+			// Send coords array to plotting function
+			PlotHeatmap(googleLatLngArray);
 			
 		},
 
@@ -49,26 +122,25 @@ function QueryForHeatmap() {
 
 }
 
-function PlotHeatmap() {
+//
+// Function that takes array of google.maps.LatLng() values and plots a heatmap
+function PlotHeatmap(gLatLngArray) {
 
-	var heatmapData = new Array();
-
-	// Get brake data from input box
-	var heatPointsArray = populateRouteArray();
-
-	for (var i = 0; i < heatPointsArray.length; i++) {
-		var coordinate = new google.maps.LatLng(heatPointsArray[i][1],heatPointsArray[i][0]);
-
-		heatmapData.push(coordinate);
-	}
-
-	var MVCpointArray = new google.maps.MVCArray(heatmapData);
+	var MVCpointArray = new google.maps.MVCArray(gLatLngArray);
 
 	heatmap = new google.maps.visualization.HeatmapLayer({
 	    data: MVCpointArray,
-	    radius: 20
+	    radius: 10
 	});
 
 	heatmap.setMap(map);
 	
+}
+
+//
+// Simple function to remove heatmap
+function ClearHeatmap() {
+
+	heatmap.setMap(null);
+
 }
