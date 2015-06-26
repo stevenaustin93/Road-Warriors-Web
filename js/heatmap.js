@@ -13,7 +13,9 @@ var heatmap;
 $(document).ready(function() {
 
 	$('#heatMap').on('change', function() {
-		QueryForHeatmap();
+
+		//QueryForHeatmap();
+
 	});
 
 
@@ -82,13 +84,15 @@ function QueryForHeatmap() {
 		greaterThanVal = 10;
 	}
 
-	// Get array of query results from server
+	// Setup query from general table
 	var rowColPairs = Parse.Object.extend("generalTable");
 	var query = new Parse.Query(rowColPairs);
 
+	// Set query constraints
 	query.greaterThan(heatmapCol, greaterThanVal);
 	query.limit(500);
 
+	// Perform query
 	query.find({
 
 		success: function(results) {
