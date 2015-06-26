@@ -1,20 +1,21 @@
 //
 // heatmap.js
-// Displays a heatmap of input coordinates
+// Displays a heatmap of selected data from general table
 //
-
-//
-// breakmap.js
-// This file handles the input of the break
-// 
 
 var heatmap;
+var heatDisplayed = false;
 
 $(document).ready(function() {
 
 	$('#heatMap').on('change', function() {
 
-		//QueryForHeatmap();
+		if (heatDisplayed) {
+			ClearHeatmap();
+			heatDisplayed = false;
+		}
+		heatDisplayed = true;
+		QueryForHeatmap();
 
 	});
 
@@ -115,7 +116,7 @@ function QueryForHeatmap() {
 
 			// Send coords array to plotting function
 			PlotHeatmap(googleLatLngArray);
-			
+
 		},
 
 		error: function(error) {
@@ -133,12 +134,12 @@ function PlotHeatmap(gLatLngArray) {
 	var MVCpointArray = new google.maps.MVCArray(gLatLngArray);
 
 	heatmap = new google.maps.visualization.HeatmapLayer({
-	    data: MVCpointArray,
-	    radius: 10
+		data: MVCpointArray,
+		radius: 20
 	});
 
 	heatmap.setMap(map);
-	
+
 }
 
 //

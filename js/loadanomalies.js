@@ -166,7 +166,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 		}
 	});
 
-	// Rapid accel checkbox event handler
+	// Crash checkbox event handler
 	var crashClicked = false;
 	$('#crash').click(function() {
 		if (crashClicked) {
