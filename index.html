@@ -4,7 +4,7 @@
 	<title>Traffic Management</title>
 	
 	<style>
-	html, body, #map-canvas {
+	html, body, #map-canvas, #dashBoardDiv {
 		height: 100%;
 		margin: 0px;
 		padding: 0px;
@@ -61,14 +61,19 @@
 
 	
 
-	/* #topBar {
+	 #topBar {
+		margin-left: 280px;
 		position: absolute;
-		float: center;
+		z-index: 1;
+		height: 50px;
+		width: 230px;
+		background-color: white;
+
 	}
 
-	#side-bar {
-		position: relative;
-		}*/
+	 #dashBoardDiv {
+	 	/*margin-top: 30px;*/
+	 }
 
 
 		</style>
@@ -135,15 +140,15 @@
 		</script>
 	</head>
 	<body>
-	<!-- <div id="topBar">
+	 <div id="topBar">
 			<ul class="nav nav-tabs">
 				<li role="presentation" class="active"><a href="#" data-toggle="tab">Dashboard</a></li>
 				<li role="presentation"><a href="#" data-toggle="tab">Data Analytics</a></li>
 			</ul>
-		</div>		 -->
+		</div>
 
 
-		<!-- <div id="dashBoardDiv"> -->
+		 <div id="dashBoardDiv">
 		<div class="side-bar">
 			<h3>Traffic Information System</h3>
 			<div>
@@ -154,9 +159,9 @@
 			</div>
 			<div>
 				<ul class="nav nav-pills nav-stacked">
-					<li id="live" role="presentation" class="active"><a data-toggle="tab">Live</a></li>
 					<li id="historic"><a data-toggle="tab">Historic</a></li>
-					<li id="forecast"><a data-toggle="tab">Forecast</a></li>
+					<li id="live" role="presentation" class="active"><a data-toggle="tab">Live</a></li>
+					<li id="forecast"><a data-toggle="tab">Future</a></li>
 
 				</ul>
 			</div>
@@ -255,6 +260,6 @@
 </div>
 </div>
 <div id="map-canvas"></div>
-<!-- </div> -->
+</div> <!-- End DashBoard Div -->
 </body>
 </html>
