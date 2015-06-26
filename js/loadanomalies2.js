@@ -85,27 +85,6 @@ function AnomalyQueryCallback(anomaliesArray) {
 
 
 		// When you create the marker, add a listener that will open an "infowindow" containing corresponding data
-		
-  		//content for infoWindow when clicking on the anomaly marker
-		var contentString = ' <div id = "content">'+
-		'<div id = "siteNotice">' +
-		'</div>' + '<h1 id = "firstHeading" class = "firstHeading">HEADING</h1>' + 
-		'<div id = "bodyContent">' + '<p>info paragraph</p>';
-		//this creates the infowindow, it will display "contentString" 
-		var infowindow = new google.maps.InfoWindow({
-			content: contentString,
-			position: markPos
-		})
-		// Create the marker
-		var marker = new google.maps.Marker({
-			position: markPos,
-			title: markTitle,
-			icon: markIcon
-		});
-		//listener: waits for click 
-		google.maps.event.addListener(marker, 'click', function() {
-			infowindow.open(map, marker);
-		})
 
 
 		// Add the marker to respective array
@@ -128,6 +107,23 @@ function AnomalyQueryCallback(anomaliesArray) {
 				// Do nothing on default case
 		}
 	}
+	function createMarker(i) {
+		var marker = new google.maps.Marker({
+			map: map,
+			position: new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]),
+			icon: markIcon
+		});
+		var infoWindow = new google.maps.InfoWindow({
+			content: 'test string'
+		});
+		google.maps.event.addListener(marker, 'click', function()){
+			infowindow.open(map, marker);
+		});
+	}
+	for (var i = 0; i < anomaliesArray.length; i++) {
+		createMarker(i);
+	}
+	
 
 	// Swerve checkbox event handler
 	var swerveClicked = false;
