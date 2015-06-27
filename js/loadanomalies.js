@@ -52,6 +52,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 	var rapidDecelArray = new Array();
 	var crashArray = new Array();
 
+	
 	// Loop through anomaliesArray and create a marker in respective arrays
 	for (var i = 0; i < anomaliesArray.length; i++) {
 
@@ -82,16 +83,10 @@ function AnomalyQueryCallback(anomaliesArray) {
 			default:
 				// Do nothing on default case
 		}
-
-
-		// When you create the marker, add a listener that will open an "infowindow" containing corresponding data
 		
   		//content for infoWindow when clicking on the anomaly marker
-		var contentString = ' <div id = "content">'+
-		'<div id = "siteNotice">' +
-		'</div>' + '<h1 id = "firstHeading" class = "firstHeading">HEADING</h1>' + 
-		'<div id = "bodyContent">' + '<p>info paragraph</p>';
-		//this creates the infowindow, it will display "contentString" 
+		var contentString = "<i><b>Class 1 Serving Anomaly.</b></i>" + "  " + "<b>File ID:</b> <i>462180</i>" + "  " + "<b>Time:</b> <i>05:38:13</i>";
+		//this creates the infowindow, it will display "contentString" and appear on the clicked marker
 		var infowindow = new google.maps.InfoWindow({
 			content: contentString,
 			position: markPos
@@ -104,7 +99,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 		});
 		//listener: waits for click 
 		google.maps.event.addListener(marker, 'click', function() {
-			infowindow.open(map, marker);
+			infowindow.open(map, this);
 		})
 
 
