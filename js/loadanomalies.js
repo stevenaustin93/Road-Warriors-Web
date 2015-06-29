@@ -26,6 +26,7 @@ $(document).ready(function() {
 			// Formatted "return" array (actually pushed forward)
 			var anomaliesArray = new Array();
 
+
 			// Do something with the returned Parse.Object values
 			for (var i = 0; i < results.length; i++) {
 				var object = results[i];
@@ -65,42 +66,46 @@ function AnomalyQueryCallback(anomaliesArray) {
 			case "S":
 				markIcon = SWERVE_ICON;
 				markTitle = "Swerving event detected here!";
+				markName = "<b>Swerving Event.</b>" 
 				break;
 			case "A1":
+				markName = "<b>Class 1 Acceleration Event.</b>";
 			case "A2":
 				markIcon = FAST_ACCEL_ICON;
 				markTitle = "Fast acceleration event detected here!";
+				markName = "<b>Class 2 Acceleration Event.</b>";
 				break;
 			case "B1":
+				markName = "<b>Class 1 Braking Event.</b>";
 			case "B2":
 				markIcon = BRAKING_ICON;
 				markTitle = "Rapid braking event detected here!";
+				markName = "<b>Class 2 Braking Event.</b>";
 				break;
 			case "C":
 				markIcon = CRASH_ICON;
 				markTitle = "Accident detected here!";
+				markName = "<b>Accident.</b>";
 				break;
 			default:
 				// Do nothing on default case
 		}
-		
-  		//content for infoWindow when clicking on the anomaly marker
-		var contentString = "<i><b>Class 1 Serving Anomaly.</b></i>" + "  " + "<b>File ID:</b> <i>462180</i>" + "  " + "<b>Time:</b> <i>05:38:13</i>";
-		//this creates the infowindow, it will display "contentString" and appear on the clicked marker
-		var infowindow = new google.maps.InfoWindow({
-			content: contentString,
-			position: markPos
-		})
 		// Create the marker
 		var marker = new google.maps.Marker({
 			position: markPos,
 			title: markTitle,
 			icon: markIcon
-		});
-		//listener: waits for click 
-		google.maps.event.addListener(marker, 'click', function() {
-			infowindow.open(map, this);
-		})
+			});
+		// When the user clicks on a marker, an infowindow appears that details the type of anomaly and the exact location (Lat/Lng). 
+		function addInfoWindow(marker, message) {
+			var infoWindow = new google.maps.InfoWindow({
+				content: message
+			});
+			new google.maps.event.addListener(marker, 'click', function () {
+				infoWindow.open(map,this);
+			});
+		}
+		addInfoWindow(marker, markName.toString() + " " + "Location:" + " " + markPos.toString());
 
 
 		// Add the marker to respective array
