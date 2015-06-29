@@ -151,7 +151,7 @@
 			mapTypeControl: true,
 			mapTypeControlOptions: {
 				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-				position: google.maps.ControlPosition.TOP_CENTER
+				position: google.maps.ControlPosition.BOTTOM_CENTER
 			},
 			zoomControl: true,
 			zoomControlOptions: {
@@ -161,7 +161,7 @@
 			scaleControl: true,
 			streetViewControl: true,
 			streetViewControlOptions: {
-				position: google.maps.ControlPosition.RIGHT_TOP
+				position: google.maps.ControlPosition.RIGHT_CENTER
 			},
 			panControl: false
 		}
@@ -170,7 +170,22 @@
 	}
 
 	google.maps.event.addDomListener(window, 'load', initialize);
-
+</script>
+<script>
+/*
+	var center;
+	function calculateCenter() {
+		alert("attempted to recenter");
+		center = map.getCenter();
+	}
+	google.maps.event.addDomListener(map, 'idle', function() {
+		calculateCenter();
+	});
+	google.maps.event.addDomListener(window, 'resize', function() {
+		calculateCenter();
+		map.setCenter(center);
+	});
+*/
 	</script>
 </head>
 <body>
@@ -318,18 +333,7 @@
 </div>
 <div id="map-canvas"></div>
 
-<script>
-var center;
-function calculateCenter() {
-	center = map.getCenter();
-}
-google.maps.event.addDomListener(map, 'idle', function() {
-	calculateCenter();
-});
-google.maps.event.addDomListener(window, 'resize', function() {
-	map.setCenter(center);
-});
-</script>
+
 
 </div> <!-- End DashBoard Div -->
 </body>
