@@ -207,6 +207,8 @@ function plotroute(arrayOfPoints) {
 	// Array of coordinates
 	var routeCoordinates = new Array();
 
+	alert("# Lines: " + arrayOfPoints.length);
+
 	for (var i = 0; i < arrayOfPoints.length; i++) {
 		routeCoordinates.push(new google.maps.LatLng(arrayOfPoints[i][0],arrayOfPoints[i][1]));
 	}
@@ -260,4 +262,14 @@ function plotroute(arrayOfPoints) {
 	}
 	*/
 
+}
+
+//
+// Function to set color coding of route polylines
+function SetRouteColors() {
+
+	// Query server each shape point along route
+
+	// Set a color for each shape point
+	
 }
