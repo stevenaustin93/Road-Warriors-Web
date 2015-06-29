@@ -1,9 +1,9 @@
-//THIS CODE IS WORKING
-
 //
 // loadanomalies.js
 // This (revamped) script handles the checkbox input of anomalies on the map
 //
+
+// MOST RECENT EDITS
 
 // Icon paths:
 var CRASH_ICON = "images/crash_icon.png";
@@ -54,14 +54,11 @@ function AnomalyQueryCallback(anomaliesArray) {
 	var rapidAccelArray = new Array();
 	var rapidDecelArray = new Array();
 	var crashArray = new Array();
-
 	
 	// Loop through anomaliesArray and create a marker in respective arrays
 	for (var i = 0; i < anomaliesArray.length; i++) {
-			//GPS Position
-			var markPos = new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]);
 
-		// Set icon and title (label) accordingly
+// Set icon and title (label) accordingly
 		switch (anomaliesArray[i][2]) {
 			
 			case "S":
@@ -91,32 +88,6 @@ function AnomalyQueryCallback(anomaliesArray) {
 			default:
 				// Do nothing on default case
 		}
-		// Create the marker
-		var marker = new google.maps.Marker({
-			position: markPos,
-			title: markTitle,
-			icon: markIcon,
-			});
-
-//When the user clicks on a marker, an infowindow appears that details the type of anomaly and the exact location (Lat/Lng). 
-		
-        var message = markName.toString() + '<div>' + "<b>Location:</b>" + " " + markPos.toString() + "<div>" + "<b>File ID:</b>" + " " + anomaliesArray[i][3];
-
-		function addInfoWindow(marker, message) {
-			//initialize infowindow
-			var infoWindow = new google.maps.InfoWindow({
-				content: message
-			});
-			//add a listener for the infowindow (click)
-			new google.maps.event.addListener(marker, 'click', function () {
-				infoWindow.open(map, this);
-			});
-		}
-		addInfoWindow(marker, message); 
-
-
-
-
 		// Add the marker to respective array
 		switch (anomaliesArray[i][2]) {
 			case "S":
@@ -137,6 +108,79 @@ function AnomalyQueryCallback(anomaliesArray) {
 				// Do nothing on default case
 		}
 	}
+
+	function initialize() { 
+		for (var i = 0; i < anomaliesArray.length; i++) {
+		//GPS Position
+			var markPos = new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]);
+		var myOptions = {
+				zoom: 12,
+				center: new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]),
+				mapTypeId: google.maps.MapTypeId.ROADMAP,
+				streetViewControl: false
+			}
+		//create map
+		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+		//create marker object
+		var marker = new google.maps.Marker({
+			position: markPos,
+			title: markTitle,
+			icon: markIcon,
+			draggable: true
+			});
+
+		function addInfoWindow(marker, message) {
+
+			//create a variable 'contentString' to hold content of infowindow
+			var contentString = '<div id = "content" style = "width:200px;height:200px;"></div">';
+
+			//initialize infowindow
+			var infoWindow = new google.maps.InfoWindow({
+				content: contentString
+			});
+			
+			//add a listener for the infowindow (click)
+			new google.maps.event.addListener(marker, 'click', function () {
+				infoWindow.open(map, this);
+			});
+
+			var pano = null;
+			google.maps.event.addListener(infowindow, 'domready', function() {
+			if(pano != null){
+				pano.unbind("position");
+				pano.setVisible(false);
+			}
+			pano = new google.maps.StreetViewPanorama(document.getElementById("content"), {
+				navigationControl: true,
+				navigationControlOptions: {style: google.maps.NavigationControlStyle.ANDROID},
+				enableCloseButtion: false,
+				addressControl: false,
+				linksControl: false
+			});
+			google.maps.event.addListener(infowindow, 'closeclick', function() {
+				pana.unbind("position");
+				pano.setVisible(false);
+				pano = null;
+			});
+		})
+		addInfoWindow(marker, contentString); 
+		}
+	}
+	
+	}
+//When the user clicks on a marker, an infowindow appears that details the type of anomaly and the exact location (Lat/Lng). 
+		/*var message = '<div>Porcelain Factory of Vista Alegre</div>' +
+                      '<div>History</div>' +
+                      '<img src="http://maps.marnoto.com/en/5wayscustomizeinfowindow/images/vistalegre.jpg" alt="Porcelain Factory of Vista Alegre" height="115" width="83">' +
+                      '<p>Founded in 1824, the Porcelain Factory of Vista Alegre was the first industrial unit dedicated to porcelain production in Portugal. For the foundation and success of this risky industrial development was crucial the spirit of persistence of its founder, José Ferreira Pinto Basto. Leading figure in Portuguese society of the nineteenth century farm owner, daring dealer, wisely incorporated the liberal ideas of the century, having become "the first example of free enterprise" in Portugal.</p>' +
+                      '<div class="iw-subTitle">Contacts</div>' +
+                      '<p>VISTA ALEGRE ATLANTIS, SA<br>3830-292 Ílhavo - Portugal<br>'+
+                      '<br>Phone. +351 234 320 600<br>e-mail: geral@vaa.pt<br>www: www.myvistaalegre.com</p>'+
+                    '</div>' +
+                    '<div class="iw-bottom-gradient"></div>' +
+                  '</div>';*/
+
 
 	// Swerve checkbox event handler
 	var swerveClicked = false;
@@ -231,4 +275,3 @@ function AnomalyQueryCallback(anomaliesArray) {
 		});
 
 	})
-}
