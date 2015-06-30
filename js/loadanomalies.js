@@ -71,6 +71,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 				break;
 			case "A1":
 				markName = "<b>Class 1 Acceleration Event.</b>";
+				break;
 			case "A2":
 				markIcon = FAST_ACCEL_ICON;
 				markTitle = "Fast acceleration event detected here!";
@@ -78,6 +79,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 				break;
 			case "B1":
 				markName = "<b>Class 1 Braking Event.</b>";
+				break;
 			case "B2":
 				markIcon = BRAKING_ICON;
 				markTitle = "Rapid braking event detected here!";
