@@ -223,7 +223,7 @@ function plotroute(arrayOfPoints, color) {
 	// Array of coordinates
 	var routeCoordinates = new Array();
 
-	alert("# Lines: " + arrayOfPoints.length);
+	/*alert("# Lines: " + arrayOfPoints.length);*/
 
 	for (var i = 0; i < arrayOfPoints.length; i++) {
 		routeCoordinates.push(new google.maps.LatLng(arrayOfPoints[i][0],arrayOfPoints[i][1]));
