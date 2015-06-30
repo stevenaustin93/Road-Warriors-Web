@@ -70,6 +70,7 @@
 		height: 50px;
 		width: 100%;
 		background-color: rgba(255, 255, 255, 0.82);
+		pointer-events: none;
 
 	}
 
@@ -94,6 +95,7 @@
 		top: 0;
 		left: 0;
 		position: absolute;
+		pointer-events: auto;
 	}
 
 	#TIS {
@@ -162,25 +164,22 @@
 			streetViewControl: true,
 			streetViewControlOptions: {
 				position: google.maps.ControlPosition.RIGHT_CENTER
+
+
 			},
-			panControl: false
+			panControl: false,
 		}
 
 		map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
 
 	}
 
 	google.maps.event.addDomListener(window, 'load', initialize);
 
 
-	/*google.maps.event.addDomListener(window, 'resize', function() {
-    map.setCenter(center);
-  }*/
 
-  
 </script>
-<script>
+<!--<script>
 /*
 	var center;
 	function calculateCenter() {
@@ -195,7 +194,11 @@
 		map.setCenter(center);
 	});
 */
+<<<<<<< HEAD
+	</script> -->
+=======
 </script>
+>>>>>>> origin/master
 </head>
 <body>
 	<div id="topBar">
@@ -341,9 +344,8 @@
 		</div>
 	</div>
 </div>
+
 <div id="map-canvas"></div>
-
-
 
 </div> <!-- End DashBoard Div -->
 </body>

@@ -7,81 +7,151 @@
 		<!-- 1. Add these JavaScript inclusions in the head of your page -->
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+        <script type="text/javascript" src="js/exporting.js"></script>
 		
-		
-		<!-- 2. Add the JavaScript to initialize the chart on document ready -->
-		<script type="text/javascript">
-		$(document).ready(function() {
-			
-			var options = {
-				chart: {
-					renderTo: 'container',
-					type: 'column'
-				},
-				title: {
-					text: 'Fruit Consumption'
-				},
-				xAxis: {
-					categories: []
-				},
-				yAxis: {
-					title: {
-						text: 'Units'
-					}
-				},
-				series: []
-			};
 
-				
-			 */ 
-			$.get('fruits.csv', function(data) {
-				// Split the lines
-				var lines = data.split('\n');
-				$.each(lines, function(lineNo, line) {
-					var items = line.split(',');
-					
-					// header line containes categories
-					if (lineNo == 0) {
-						$.each(items, function(itemNo, item) {
-							if (itemNo > 0) options.xAxis.categories.push(item);
-						});
-					}
-					
-					// the rest of the lines contain data with their name in the first position
-					else {
-						var series = { 
-							data: []
-						};
-						$.each(items, function(itemNo, item) {
-							if (itemNo == 0) {
-								series.name = item;
-							} else {
-								series.data.push(parseFloat(item));
-							}
-						});
-						
-						options.series.push(series);
-					}
-					
-				});
-				
-				var chart = new Highcharts.Chart(options);
-			});
-			
-			
-		});
+		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
+
+		<!-- Parse initialization -->
+		<script>
+		Parse.initialize("6s0wYYKZR2sQU8zMV304cL8jv5Pdmp3PzOIwKLOp", "7C1XQAKjUdhiH6k25tRIbVOweuNMoFy0n0An4LJf");
 		</script>
 		
+
+
 	</head>
 	<body>
 
-		<div style="width: 800px; margin: 2em auto; padding: 1em; border: 1px solid red; border-radius: 0.5em">
-
-			<a href="http://api.highcharts.com/#data">Data module</a>.
-		</div>
 		
 		<!-- 3. Add the container -->
 		<div id="container" style="width: 800px; height: 400px; margin: 0 auto"></div>
+
+		<!-- 2. Add the JavaScript to initialize the chart on document ready -->
+		<script>
+			function QueryServer() {
+				var BarAnomalies = Parse.Object.extend("BarAnomalies");
+				var query = new Parse.Query(BarAnomalies);
+				query.limit(1000);
+				query.find({
+				  success: function(results) {
+				  	alert("Results found:" + results.length);
+
+				    CreateChart(results);
+
+				  },
+				  error: function(error) {
+				    alert("Error: " + error.code + " " + error.message);
+				  }
+
+				});
+			}
+
+			function CreateChart(results) {
+
+				var options = {
+					chart: {
+						renderTo: 'container',
+						type: 'column'
+					},
+					title: {
+						text: 'Current Anomalies of Ann Arbor'
+					},
+					xAxis: {
+						categories: ['Live Data']
+
+					},
+					yAxis: {
+						title: {
+							text: 'Units'
+						}
+					},
+
+                    credits: {
+                        enabled: false
+                    },
+
+					series: []
+
+					};
+
+				var series0 = { 
+							name: 'Swerving',
+							data: []
+							
+						};
+				var series1 = { 
+							name: 'Minor Rapid Acceleration',
+							data: []
+							
+						};
+
+				var series2 = { 
+							name: 'Major Rapid Acceleration',
+							data: []
+							
+						};
+
+				var series3 = { 
+							name: 'Minor Rapid Braking',
+							data: []
+							
+						};
+
+				var series4 = {
+							name: 'Major Rapid Braking', 
+							data: []
+							
+						};
+				
+
+
+
+				for (var i = 0; i < results.length; i++) {
+				var Swerving = results[i].get('Swerving');
+				var Accel1 = results[i].get('Accel1');
+				var Accel2 = results[i].get('Accel2');
+				var Brake1 = results[i].get('Brake1');
+				var Brake2 = results[i].get('Brake2');
+				series0.data.push(Swerving);
+				series1.data.push(Accel1);
+				series2.data.push(Accel2);
+				series3.data.push(Brake1);	
+				series4.data.push(Brake2);
+				//options.xAxis.categories.push(names);			
+				}	
+
+				options.series.push(series0, series1, series2, series3, series4);			
+					
+
+
+				
+				
+
+
+
+					
+
+				
+
+
+
+				var chart = new Highcharts.Chart(options);
+			}
+			
+
+			$(document).ready(function() {
+				QueryServer();
+
+			});
+
+
+		</script>
+
+
+
+		
+
+
 		
 				
 	</body>
