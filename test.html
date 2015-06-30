@@ -29,12 +29,13 @@
 		<!-- 2. Add the JavaScript to initialize the chart on document ready -->
 		<script>
 			function QueryServer() {
-				var fruits = Parse.Object.extend("fruits");
-				var query = new Parse.Query(fruits);
+				var accidents = Parse.Object.extend("accidents");
+				var query = new Parse.Query(accidents);
 
 				query.find({
 				  success: function(results) {
 				  	alert("Results found:" + results.length);
+				  	alert(results);
 
 				    CreateChart(results);
 
@@ -51,10 +52,10 @@
 				var options = {
 					chart: {
 						renderTo: 'container',
-						type: 'column'
+						type: 'splines'
 					},
 					title: {
-						text: 'Fruit Consumption'
+						text: 'Accidents'
 					},
 					xAxis: {
 						categories: []
@@ -73,44 +74,10 @@
 
 					};
 
-				var series0 = { 
-							data: []
-							
-						};
-				var series1 = { 
-							data: []
-							
-						};
 
-				var series2 = { 
-							data: []
-							
-						};
-
-				var series3 = { 
-							data: []
-							
-						};
-
-
-				for (var i = 0; i < results.length; i++) {
-				var numapples = results[i].get('Apples');
-				var numoranges = results[i].get('Oranges');
-				var numplums = results[i].get('Plums');
-				var numpears = results[i].get('Pears');
-				var names = results[i].get('Name');
-				series0.data.push(numapples);
-				series1.data.push(numoranges);
-				series2.data.push(numplums);
-				series3.data.push(numpears);	
-				options.xAxis.categories.push(names);			
-				}				
-					
-
-
-				options.series.push(series0,series1, series2, series3);
-				
-				
+				for (var i = 0; i < results.length; i++){
+					alert(Day)
+				}
 
 
 
