@@ -102,8 +102,9 @@ function calcRouteSuccess() {
 }
 
 //
-// Function to call cloud function that takes start/end points and returns shapepoints along route
+// Function to call cloud function that takes start/end points and returns shapepoints along a set of routes
 function cloudComputeShapes(startEndArray) {
+	alert("querying for routes...");
 	// Convert input array to start and end strings
 	var startString = "" + startEndArray[0][0] + "," + startEndArray[0][1];
 	var endString = "" + startEndArray[1][0] + "," + startEndArray[1][1];
@@ -115,14 +116,29 @@ function cloudComputeShapes(startEndArray) {
 	}, {
 		success: function(result) {
 
-			// Convert objects in results to 2D array
-			var convertedArray = new Array();
-			for (var i = 0; i < result.lat.length; i++) {
-				convertedArray.push([result.lat[i],result.lng[i]]);
+			// There may be multiple routes returned
+			var arrayOfRoutes = new Array();
+			alert(result.length " routes found");
+
+			for (var j = 0; j < result.length; j++) {
+
+				// Convert objects in results to 2D array
+				var convertedArray = new Array();
+				for (var i = 0; i < result[j].lat.length; i++) {
+					convertedArray.push([result[j].lat[i],result[j].lng[i]]);
+				}
+
+				arrayOfRoutes.push(convertedArray);
 			}
 
-			// Plot the converted 2D array
-			convertShapesToArray(convertedArray);
+			for (var i = 0; i < arrayOfRoutes.length; i++) {
+				var color = 'Gray';
+				if (i == 0) {
+					color = 'DarkBlue';
+				}
+				convertShapesToArray(arrayOfRoutes[i], color);
+			}
+
 		},
 		error: function(error) {
 			alert("Error: " + error.code + " " + error.message);
@@ -132,7 +148,7 @@ function cloudComputeShapes(startEndArray) {
 
 //
 // Function to take JSON object from query and convert it to array of GPS coordinates
-function convertShapesToArray(arrayOfPoints) {
+function convertShapesToArray(arrayOfPoints, color) {
 
 	// Conver the shape points to array of lat/longs
 	// unnecessary??
@@ -157,7 +173,7 @@ function convertShapesToArray(arrayOfPoints) {
 	safetyRating = safetyRating.toPrecision(2);  
 	showSafetyRating(arrayOfPoints, safetyRating);
 	// Plot the route
-	plotroute(arrayOfPoints);
+	plotroute(arrayOfPoints, color);
 
 }
 
@@ -202,12 +218,12 @@ function showSafetyRating(arrayOfPoints, safetyRating) {
 }
 
 //
-function plotroute(arrayOfPoints) {
+function plotroute(arrayOfPoints, color) {
 
 	// Array of coordinates
 	var routeCoordinates = new Array();
 
-	alert("# Lines: " + arrayOfPoints.length);
+	/*alert("# Lines: " + arrayOfPoints.length);*/
 
 	for (var i = 0; i < arrayOfPoints.length; i++) {
 		routeCoordinates.push(new google.maps.LatLng(arrayOfPoints[i][0],arrayOfPoints[i][1]));
@@ -215,7 +231,7 @@ function plotroute(arrayOfPoints) {
 
 	plottedRoute = new google.maps.Polyline({
 		path: routeCoordinates,
-		strokeColor: 'DarkBlue',
+		strokeColor: color,
 		strokeOpacity: 1.0,
 		strokeWeight: 3
 	});
