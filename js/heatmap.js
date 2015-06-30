@@ -74,15 +74,18 @@ function QueryForHeatmap() {
 	// Determine which type of heatmap we want
 	var heatmapCol = HeatmapType();
 
-	// Cancel query if "none" is selected
 	if (heatmapCol === "none") {
-		return;
-	}
 
-	// Set "greater than" value if necessary
-	var greaterThanVal = 0;
-	if (heatmapCol === "cars") {
-		greaterThanVal = 10;
+		// If "none" is selected, cancel the query
+		return;
+
+	} else if (heatmapCol === "cars") {
+
+		// Car density querying requires specialized querying function
+		//alert("Selected \"Cars\", redirecting query...");
+		QueryForCarHeatmap();
+		return;
+
 	}
 
 	// Setup query from general table
@@ -90,7 +93,7 @@ function QueryForHeatmap() {
 	var query = new Parse.Query(rowColPairs);
 
 	// Set query constraints
-	query.greaterThan(heatmapCol, greaterThanVal);
+	query.greaterThan(heatmapCol, 0);
 	query.limit(500);
 
 	// Perform query
@@ -126,6 +129,54 @@ function QueryForHeatmap() {
 	});
 
 }
+
+
+//
+// Function to query for only top 5% of car densities
+function QueryForCarHeatmap() {
+
+	// Setup query from general table
+	var rowColPairs = Parse.Object.extend("generalTable");
+	var carQuery = new Parse.Query(rowColPairs);
+
+	// Set query constraints
+	carQuery.descending("cars");
+	carQuery.limit(1000);
+
+	// Perform query
+	carQuery.find({
+
+		success: function(results) {
+
+			//alert("Number of car heatmap entries: " + results.length);
+
+			// Create array of lat/longs for the heatmap plot
+			var googleLatLngArray = new Array();
+
+			for (var i = 0; i < results.length; i++) {
+				var object = results[i];
+
+				// Convert row/col to lat/lng
+				var GLat = object.get('row') * 0.00005 + 41.994;
+				var GLng = object.get('col') * 0.00005 - 84.88087;
+
+				// Add point to coords array
+				googleLatLngArray.push(new google.maps.LatLng(GLat, GLng));
+			}
+
+			// Send coords array to plotting function
+			PlotHeatmap(googleLatLngArray);
+
+		},
+
+		error: function(error) {
+			alert("Error: " + error.code + " " + error.message);
+		}
+
+	});
+
+}
+
 
 //
 // Function that takes array of google.maps.LatLng() values and plots a heatmap

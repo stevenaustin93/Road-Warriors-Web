@@ -1,3 +1,5 @@
+//THIS CODE IS WORKING
+
 //
 // loadanomalies.js
 // This (revamped) script handles the checkbox input of anomalies on the map
@@ -15,7 +17,7 @@ var GENERAL_ALERT_ICON = "images/general_alert.png";
 $(document).ready(function() {
 
 	// Get array of query results from server
-	var realAnomalies = Parse.Object.extend("realAnomalies");
+	var realAnomalies = Parse.Object.extend("superTable");
 	var query = new Parse.Query(realAnomalies);
 
 	query.limit(200);
@@ -26,10 +28,11 @@ $(document).ready(function() {
 			// Formatted "return" array (actually pushed forward)
 			var anomaliesArray = new Array();
 
+
 			// Do something with the returned Parse.Object values
 			for (var i = 0; i < results.length; i++) {
 				var object = results[i];
-				anomaliesArray.push([object.get('Lat'), object.get('Long'), object.get('Class')]);
+				anomaliesArray.push([object.get('Latitude'), object.get('Longitude'), object.get('class'), object.get('FileId')]);
 			}
 
 			AnomalyQueryCallback(anomaliesArray);
@@ -52,11 +55,11 @@ function AnomalyQueryCallback(anomaliesArray) {
 	var rapidDecelArray = new Array();
 	var crashArray = new Array();
 
+	
 	// Loop through anomaliesArray and create a marker in respective arrays
 	for (var i = 0; i < anomaliesArray.length; i++) {
-
-		// GPS Position
-		var markPos = new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]);
+			//GPS Position
+			var markPos = new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]);
 
 		// Set icon and title (label) accordingly
 		switch (anomaliesArray[i][2]) {
@@ -64,31 +67,57 @@ function AnomalyQueryCallback(anomaliesArray) {
 			case "S":
 				markIcon = SWERVE_ICON;
 				markTitle = "Swerving event detected here!";
+				markName = "<b>Swerving Event.</b>" 
 				break;
 			case "A1":
+				markName = "<b>Class 1 Acceleration Event.</b>";
+				break;
 			case "A2":
 				markIcon = FAST_ACCEL_ICON;
 				markTitle = "Fast acceleration event detected here!";
+				markName = "<b>Class 2 Acceleration Event.</b>";
 				break;
 			case "B1":
+				markName = "<b>Class 1 Braking Event.</b>";
+				break;
 			case "B2":
 				markIcon = BRAKING_ICON;
 				markTitle = "Rapid braking event detected here!";
+				markName = "<b>Class 2 Braking Event.</b>";
 				break;
 			case "C":
 				markIcon = CRASH_ICON;
 				markTitle = "Accident detected here!";
+				markName = "<b>Accident.</b>";
 				break;
 			default:
 				// Do nothing on default case
 		}
-
 		// Create the marker
 		var marker = new google.maps.Marker({
 			position: markPos,
 			title: markTitle,
-			icon: markIcon
-		});
+			icon: markIcon,
+			});
+
+//When the user clicks on a marker, an infowindow appears that details the type of anomaly and the exact location (Lat/Lng). 
+		
+        var message = markName.toString() + '<div>' + "<b>Location:</b>" + " " + markPos.toString() + "<div>" + "<b>File ID:</b>" + " " + anomaliesArray[i][3];
+
+		function addInfoWindow(marker, message) {
+			//initialize infowindow
+			var infoWindow = new google.maps.InfoWindow({
+				content: message
+			});
+			//add a listener for the infowindow (click)
+			new google.maps.event.addListener(marker, 'click', function () {
+				infoWindow.open(map, this);
+			});
+		}
+		addInfoWindow(marker, message); 
+
+
+
 
 		// Add the marker to respective array
 		switch (anomaliesArray[i][2]) {

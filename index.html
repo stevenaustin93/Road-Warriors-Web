@@ -6,14 +6,13 @@
 	<style>
 	html, body, #map-canvas, #dashBoardDiv {
 		height: 100%;
-		margin: 0px;
 		padding: 0px;
 		z-index:0;
 	}
 
 	.side-bar {
-		width: 280px;
-		height: 100%;
+		width: 295px;
+		/*height: 100%;*/
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -23,6 +22,11 @@
 		border-color: lightgray;
 		border-width: 1px;
 		padding: 10px 20px 10px 20px;
+	}
+
+	#map-canvas {
+		height: 100%;
+		margin-bottom: 0%;
 	}
 
 	#dropdownbutton {
@@ -44,121 +48,180 @@
 	}
 
 	fieldset {
-				border: 0;
-			}
-			label {
-				display: block;
-				margin: 0px 0 0px 0;
-			}
-			select {
-				height: 30px;
-				width: 220px;
-				margin-bottom: 10px
-			}
-			.overflow {
-				height: 200px;
-			}
+		border: 0;
+	}
+	
+	select {
+		height: 30px;
+		width: 220px;
+		margin-bottom: 10px
+	}
+
+	.overflow {
+		height: 200px;
+	}
 
 	
 
-	 #topBar {
-		margin-left: 280px;
+	#topBar {
+		margin-left: 0px;
 		position: absolute;
 		z-index: 1;
 		height: 50px;
-		width: 230px;
-		background-color: white;
+		width: 100%;
+		background-color: rgba(255, 255, 255, 0.82);
 
 	}
 
-	 #dashBoardDiv {
-	 	/*margin-top: 30px;*/
-	 }
+	#dashBoardDiv {
+		height: 100%;
+		margin-bottom: 0px;
+		margin-top: auto;
+	}
 
+	#sideBar {
+		height: 90%;
+		margin-top: 50px;
+		overflow: auto;
+		
+	}
 
-		</style>
+	#navTabs {
+		width: 420px;
+		margin-top: 0px;
+		margin-left: 44%;
+		margin-right: auto;
+		top: 0;
+		left: 0;
+		position: absolute;
+	}
 
-		<!-- Google maps -->
-		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZCvB7znSd96KaA7vxEAumHmvweDXVRMU&libraries=visualization"></script>
+	#TIS {
+		margin-bottom: auto;
+		margin-top: 6.5px;
+		padding-left: 5px;
+	}
 
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	#routeSelection {
+		margin-bottom: auto;
+	}
 
-		<!-- jQuery library -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	#routeButtons {
+		padding-top: 5px;
+	}
 
-		<!-- Latest compiled JavaScript -->
-		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	</style>
 
-		<!-- Parse Scripts -->
-		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
+	<!-- Google maps -->
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZCvB7znSd96KaA7vxEAumHmvweDXVRMU&libraries=visualization"></script>
 
-		<!-- Parse initialization -->
-		<script>
-		Parse.initialize("6s0wYYKZR2sQU8zMV304cL8jv5Pdmp3PzOIwKLOp", "7C1XQAKjUdhiH6k25tRIbVOweuNMoFy0n0An4LJf");
-		</script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
-		<!-- Local Scripts -->
-		<!-- <script type="text/javascript" src="js/mapinit.js"></script> -->
-		<script type="text/javascript" src="js/jquery-csv.js"></script>
-		<script type="text/javascript" src="js/loadanomalies.js"></script>
-		<script type="text/javascript" src="js/colorroute.js"></script>
-		<script type="text/javascript" src="js/brakemap.js"></script>
-		<script type="text/javascript" src="js/heatmap.js"></script>
-		<script type="text/javascript" src="js/plotroute.js"></script>
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-		<script>
-		var map;
+	<!-- Latest compiled JavaScript -->
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-		function initialize() {
-			var mapOptions = {
-				zoom: 12,
-				center: new google.maps.LatLng(42.2813, -83.7483),
-				mapTypeControl: true,
-				mapTypeControlOptions: {
-					style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-					position: google.maps.ControlPosition.TOP_CENTER
-				},
-				zoomControl: true,
-				zoomControlOptions: {
-					style: google.maps.ZoomControlStyle.SMALL,
-					position: google.maps.ControlPosition.RIGHT_CENTER
-				},
-				scaleControl: true,
-				streetViewControl: true,
-				streetViewControlOptions: {
-					position: google.maps.ControlPosition.RIGHT_TOP
-				},
-				panControl: false
-			}
+	<!-- Parse Scripts -->
+	<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
 
-			map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	<!-- Parse initialization -->
+	<script>
+	Parse.initialize("6s0wYYKZR2sQU8zMV304cL8jv5Pdmp3PzOIwKLOp", "7C1XQAKjUdhiH6k25tRIbVOweuNMoFy0n0An4LJf");
+	</script>
+
+	<!-- Local Scripts -->
+	<!-- <script type="text/javascript" src="js/mapinit.js"></script> -->
+	<script type="text/javascript" src="js/jquery-csv.js"></script>
+	<script type="text/javascript" src="js/loadanomalies.js"></script>
+	<script type="text/javascript" src="js/colorroute.js"></script>
+	<script type="text/javascript" src="js/brakemap.js"></script>
+	<script type="text/javascript" src="js/heatmap.js"></script>
+	<script type="text/javascript" src="js/plotroute.js"></script>
+
+	<script>
+	var map;
+
+	function initialize() {
+		var mapOptions = {
+			zoom: 12,
+			center: new google.maps.LatLng(42.2813, -83.7483),
+			mapTypeControl: true,
+			mapTypeControlOptions: {
+				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+				position: google.maps.ControlPosition.BOTTOM_CENTER
+			},
+			zoomControl: true,
+			zoomControlOptions: {
+				style: google.maps.ZoomControlStyle.SMALL,
+				position: google.maps.ControlPosition.RIGHT_CENTER
+			},
+			scaleControl: true,
+			streetViewControl: true,
+			streetViewControlOptions: {
+				position: google.maps.ControlPosition.RIGHT_CENTER
+			},
+			panControl: false
 		}
 
-		google.maps.event.addDomListener(window, 'load', initialize);
-
-		</script>
-	</head>
-	<body>
-	 <div id="topBar">
-			<ul class="nav nav-tabs">
-				<li role="presentation" class="active"><a href="#" data-toggle="tab">Dashboard</a></li>
-				<li role="presentation"><a href="#" data-toggle="tab">Data Analytics</a></li>
-			</ul>
-		</div>
+		map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
 
-		 <div id="dashBoardDiv">
-		<div class="side-bar">
-			<h3>Traffic Information System</h3>
+	}
+
+	google.maps.event.addDomListener(window, 'load', initialize);
+
+
+	/*google.maps.event.addDomListener(window, 'resize', function() {
+    map.setCenter(center);
+  }*/
+
+  
+</script>
+<script>
+/*
+	var center;
+	function calculateCenter() {
+		alert("attempted to recenter");
+		center = map.getCenter();
+	}
+	google.maps.event.addDomListener(map, 'idle', function() {
+		calculateCenter();
+	});
+	google.maps.event.addDomListener(window, 'resize', function() {
+		calculateCenter();
+		map.setCenter(center);
+	});
+*/
+</script>
+</head>
+<body>
+	<div id="topBar">
+		<h2 id="TIS" style="float:left"><em>Traffic Information System</em></h2>
+		<ul id="navTabs" class="nav nav-tabs">
+			<li role="presentation" class="active"><a href="index.html" data-toggle="tab"><strong>Dashboard</strong></a></li>
+			<li role="presentation"><a href="newDataPage.html" data-toggle="tab"><strong>Data Analytics</strong></a></li>
+			<li role="presentation"><a href="#" data-toggle="tab"><strong>About</strong></a></li>
+			<li role="presentation"><a href="#" data-toggle="tab"><strong>Support</strong></a></li>
+
+		</ul>
+	</div>
+
+
+	<div id="dashBoardDiv">
+		<div id="sideBar" class="side-bar">
+			<!-- <h3>Traffic Information System</h3>
 			<div>
 				<ul class="nav nav-tabs">
 					<li role="presentation" class="active"><a href="#" data-toggle="tab">Dashboard</a></li>
 					<li role="presentation"><a href="#" data-toggle="tab">Data Analytics</a></li>
 				</ul>
-			</div>
+			</div> -->
 			<div>
-				<ul class="nav nav-pills nav-stacked">
+				<h4>Mapping Frame:</h4>
+				<ul class="nav nav-pills nav-stacked nav-tabs">
 					<li id="historic"><a data-toggle="tab">Historic</a></li>
 					<li id="live" role="presentation" class="active"><a data-toggle="tab">Live</a></li>
 					<li id="forecast"><a data-toggle="tab">Future</a></li>
@@ -177,7 +240,7 @@
 					<option value="brake2">-0.70 G Braking</option>
 					<option value="brake3">-0.50 G Braking</option>
 					<option value="swerve">High Swerving</option>
-					<option value="cars">High Car Density</option>
+					<option value="cars">Highest 5% Car Density</option>
 					<!-- <span class="caret"></span> -->
 				</select>
 				<!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -187,16 +250,18 @@
 				</ul> -->
 			</div>	
 
+			<hr>
 
-			<div style="margin-top: 10px">
-			<button id="swerve" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/swerve_icon.png" align="left"></span>Swerve</button>
+			<div>
+				<h4> Display Events: </h4>
+				<button id="swerve" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/swerve_icon.png" align="left"></span>Swerve</button>
 
-			<button id="rapidAccel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/fast_accel_icon.png" align="left"></span>Acceleration</button>
+				<button id="rapidAccel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/fast_accel_icon.png" align="left"></span>Acceleration</button>
 
-			<button id="rapidDecel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/braking_icon.png" align="left"></span>Braking</button>
+				<button id="rapidDecel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/braking_icon.png" align="left"></span>Braking</button>
 
-			<button id="crash" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/crash_icon.png" align="left"></span>Crash</button>
-		</div>
+				<button id="crash" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"><img src="images/crash_icon.png" align="left"></span>Crash</button>
+			</div>
 		<!--
 		<div class="dropdown">
 			<h4>Start:</h4>
@@ -216,9 +281,10 @@
 				</ul>
 			</div>
 		</div>
-		-->
-		
-	<div>
+	-->
+	<hr>
+
+	<div id="routeSelection">
 	<!--	<style>
 			fieldset {
 				border: 0;
@@ -235,6 +301,22 @@
 				height: 200px;
 			}
 		</style> -->
+		<h3><em>Route Selection:</em></h3>
+		<div class="dropdown">
+			
+			<h4>Route View:</h4>
+			<select name="routeOptions" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background-color:white">
+				<option id="none" selected="selected">None</option>
+				<option id="speed">Speed</option>
+				<option id="acceleration">Acceleration</a></option>
+				<option id="yaw">Yaw Rate</option>
+				<option id="traffic">Traffic</option>
+
+			</select>
+
+		</div>
+
+		
 		<label for="start"><h4>Start:</h4></label>
 
 		<select name="start" id="start" class="btn btn-default" style="background-color: white">
@@ -250,16 +332,19 @@
 			<option>Stadium</option>
 			<option>Miller Nature Area</option>
 		</select>
+
+		<p></p>
+		<div id="routeButtons" style="display:in-line; padding-top: 5px">
+			<button id="calcRoute" type="button" class="btn btn-primary">Calculate Route</button>
+			<button id="clearRoute" type="button" class="btn btn-primary">Clear Route</button>
+
+		</div>
 	</div>
-
-	<p></p>
-	<div id="routeButtons" style="display:in-line">
-	<button id="calcRoute" type="button" class="btn btn-primary">Calculate Route</button>
-	<button id="clearRoute" type="button" class="btn btn-primary">Clear Route</button>
-
-</div>
 </div>
 <div id="map-canvas"></div>
+
+
+
 </div> <!-- End DashBoard Div -->
 </body>
 </html>
