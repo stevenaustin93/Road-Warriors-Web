@@ -266,8 +266,8 @@ function PlotRoutes(arrayOfRoutes) {
 		plottedRoutes.push(new google.maps.Polyline({
 			path: routeCoordinates,
 			strokeColor: color,
-			strokeOpacity: 1.0,
-			strokeWeight: 3
+			strokeOpacity: 0.7,
+			strokeWeight: 5
 		}));
 	}
 
