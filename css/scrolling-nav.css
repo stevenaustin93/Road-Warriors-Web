@@ -4,15 +4,12 @@
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
 
-body {
+html, body {
     width: 100%;
     height: 100%;
 }
 
-html {
-    width: 100%;
-    height: 100%;
-}
+
 
 
 
@@ -25,11 +22,14 @@ of those sections to manage the look and feel of the site. */
     padding-top: 150px;
     text-align: center;
     background: #fff;
+    width: 100%;
+    top: 0;
+
 }
 
 .about-section {
     height: 100%;
-    padding-top: 150px;
+    padding-top: 110px;
     text-align: center;
     background: #eee;
 }
@@ -61,10 +61,10 @@ of those sections to manage the look and feel of the site. */
 
 #wrapper {
     padding-left: 0;
-    -webkit-transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease; 
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
+    transition: all 0.5s ease;*/
 }
 
 
