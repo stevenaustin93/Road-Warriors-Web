@@ -70,19 +70,23 @@ function AnomalyQueryCallback(anomaliesArray) {
 				markName = "<b>Swerving Event.</b>" 
 				break;
 			case "A1":
+				markIcon = FAST_ACCEL_ICON
+				markTitle = "Fast acceleration event detected here!"
 				markName = "<b>Class 1 Acceleration Event.</b>";
 				break;
 			case "A2":
 				markIcon = FAST_ACCEL_ICON;
-				markTitle = "Fast acceleration event detected here!";
+				markTitle = "Acceleration event detected here!";
 				markName = "<b>Class 2 Acceleration Event.</b>";
 				break;
 			case "B1":
+				markIcon = BRAKING_ICON;
+				markTitle = "Rapid braking event detected here!";
 				markName = "<b>Class 1 Braking Event.</b>";
 				break;
 			case "B2":
 				markIcon = BRAKING_ICON;
-				markTitle = "Rapid braking event detected here!";
+				markTitle = "Braking event detected here!";
 				markName = "<b>Class 2 Braking Event.</b>";
 				break;
 			case "C":
@@ -102,7 +106,11 @@ function AnomalyQueryCallback(anomaliesArray) {
 
 //When the user clicks on a marker, an infowindow appears that details the type of anomaly and the exact location (Lat/Lng). 
 		
-        var message = markName.toString() + '<div>' + "<b>Location:</b>" + " " + markPos.toString() + "<div>" + "<b>File ID:</b>" + " " + anomaliesArray[i][3];
+        var message = markName.toString() + '<div>' + "<b>Location:</b>" + " " + markPos.toString();
+        //To post FileID as well, add:' + "<div>" + "<b>File ID:</b>" + " " + anomaliesArray[i][3]'
+
+        //Initialize array of infowindows 
+        var infoWindowsArray = new Array();
 
 		function addInfoWindow(marker, message) {
 			//initialize infowindow
@@ -110,14 +118,26 @@ function AnomalyQueryCallback(anomaliesArray) {
 				content: message
 			});
 			//add a listener for the infowindow (click)
-			new google.maps.event.addListener(marker, 'click', function () {
+			new google.maps.event.addListener(marker, 'click', function(event) {
 				infoWindow.open(map, this);
+				infoWindowsArray.push(infoWindow);
 			});
+
+			for (var i = 0; i < infoWindows.length; i++) {
+			infoWindowsArray[i].setMap(map);
+			}
+
+			function clearOldWindow(marker) {
+				for (var i = 0; i < infoWindows.length; i++){
+					new google.maps.event.addListener(marker, 'click', function(event){
+					infowWindowsArray[i].setMap(null);
+					})
+				}
+			}
 		}
 		addInfoWindow(marker, message); 
 
-
-
+		
 
 		// Add the marker to respective array
 		switch (anomaliesArray[i][2]) {
@@ -125,12 +145,16 @@ function AnomalyQueryCallback(anomaliesArray) {
 				swerveArray.push(marker);
 				break;
 			case "A1":
-			case "A2":
 				rapidAccelArray.push(marker);
 				break;
+			case "A2":
+				//rapidAccelArray.push(marker);
+				break;
 			case "B1":
-			case "B2":
 				rapidDecelArray.push(marker);
+				break;
+			case "B2":
+				//rapidDecelArray.push(marker);
 				break;		
 			case "C":
 				crashArray.push(marker);
