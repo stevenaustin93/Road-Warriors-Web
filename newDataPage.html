@@ -73,10 +73,17 @@
 									text: 'Accident Data'
 								},
 								xAxis: {
-									type: 'datetime',
-									categories: []
 
-								},
+									type: 'datetime',
+									labels: {
+									    formatter: function() {
+									          return Highcharts.dateFormat('%b', this.value);
+									    }
+									},
+								 	
+				
+								    categories: []
+								},	
 								yAxis: {
 									title: {
 										text: 'Units'
@@ -88,6 +95,9 @@
 			                    },
 
 								series: []
+	
+									//pointInterval: 24 * 3600 * 1000 * 31
+
 
 								};
 							
@@ -96,23 +106,23 @@
 							}
 
 
-
-
 							var dates = [];
 							var c;
 							var utcDate;
-							var d = [];
+							var d;
 
 							
 
 							for (var i = 0; i < results.length; i++){
 								amount = results[i].get('Count');
 								dates.push(results[i].get('Date'));
-								c = dates[i];
-								d.push(c);
+								d = dates[i];
+								d = String(d);
+								d = d.split('-');
 
+								//alert(d);
 
-								utcDate = new Date(Date.UTC());
+								utcDate = new Date (Date.UTC(d[0],d[1],d[2]));
 								options.xAxis.categories.push(utcDate);
 								
 							

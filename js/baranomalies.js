@@ -6,7 +6,7 @@
 		query.limit(1000);
 		query.find({
 		  success: function(results) {
-		  	alert("Results found:" + results.length);
+		  	//alert("Results found:" + results.length);
 
 		    Create(results);
 
