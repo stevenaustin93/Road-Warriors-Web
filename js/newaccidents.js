@@ -7,7 +7,7 @@
 				query.find({
 					
 					success: function(results) {
-					  	alert("Results found:" + results.length);
+					  	//alert("Results found:" + results.length);
 						CreateChart(results);
 					},
 					error: function(error) {
@@ -21,7 +21,7 @@
 				var options = {
 					
 					chart: {
-						renderTo: 'container',
+						renderTo: 'accid',
 						type: 'spline'
 					},
 					
