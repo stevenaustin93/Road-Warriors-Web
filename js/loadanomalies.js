@@ -125,15 +125,18 @@ function AnomalyQueryCallback(anomaliesArray) {
 
 			for (var i = 0; i < infoWindows.length; i++) {
 			infoWindowsArray[i].setMap(map);
+				if (infoWindowsArray[i] != this) {
+					infoWindowsArray[i].close();
+				}
 			}
 
-			function clearOldWindow(marker) {
+			/*function clearOldWindow(marker) {
 				for (var i = 0; i < infoWindows.length; i++){
 					new google.maps.event.addListener(marker, 'click', function(event){
 					infowWindowsArray[i].setMap(null);
 					})
 				}
-			}
+			}*/
 		}
 		addInfoWindow(marker, message); 
 
