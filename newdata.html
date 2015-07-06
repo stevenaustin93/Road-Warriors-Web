@@ -53,8 +53,9 @@
         background-color: rgba(255, 255, 255, 0.82);
         pointer-events: none;
         float: left;
-        z-index: 1001
+        z-index: 1001;
         left: 0;
+        border-radius: 5px solid;
 
     }
 
@@ -75,16 +76,13 @@
         padding-left: 5px;
         margin-left: 0px;
         float: left;
-        position: absolute;
-        text-align: left;
-    }
-
-    #sidebar-wrapper {
-        height: 90%;
-        margin-top: 50px;
-        overflow: auto;
+        font-family: helvetica;
+        font-weight: normal;
+        font-size: 30px;
         
     }
+
+   
 
     .side-bar {
         width: 295px;
@@ -100,6 +98,10 @@
         padding: 10px 20px 10px 20px;
     }
 
+    #sidebar-wrapper {
+        margin-top: 50px;
+    }
+
 
 
 
@@ -108,10 +110,10 @@
  <div id="wrapper">
 
         <div id="topBar">
-        <h2 id="TIS" style="float:left"><em>Traffic Information System</em></h2>
+        <h2 id="TIS"><em>Traffic Information System</em></h2>
         <ul id="navTabs" class="nav nav-tabs navbar-left" data-step="1" data-intro="Welcome To The Traffic Navigation System">
-            <li role="presentation" class="active"><a href="index.html" data-toggle="tab"><strong>Dashboard</strong></a></li>
-            <li role="presentation"><a href="newdata.html" target="_blank" data-toggle="tab"><strong>Data Analytics</strong></a></li>
+            <li role="presentation"><a href="index.html"><strong>Dashboard</strong></a></li>
+            <li role="presentation" class="active"><a href="newdata.html"><strong>Data Analytics</strong></a></li>
             <li role="presentation"><a href="#" data-toggle="tab"><strong>About</strong></a></li>
             <li role="presentation"><a href="#" data-toggle="tab"><strong>Support</strong></a></li>
 
@@ -154,8 +156,6 @@
                         <p><script type="text/javascript" src="js/weatherchart.js"></script></p>
                     </div>
                     
-                </div>
-                    <!--<a class="btn btn-default page-scroll" href="#about">Click Me to Scroll Down!</a>-->
                 </div>
             </div>
         </div>
