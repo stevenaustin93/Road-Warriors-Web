@@ -43,10 +43,83 @@
 <!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
 
 <body>
+    <style type="text/css">
+
+    #topBar {
+        margin-left: 0px;
+        position: fixed;
+        height: 50px;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.82);
+        pointer-events: none;
+        float: left;
+        z-index: 1001
+        left: 0;
+
+    }
+
+    #navTabs {
+        width: 420px;
+        margin-top: 0px;
+        margin-left: 44%;
+        margin-right: auto;
+        top: 0;
+        left: 0;
+        position: absolute;
+        pointer-events: auto;
+    }
+
+    #TIS {
+        margin-bottom: auto;
+        margin-top: 6.5px;
+        padding-left: 5px;
+        margin-left: 0px;
+        float: left;
+        position: absolute;
+        text-align: left;
+    }
+
+    #sidebar-wrapper {
+        height: 90%;
+        margin-top: 50px;
+        overflow: auto;
+        
+    }
+
+    .side-bar {
+        width: 295px;
+        /*height: 100%;*/
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1002;
+        background-color: rgba(255, 255, 255, 0.83);
+        border-style: solid;
+        border-color: lightgray;
+        border-width: 1px;
+        padding: 10px 20px 10px 20px;
+    }
+
+
+
+
+    </style>
+
+ <div id="wrapper">
+
+        <div id="topBar">
+        <h2 id="TIS" style="float:left"><em>Traffic Information System</em></h2>
+        <ul id="navTabs" class="nav nav-tabs navbar-left" data-step="1" data-intro="Welcome To The Traffic Navigation System">
+            <li role="presentation" class="active"><a href="index.html" data-toggle="tab"><strong>Dashboard</strong></a></li>
+            <li role="presentation"><a href="newdata.html" target="_blank" data-toggle="tab"><strong>Data Analytics</strong></a></li>
+            <li role="presentation"><a href="#" data-toggle="tab"><strong>About</strong></a></li>
+            <li role="presentation"><a href="#" data-toggle="tab"><strong>Support</strong></a></li>
+
+        </ul>
+    </div>
 
     <!-- Navigation -->
-    <div id="wrapper">
-
+   
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="side-bar sidebar-nav">
