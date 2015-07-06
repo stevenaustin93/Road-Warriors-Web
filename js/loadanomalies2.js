@@ -114,8 +114,9 @@ function AnomalyQueryCallback(anomaliesArray) {
 
 
 
-		
-		addInfoWindow(marker, message); 
+		// Add an info window to the marker
+		var markNumber = i;
+		addInfoWindow(marker, message, i); 
 
 		
 
@@ -239,30 +240,22 @@ function AnomalyQueryCallback(anomaliesArray) {
 	})
 }
 
-function addInfoWindow(marker, message) {
-			//initialize infowindow
-			var infoWindow = new google.maps.InfoWindow({
-				content: message
-			});
-			//add a listener for the infowindow (click)
-			new google.maps.event.addListener(marker, 'click', function(event) {
+function addInfoWindow(marker, message, number) {
+	//initialize infowindow
+	var infoWindow = new google.maps.InfoWindow({
+		content: message
+	});
 
-				infoWindow.open(map, this);
-				infoWindowsArray.push(infoWindow);
-			});
-
-			for (var i = 0; i < infoWindows.length; i++) {
-				//infoWindowsArray[i].setMap(map);
-				if (infoWindowsArray[i] != this) {
-					infoWindowsArray[i].close();
-				}
+	//add a listener for the infowindow (click)
+	new google.maps.event.addListener(marker, 'click', function(event) {
+		for (var i = 0; i < infowWindowsArray.length; i++) {
+			if (i === number) {
+				infoWindowsArray[i].open(map, this);
+			} else {
+				infowWindowsArray[i].close();
 			}
-
-	/*function clearOldWindow(marker) {
-		for (var i = 0; i < infoWindows.length; i++){
-			new google.maps.event.addListener(marker, 'click', function(event){
-			infowWindowsArray[i].setMap(null);
-			})
 		}
-	}*/
+	});
+
+	infoWindowsArray.push(infoWindow);
 }

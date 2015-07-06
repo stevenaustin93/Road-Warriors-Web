@@ -5,8 +5,8 @@
     <title>TMI: Data Analysis Page</title>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
-    <script type="text/javascript" src="js/exporting.js"></script>
-    <!-- <script type="text/javascript" src="js/exporting.js"></script> -->
+   <!--<script type="text/javascript" src="js/exporting.js"></script>-->
+
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js">
     </script>
     <script> Parse.initialize("6s0wYYKZR2sQU8zMV304cL8jv5Pdmp3PzOIwKLOp", "7C1XQAKjUdhiH6k25tRIbVOweuNMoFy0n0An4LJf");</script>
@@ -30,15 +30,96 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <!-- Highcharts -->
+
+    <!-- Highcharts heat maps -->
+    <script src="http://code.highcharts.com/modules/heatmap.js"></script>
+
+    <!-- Not sure what this is -->
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+
 </head>
 
 <!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
 
 <body>
+    <style type="text/css">
+
+    #topBar {
+        margin-left: 0px;
+        position: fixed;
+        height: 50px;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.82);
+        pointer-events: none;
+        float: left;
+        z-index: 1001
+        left: 0;
+
+    }
+
+    #navTabs {
+        width: 420px;
+        margin-top: 0px;
+        margin-left: 44%;
+        margin-right: auto;
+        top: 0;
+        left: 0;
+        position: absolute;
+        pointer-events: auto;
+    }
+
+    #TIS {
+        margin-bottom: auto;
+        margin-top: 6.5px;
+        padding-left: 5px;
+        margin-left: 0px;
+        float: left;
+        position: absolute;
+        text-align: left;
+    }
+
+    #sidebar-wrapper {
+        height: 90%;
+        margin-top: 50px;
+        overflow: auto;
+        
+    }
+
+    .side-bar {
+        width: 295px;
+        /*height: 100%;*/
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1002;
+        background-color: rgba(255, 255, 255, 0.83);
+        border-style: solid;
+        border-color: lightgray;
+        border-width: 1px;
+        padding: 10px 20px 10px 20px;
+    }
+
+
+
+
+    </style>
+
+ <div id="wrapper">
+
+        <div id="topBar">
+        <h2 id="TIS" style="float:left"><em>Traffic Information System</em></h2>
+        <ul id="navTabs" class="nav nav-tabs navbar-left" data-step="1" data-intro="Welcome To The Traffic Navigation System">
+            <li role="presentation" class="active"><a href="index.html" data-toggle="tab"><strong>Dashboard</strong></a></li>
+            <li role="presentation"><a href="newdata.html" target="_blank" data-toggle="tab"><strong>Data Analytics</strong></a></li>
+            <li role="presentation"><a href="#" data-toggle="tab"><strong>About</strong></a></li>
+            <li role="presentation"><a href="#" data-toggle="tab"><strong>Support</strong></a></li>
+
+        </ul>
+    </div>
 
     <!-- Navigation -->
-    <div id="wrapper">
-
+   
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="side-bar sidebar-nav">
@@ -69,9 +150,10 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1>Data Analysis</h1>
-                    <div id="weather" style="height: 400px; min-width: 310px; max-width: 800px; margin: 0 auto"></div>
-                    <script src="js/jquery.js"></script>
-                    <p><script type="text/javascript" src="js/weatherchart.js"></script></p>
+                    <div id="weather" style="height: 400px; min-width: 310px; max-width: 800px; margin: 0 auto">
+                        <p><script type="text/javascript" src="js/weatherchart.js"></script></p>
+                    </div>
+                    
                 </div>
                     <!--<a class="btn btn-default page-scroll" href="#about">Click Me to Scroll Down!</a>-->
                 </div>
@@ -100,7 +182,7 @@
                 <div class="col-lg-12">
                     <h1>Accident Data</h1>
                     <div id ="accid" style="width: 800px; height: 400px; margin: 0 auto">
-                    <p><script type="text/javascript" src="js/accidents.js"></script></p>
+                    <p><script type="text/javascript" src="js/newaccidents.js"></script></p>
                     </div>
                 </div>
             </div>
@@ -113,6 +195,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1>Pie Charts</h1>
+                    <div id ="pie" style="width: 800px; height: 400px; margin: 0 auto">
+                    <p><script type="text/javascript" src="js/thepiechart.js"></script></p>
+                    </div>
                 </div>
             </div>
         </div>

@@ -108,67 +108,66 @@ function AnomalyQueryCallback(anomaliesArray) {
 				// Do nothing on default case
 		}
 	}
+}
 
-	function initialize() { 
-		for (var i = 0; i < anomaliesArray.length; i++) {
-		//GPS Position
-			var markPos = new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]);
-		var myOptions = {
-				zoom: 12,
-				center: new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]),
-				mapTypeId: google.maps.MapTypeId.ROADMAP,
-				streetViewControl: false
-			}
-		//create map
-		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-
-		//create marker object
-		var marker = new google.maps.Marker({
-			position: markPos,
-			title: markTitle,
-			icon: markIcon,
-			draggable: true
-			});
-
-		function addInfoWindow(marker, message) {
-
-			//create a variable 'contentString' to hold content of infowindow
-			var contentString = '<div id = "content" style = "width:200px;height:200px;"></div">';
-
-			//initialize infowindow
-			var infoWindow = new google.maps.InfoWindow({
-				content: contentString
-			});
-			
-			//add a listener for the infowindow (click)
-			new google.maps.event.addListener(marker, 'click', function () {
-				infoWindow.open(map, this);
-			});
-
-			var pano = null;
-			google.maps.event.addListener(infowindow, 'domready', function() {
-			if(pano != null){
-				pano.unbind("position");
-				pano.setVisible(false);
-			}
-			pano = new google.maps.StreetViewPanorama(document.getElementById("content"), {
-				navigationControl: true,
-				navigationControlOptions: {style: google.maps.NavigationControlStyle.ANDROID},
-				enableCloseButtion: false,
-				addressControl: false,
-				linksControl: false
-			});
-			google.maps.event.addListener(infowindow, 'closeclick', function() {
-				pana.unbind("position");
-				pano.setVisible(false);
-				pano = null;
-			});
-		})
-		addInfoWindow(marker, contentString); 
+function initialize() { 
+	for (var i = 0; i < anomaliesArray.length; i++) {
+	//GPS Position
+		var markPos = new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]);
+	var myOptions = {
+			zoom: 12,
+			center: new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]),
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			streetViewControl: false
 		}
+	//create map
+	var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	//create marker object
+	var marker = new google.maps.Marker({
+		position: markPos,
+		title: markTitle,
+		icon: markIcon,
+		draggable: true
+		});
 	}
-	
-	}
+}
+
+	function addInfoWindow(marker, message) {
+
+		//create a variable 'contentString' to hold content of infowindow
+		var contentString = '<div id = "content" style = "width:200px;height:200px;"></div">';
+
+		//initialize infowindow
+		var infoWindow = new google.maps.InfoWindow({
+			content: contentString
+		});
+			
+		//add a listener for the infowindow (click)
+		new google.maps.event.addListener(marker, 'click', function () {
+			infoWindow.open(map, this);
+		});
+
+		var pano = null;			google.maps.event.addListener(infowindow, 'domready', function() {
+		if(pano != null){
+			pano.unbind("position");
+			pano.setVisible(false);
+		}
+		pano = new google.maps.StreetViewPanorama(document.getElementById("content"), {
+			navigationControl: true,
+			navigationControlOptions: {style: google.maps.NavigationControlStyle.ANDROID},
+			enableCloseButtion: false,
+			addressControl: false,
+			linksControl: false
+		});
+		google.maps.event.addListener(infowindow, 'closeclick', function() {
+			pana.unbind("position");
+			pano.setVisible(false);
+			pano = null;
+		});
+	})
+
+	addInfoWindow(marker, contentString); 
+}
 //When the user clicks on a marker, an infowindow appears that details the type of anomaly and the exact location (Lat/Lng). 
 		/*var message = '<div>Porcelain Factory of Vista Alegre</div>' +
                       '<div>History</div>' +
