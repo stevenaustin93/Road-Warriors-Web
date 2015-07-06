@@ -191,6 +191,12 @@ function ManageRoutes(routeObjList) {
 	// Plot the routes
 	PlotRoutes(routeObjList);
 
+	// 
+	for (var i = 0; i < routeObjList.length; i++) {
+		var allBoxList = AllBoxes(routeObjList[i].rtPoints);
+		var queryList = ConvertToQueries(allBoxList);
+	}
+
 }
 
 //
@@ -261,6 +267,7 @@ function PlotRoutes(arrayOfRoutes) {
 
 		for (var i = 0; i < arrayOfRoutes[j].rtPoints.length; i++) {
 			routeCoordinates.push(new google.maps.LatLng(arrayOfRoutes[j].rtPoints[i][0],arrayOfRoutes[j].rtPoints[i][1]));
+
 		}
 
 		plottedRoutes.push(new google.maps.Polyline({
