@@ -191,11 +191,7 @@ function ManageRoutes(routeObjList) {
 	// Plot the routes
 	PlotRoutes(routeObjList);
 
-	// 
-	for (var i = 0; i < routeObjList.length; i++) {
-		var allBoxList = AllBoxes(routeObjList[i].rtPoints);
-		var queryList = ConvertToQueries(allBoxList);
-	}
+	
 
 }
 
