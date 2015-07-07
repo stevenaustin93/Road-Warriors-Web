@@ -28,12 +28,13 @@ $(document).ready(function() {
 	// 1. Convert shape points to row/col boxes (format of General Table)
 	// 2. Determine all boxes along the line between step 1 boxes (forms a contiguous set of boxes)
 	// 3. Concatenate the results of step 2 into a super-list
-	//var allBoxList = AllBoxes(testShapepoints);
+	var allBoxList = AllBoxes(testShapepoints);
 
 	// 4. Divide superlist into a set of queries with max size = 1000 boxes
-	//var queryList = ConvertToQueries(allBoxList);
+	var queryList = ConvertToQueries(allBoxList);
 
 	// 5. Submit queries
+	SubmitQueries(queryList);
 
 	/////
 	// The rest of this code is carried out in a callback function, but this is the basic overview:
