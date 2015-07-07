@@ -6,7 +6,7 @@
 //
 
 // Global variables
-	// Used for "clear route" functionality
+// Used for "clear route" functionality
 var startMarker;
 var endMarker;
 var infoWindows = new Array();
@@ -17,7 +17,7 @@ var routed = false;
 // On document ready
 $(document).ready(function() {
 	$('#calcRoute').click(function() {
-		if ( ($('#start').val() === "None") || ($('#end').val() === "None")) {
+		if (($('#start').val() === "None") || ($('#end').val() === "None")) {
 			alert("Please select start and end points for your route");
 		} else {
 			if (routed) {
@@ -54,60 +54,59 @@ function ClearRoutes() {
 // When calculate route is clicked successfully
 function calcRouteSuccess() {
 	// Get Start and End from selection box
-		var selectedStart = $('#start').val();
-		var selectedEnd = $('#end').val();
+	var selectedStart = $('#start').val();
+	var selectedEnd = $('#end').val();
 
-		// Convert these to coordinates
-		var startLat;
-		var endLat;
-		var startLong;
-		var endLong;
+	// Convert these to coordinates
+	var startLat;
+	var endLat;
+	var startLong;
+	var endLong;
 
-		if (selectedStart === "PF Changs") {
-			startLat = 42.242753;
-			startLong = -83.745882;
-		} else if (selectedStart === "Law Quadrangle") {
-			startLat = 42.274460; 
-			startLong = -83.739531;
-		}
-		else {
-			// nothing here?
-		}
+	if (selectedStart === "PF Changs") {
+		startLat = 42.242753;
+		startLong = -83.745882;
+	} else if (selectedStart === "Law Quadrangle") {
+		startLat = 42.274460;
+		startLong = -83.739531;
+	} else {
+		// nothing here?
+	}
 
-		if (selectedEnd === "Stadium") {
-			endLat = 42.266804;
-			endLong = -83.748016;
-		} else if (selectedEnd === "Miller Nature Area") {
-			endLat = 42.287535;
-			endLong = -83.768593;
-		} else {
-			// nothing here?
-		}
+	if (selectedEnd === "Stadium") {
+		endLat = 42.266804;
+		endLong = -83.748016;
+	} else if (selectedEnd === "Miller Nature Area") {
+		endLat = 42.287535;
+		endLong = -83.768593;
+	} else {
+		// nothing here?
+	}
 
-		var startEndArray = new Array();
-		startEndArray.push([startLat, startLong]);
-		startEndArray.push([endLat, endLong]);
+	var startEndArray = new Array();
+	startEndArray.push([startLat, startLong]);
+	startEndArray.push([endLat, endLong]);
 
-		/*
-		// Place markers at start and end
-		var startPosition = new google.maps.LatLng(startLat, startLong);
-		startMarker = new google.maps.Marker({
-			position: startPosition,
-			map: map,
-			title: 'Start: ' + selectedStart
-		});
+	/*
+	// Place markers at start and end
+	var startPosition = new google.maps.LatLng(startLat, startLong);
+	startMarker = new google.maps.Marker({
+		position: startPosition,
+		map: map,
+		title: 'Start: ' + selectedStart
+	});
 
-		var endPosition = new google.maps.LatLng(endLat, endLong);
-		endMarker = new google.maps.Marker({
-			position: endPosition,
-			map: map,
-			title: 'End: ' + selectedEnd
-		});
-		*/
+	var endPosition = new google.maps.LatLng(endLat, endLong);
+	endMarker = new google.maps.Marker({
+		position: endPosition,
+		map: map,
+		title: 'End: ' + selectedEnd
+	});
+	*/
 
-		// Query server for shapepoints between these two points
-		// assume cloud function accepts an array of points
-		cloudComputeShapes(startEndArray);
+	// Query server for shapepoints between these two points
+	// assume cloud function accepts an array of points
+	cloudComputeShapes(startEndArray);
 }
 
 //
@@ -163,35 +162,33 @@ function ManageRoutes(routeObjList) {
 
 	// Display route info for each route
 	for (var i = 0; i < routeObjList.length; i++) {
-		var safetyRating = Math.random() * 10;
-		safetyRating = safetyRating.toPrecision(2); 
 
-		DisplayRouteInfo(routeObjList[i].rtPoints, safetyRating, routeObjList[i].time, routeObjList[i].distance);
+		RunSafetyRating(routeObjList[i], i);
+
 	}
-
-	for (var i = 0; i < infoWindows.length; i++) {
-		infoWindows[i].setMap(map);
-	}
-
-
-	// Call server function to determine safety rating
-	/*
-	Parse.Cloud.run('getSafetyRating', {
-		points: arrayOfShapePoints
-	}, {
-		success: function(result) {
-			showSafetyRating(arrayOfShapePoints, result);
-		},
-		error: function(error) {
-			alert("Error: " + error.code + " " + error.message);
-		}
-	});
-	*/
 
 	// Plot the routes
 	PlotRoutes(routeObjList);
 
-	
+}
+
+function RunSafetyRating(routeObject, iterator) {
+
+	Parse.Cloud.run('rateSafety', {
+
+			shapeArray: routeObject.rtPoints
+
+		}, {
+			success: function(result) {
+
+				DisplayRouteInfo(routeObject.rtPoints, result, routeObject.time, routeObject.distance);
+				infoWindows[0].setMap(map);
+
+			},
+			error: function(error) {
+				alert("Error: " + error.code + " " + error.message);
+			}
+		});
 
 }
 
@@ -213,7 +210,7 @@ function GetLineCenter(arrayOfPoints) {
 	// Create a marker at the middle
 	var middlePosition = new google.maps.LatLng(arrayOfPoints[middle][0], arrayOfPoints[middle][1]);
 
-	return ( middlePosition );
+	return (middlePosition);
 
 }
 
@@ -233,9 +230,9 @@ function DisplayRouteInfo(arrayOfPoints, safetyRating, routeTime, routeDistance)
 	// Create an info window and display it at the middle marker
 	routeTime = routeTime.toPrecision(3);
 	routeDistance = routeDistance.toPrecision(3);
-	var contentString = 
+	var contentString =
 		'<h5><b>Route: </b><i>' + $('#start').val() + "</i> to <i>" + $('#end').val() +
-		'</i><br><b>Safety Rating: </b><i>' + safetyRating + '/10</i> (fake)' +
+		'</i><br><b>Safety Rating: </b><i>' + safetyRating + '/10</i>' +
 		'</i><br><b>Estimated Time: </b><i>' + routeTime + ' min</i>' +
 		'</i><br><b>Approx. Distance: </b><i>' + routeDistance + ' miles</i></h5>';
 
@@ -250,7 +247,7 @@ function DisplayRouteInfo(arrayOfPoints, safetyRating, routeTime, routeDistance)
 
 //
 function PlotRoutes(arrayOfRoutes) {
-	
+
 	for (var j = 0; j < arrayOfRoutes.length; j++) {
 
 		var color = 'Gray';
@@ -262,7 +259,7 @@ function PlotRoutes(arrayOfRoutes) {
 		var routeCoordinates = new Array();
 
 		for (var i = 0; i < arrayOfRoutes[j].rtPoints.length; i++) {
-			routeCoordinates.push(new google.maps.LatLng(arrayOfRoutes[j].rtPoints[i][0],arrayOfRoutes[j].rtPoints[i][1]));
+			routeCoordinates.push(new google.maps.LatLng(arrayOfRoutes[j].rtPoints[i][0], arrayOfRoutes[j].rtPoints[i][1]));
 
 		}
 
@@ -278,7 +275,7 @@ function PlotRoutes(arrayOfRoutes) {
 		plottedRoutes[i].setMap(map);
 		AddInfowindow(plottedRoutes[i], i);
 	}
-	
+
 
 }
 
@@ -286,8 +283,8 @@ function PlotRoutes(arrayOfRoutes) {
 // Function to add an infowindow to a polyline
 function AddInfowindow(polyline, number) {
 	google.maps.event.addListener(polyline, 'click', function(event) {
-			infoWindows[number].open(map);
-		});
+		infoWindows[number].open(map);
+	});
 }
 
 //
@@ -297,5 +294,5 @@ function SetRouteColors() {
 	// Query server each shape point along route
 
 	// Set a color for each shape point
-	
+
 }

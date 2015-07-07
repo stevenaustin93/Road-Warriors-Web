@@ -2,7 +2,7 @@
 
 //
 // loadanomalies.js
-// This (revamped) script handles the checkbox input of anomalies on the map
+// This (thoroughly revamped) script handles the checkbox input of anomalies on the map
 //
 
 // Icon paths:
@@ -12,15 +12,26 @@ var BRAKING_ICON = "images/braking_icon.png";
 var FAST_ACCEL_ICON = "images/fast_accel_icon.png";
 var GENERAL_ALERT_ICON = "images/general_alert.png";
 
-// List of anomalies queried from server
-//var anomalyList();
+// Global variables
+var anomalyList; 	// list of all anomalies queried from server
+var infowindow; 	// moving infowindow that follows marker click
+var crashArray = new Array(); // array of crash markers
 
 
+//
 // On document ready
 $(document).ready(function() {
 
 	// Query server for list of all anomalies
-	//PopulateAnomalyArray();
+	PopulateAnomalyArray();
+
+});
+
+//
+// Queries server for list 
+function PopulateAnomalyArray() {
+
+	anomalyList = new Array();
 
 	// Get array of query results from server
 	var realAnomalies = Parse.Object.extend("superTable");
@@ -30,18 +41,11 @@ $(document).ready(function() {
 	query.find({
 
 		success: function(results) {
+			// Add results of anomaly query to our list of anomalies
+			anomalyList = anomalyList.concat(results);
 
-			// Formatted "return" array (actually pushed forward)
-			var anomaliesArray = new Array();
-
-
-			// Do something with the returned Parse.Object values
-			for (var i = 0; i < results.length; i++) {
-				var object = results[i];
-				anomaliesArray.push([object.get('Latitude'), object.get('Longitude'), object.get('class'), object.get('FileId')]);
-			}
-
-			AnomalyQueryCallback(anomaliesArray);
+			// Setup our action listeners
+			SetupListeners();
 		},
 
 		error: function(error) {
@@ -50,8 +54,7 @@ $(document).ready(function() {
 
 	});
 
-});
-
+}
 
 // Function to be called that sets up listeners for stuff
 function AnomalyQueryCallback(anomaliesArray) {
@@ -62,19 +65,19 @@ function AnomalyQueryCallback(anomaliesArray) {
 	var rapidDecelArray = new Array();
 	var crashArray = new Array();
 
-	
+
 	// Loop through anomaliesArray and create a marker in respective arrays
 	for (var i = 0; i < anomaliesArray.length; i++) {
-			//GPS Position
-			var markPos = new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]);
+		//GPS Position
+		var markPos = new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]);
 
 		// Set icon and title (label) accordingly
 		switch (anomaliesArray[i][2]) {
-			
+
 			case "S":
 				markIcon = SWERVE_ICON;
 				markTitle = "Swerving event detected here!";
-				markName = "<b>Swerving Event.</b>" 
+				markName = "<b>Swerving Event.</b>"
 				break;
 			case "A1":
 				markIcon = FAST_ACCEL_ICON
@@ -109,15 +112,15 @@ function AnomalyQueryCallback(anomaliesArray) {
 			position: markPos,
 			title: markTitle,
 			icon: markIcon,
-			});
+		});
 
-//When the user clicks on a marker, an infowindow appears that details the type of anomaly and the exact location (Lat/Lng). 
-		
-        var message = markName.toString() + '<div>' + "<b>Location:</b>" + " " + markPos.toString();
-        //To post FileID as well, add:' + "<div>" + "<b>File ID:</b>" + " " + anomaliesArray[i][3]'
+		//When the user clicks on a marker, an infowindow appears that details the type of anomaly and the exact location (Lat/Lng). 
 
-        //Initialize array of infowindows 
-        var infoWindowsArray = new Array();
+		var message = markName.toString() + '<div>' + "<b>Location:</b>" + " " + markPos.toString();
+		//To post FileID as well, add:' + "<div>" + "<b>File ID:</b>" + " " + anomaliesArray[i][3]'
+
+		//Initialize array of infowindows 
+		var infoWindowsArray = new Array();
 
 		function addInfoWindow(marker, message) {
 			//initialize infowindow
@@ -131,7 +134,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 			});
 
 			for (var i = 0; i < infoWindows.length; i++) {
-			infoWindowsArray[i].setMap(map);
+				infoWindowsArray[i].setMap(map);
 				if (infoWindowsArray[i] != this) {
 					infoWindowsArray[i].close();
 				}
@@ -145,9 +148,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 				}
 			}*/
 		}
-		addInfoWindow(marker, message); 
-
-		
+		addInfoWindow(marker, message);
 
 		// Add the marker to respective array
 		switch (anomaliesArray[i][2]) {
@@ -165,7 +166,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 				break;
 			case "B2":
 				//rapidDecelArray.push(marker);
-				break;		
+				break;
 			case "C":
 				crashArray.push(marker);
 				break;
@@ -173,6 +174,11 @@ function AnomalyQueryCallback(anomaliesArray) {
 				// Do nothing on default case
 		}
 	}
+}
+
+//
+// Sets up listeners for 
+function SetupListeners() {
 
 	// Swerve checkbox event handler
 	var swerveClicked = false;
@@ -183,8 +189,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 				swerveArray[i].setMap(null);
 			}
 			this.blur();
-		}
-		else {
+		} else {
 			swerveClicked = true;
 			for (var i = 0; i < swerveArray.length; i++) {
 				swerveArray[i].setMap(map);
@@ -202,8 +207,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 				rapidDecelArray[i].setMap(null);
 			}
 			this.blur();
-		}
-		else {
+		} else {
 			decelClicked = true;
 			for (var i = 0; i < rapidDecelArray.length; i++) {
 				rapidDecelArray[i].setMap(map);
@@ -220,8 +224,7 @@ function AnomalyQueryCallback(anomaliesArray) {
 				rapidAccelArray[i].setMap(null);
 			}
 			this.blur();
-		}
-		else {
+		} else {
 			accelClicked = true;
 			for (var i = 0; i < rapidAccelArray.length; i++) {
 				rapidAccelArray[i].setMap(map);
@@ -232,39 +235,61 @@ function AnomalyQueryCallback(anomaliesArray) {
 	// Crash checkbox event handler
 	var crashClicked = false;
 	$('#crash').click(function() {
-		if (crashClicked) {
-			crashClicked = false;
-			for (var i = 0; i < crashArray.length; i++) {
-				crashArray[i].setMap(null);
-			}
-			this.blur();
-		}
-		else {
-			crashClicked = true;
-			for (var i = 0; i < crashArray.length; i++) {
-				crashArray[i].setMap(map);
-			}
-		}
+		CrashFunc(crashClicked);
+		if (crashClicked) this.blur();
+		crashClicked = !crashClicked;
 	});
-
-	// Clear map event handler
-	$('#clearMap').click(function() {
-		for (var i = 0; i < swerveArray.length; i++) {
-			swerveArray[i].setMap(null);
-		}
-		for (var i = 0; i < rapidDecelArray.length; i++) {
-			rapidDecelArray[i].setMap(null);
-		}
-		for (var i = 0; i < rapidAccelArray.length; i++) {
-			rapidAccelArray[i].setMap(null);
-		}
-		for (var i = 0; i < generalArray.length; i++) {
-			generalArray[i].setMap(null);
-		}
-
-		$('.chckbx').each(function() {
-			this.checked = false;
-		});
-
-	})
 }
+
+/**
+ * On click of the swerve button,
+ * run through the list of anomalies,
+ * plot the swerves if the button clicked,
+ * or remove the icons if the button is unclicked
+ */
+function CrashFunc(buttonDown) {
+
+	var crashArray = new Array();
+
+	// If the swerve button is not clicked
+	if (!(buttonDown)) {
+
+		for (var i = 0; i < anomalyList.length; i++) {
+			if (anomalyList[i].get('class') === "C") {
+
+				var markPos = new google.maps.LatLng(anomalyList[i].get('Latitude'), anomalyList[i].get('Longitude'));
+				alert("position: " + anomalyList[i].get('Latitude') + "," + anomalyList[i].get('Longitude'))
+				var marker = new google.maps.Marker({
+					markPos: markPos,
+					markIcon: CRASH_ICON,
+					markTitle: "Accident detected here!",
+					markName: "<b>Accident.</b>"
+				});
+
+				var message = "<b>Accident.</b>" + '<div>' + "<b>Location:</b>" + " " + markPos.toString();
+
+				new google.maps.event.addListener(marker, 'click', function(event) {
+					infowindow.setContent(message);
+					infowindow.open(map, marker);
+				});
+
+				crashArray.push(marker);
+
+				//marker.setMap(map);
+			}
+		}
+
+		for (var i = 0; i < crashArray.length; i++) {
+			crashArray[i].setMap(map);
+		}
+
+	}
+
+	else {
+		for (var i = 0; i < crashArray.length; i++) {
+			crashArray[i].setMap(null);
+		}
+	}
+}
+
+
