@@ -201,7 +201,7 @@ function SwerveFunc(buttonDown) {
 		
 
 	} else { // Else if the button is already clicked, hide all the anomaly icons
-		for (var i = 0; i < crashArray.length; i++) {
+		for (var i = 0; i < swerveArray.length; i++) {
 			swerveArray[i].setMap(null);
 		}
 	}
