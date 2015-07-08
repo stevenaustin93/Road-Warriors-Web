@@ -1,186 +1,146 @@
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>TMI: Data Analysis Page</title>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
-		</script>
-		<script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
-        <script type="text/javascript" src="js/exporting.js"></script>
-        <!-- <script type="text/javascript" src="js/exporting.js"></script> -->
-		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js">
-		</script>
-		<script> Parse.initialize("6s0wYYKZR2sQU8zMV304cL8jv5Pdmp3PzOIwKLOp", "7C1XQAKjUdhiH6k25tRIbVOweuNMoFy0n0An4LJf"); 
-		</script>
-	</head>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>TMI: Data Analysis Page</title>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+	</script>
+	<script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+	<script type="text/javascript" src="js/exporting.js"></script>
+	<!-- <script type="text/javascript" src="js/exporting.js"></script> -->
+	<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js">
+	</script>
+	<script> Parse.initialize("6s0wYYKZR2sQU8zMV304cL8jv5Pdmp3PzOIwKLOp", "7C1XQAKjUdhiH6k25tRIbVOweuNMoFy0n0An4LJf"); 
+	</script>
+</head>
 
-	<body>
+<body>
+	<div id="container" style="width: 800px; height: 400px; margin: 0 auto"></div>
+	<script>
 
-		<div id="container" style="width: 800px; height: 400px; margin: 0 auto"></div>
+//Load data from accidents.csv and accidentsPerDay.csv into arrays using Parse.
+function QueryServer() {
 
-		<script>
+	//var accidents = Parse.Object.extend("accidents");
+	//var query = new Parse.Query(accidents);
+	var accidentsPerDay = Parse.Object.extend("accidentsPerDay");
+	var query = new Parse.Query(accidentsPerDay);
 
-			//Load data from accidents.csv and accidentsPerDay.csv into arrays using Parse.
-			function QueryServer() {
+	query.limit(400);
+	query.find({
 
-				//var accidents = Parse.Object.extend("accidents");
-				//var query = new Parse.Query(accidents);
-				var accidentsPerDay = Parse.Object.extend("accidentsPerDay");
-				var query = new Parse.Query(accidentsPerDay);
+		success: function(results) {
+			alert("Results found:" + results.length);
 
-				query.limit(400);
-				query.find({
-					
-					success: function(results) {
-					  	alert("Results found:" + results.length);
+			//Create an accidents array to store the accidents from the accidents.csv file.
+			//var accidentsArray = new Array();
+			//Accidents per day array to store accidents per day from the accidentsPerDay.csv file.
+			/*var accidentsPerDayArray = new Array();
 
-	
-							  	
-						//Create an accidents array to store the accidents from the accidents.csv file.
-						//var accidentsArray = new Array();
-						//Accidents per day array to store accidents per day from the accidentsPerDay.csv file.
-						/*var accidentsPerDayArray = new Array();
+			for (var i = 0; i < results.length; i++){
+				var object = results[i];
+				//accidentsArray.push([object.get('UMTRI_ID'), object.get('Date'), object.get('Accident Month'), object.get('Accident Day'), object.get('Accident Year'), object.get('Time of Day'), object. get('Weather'), object.get('Total Motor Vehicles'), object.get('Gps X Coordinate'), object.get('Gps Y Coordinate')]);
+				accidentsPerDayArray.push([object.get('Date'), object.get('Count')]);
 
-						for (var i = 0; i < results.length; i++){
-							var object = results[i];
-							//accidentsArray.push([object.get('UMTRI_ID'), object.get('Date'), object.get('Accident Month'), object.get('Accident Day'), object.get('Accident Year'), object.get('Time of Day'), object. get('Weather'), object.get('Total Motor Vehicles'), object.get('Gps X Coordinate'), object.get('Gps Y Coordinate')]);
-							accidentsPerDayArray.push([object.get('Date'), object.get('Count')]);
-				
-						}*/
+			}*/
 
-						CreateChart(results);
+			CreateChart(results);
 
-				
+		},
 
-					},
+		error: function(error) {
+			alert("Error: " + error.code + " " + error.message);
+		}
 
-					error: function(error) {
-						alert("Error: " + error.code + " " + error.message);
-					}
+	});
 
-				});
+}
 
+function CreateChart(results) {
+
+	var options = {
+		chart: {
+			renderTo: 'container',
+			type: 'spline'
+		},
+		title: {
+			text: 'Accident Data'
+		},
+		xAxis: {
+
+			type: 'datetime',
+			tickInterval : 30,
+			labels: {
+				formatter: function() {
+					return Highcharts.dateFormat('%b', this.value);
+				}
+			},
+
+
+			categories: []
+		},
+		yAxis: {
+			title: {
+				text: 'Number of Accidents'
 			}
+		},
 
-			function CreateChart(results) {
+		credits: {
+			enabled: false
+		},
 
+		series: []
 
-							var options = {
-								chart: {
-									renderTo: 'container',
-									type: 'spline'
-								},
-								title: {
-									text: 'Accident Data'
-								},
-								xAxis: {
+		//pointInterval: 24 * 3600 * 1000 * 31
 
-									type: 'datetime',
-									labels: {
-									    formatter: function() {
-									          return Highcharts.dateFormat('%b', this.value);
-									    }
-									},
-								 	
-				
-								    categories: []
-								},	
-								yAxis: {
-									title: {
-										text: 'Units'
-									}
-								},
+	};
 
-			                    credits: {
-			                        enabled: false
-			                    },
+	var series0 = {
+		data: []
+	}
 
-								series: []
-	
-									//pointInterval: 24 * 3600 * 1000 * 31
+	var dates = [];
+	var c;
+	var utcDate;
+	var d;
 
+	for (var i = 0; i < results.length; i++) {
+		amount = results[i].get('Count');
 
-								};
-							
-							var series0 = {
-								data: []
-							}
+		/*
+		dates.push(results[i].get('Date'));
+		d = dates[i];
+		d = String(d);
+		d = d.split('-');
+		*/
+
+		d = (results[i].get('Date'));
+		//d = d.toString();
+		d = d.split('-');
+
+		console.log(d[0] + " " + d[1] + " " + d[2]);
+
+		utcDate = new Date(Date.UTC(d[0], d[1]-1, d[2]));
+		options.xAxis.categories.push(utcDate);
 
 
-							var dates = [];
-							var c;
-							var utcDate;
-							var d;
-
-							
-
-							for (var i = 0; i < results.length; i++){
-								amount = results[i].get('Count');
-								dates.push(results[i].get('Date'));
-								d = dates[i];
-								d = String(d);
-								d = d.split('-');
-
-								//alert(d);
-
-								utcDate = new Date (Date.UTC(d[0],d[1],d[2]));
-								options.xAxis.categories.push(utcDate);
-								
-							
-								//accidentsArray.push([object.get('UMTRI_ID'), object.get('Date'), object.get('Accident Month'), object.get('Accident Day'), object.get('Accident Year'), object.get('Time of Day'), object. get('Weather'), object.get('Total Motor Vehicles'), object.get('Gps X Coordinate'), object.get('Gps Y Coordinate')]);
-								//accidentsPerDayArray.push([object.get('Date'), object.get('Count')]);
-		
-
-								series0.data.push(amount);
-					
-							}
-
-								
-								
-
-								
-								
+		//accidentsArray.push([object.get('UMTRI_ID'), object.get('Date'), object.get('Accident Month'), object.get('Accident Day'), object.get('Accident Year'), object.get('Time of Day'), object. get('Weather'), object.get('Total Motor Vehicles'), object.get('Gps X Coordinate'), object.get('Gps Y Coordinate')]);
+		//accidentsPerDayArray.push([object.get('Date'), object.get('Count')]);
 
 
-								
+		series0.data.push(amount);
 
-							options.series.push(series0);
+	}
+	options.series.push(series0);
 
-					
-
-
-
-
+	var chart = new Highcharts.Chart(options);
+}
 
 
-										
-								
+$(document).ready(function() {
+	QueryServer();
 
-
-							
-							
-
-
-
-								
-
-							
-
-
-
-							var chart = new Highcharts.Chart(options);
-						}
-						
-
-						$(document).ready(function() {
-							QueryServer();
-
-						});
-
-
+});
 		</script>
 
-
-
-		</script>
-	</body>
+</body>
 </html>
