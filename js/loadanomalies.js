@@ -95,7 +95,7 @@ function SetupListeners() {
 /**
  * On click of the crash button,
  * run through the list of anomalies,
- * plot the swerves if the button clicked,
+ * plot the crashes if the button clicked,
  * or remove the icons if the button is unclicked
  */
 var crashArray = new Array();
@@ -178,7 +178,9 @@ function SwerveFunc(buttonDown) {
 				var infotitle = "<div><b>Swerve</b>";
 				var infoloc = "<div><b>Location: </b>" + markPos.toString();
 				var infospd = "<div><b>Speed: </b>" + anomalyList[i].get('Speed').toPrecision(4) + " m/s";
-				var infotime = "<div><b>Time: </b>" + (new Date(anomalyList[i].get('Gentime')).toUTCString());
+				var date = new Date(anomalyList[i].get('Gentime')/1000);
+				date.setFullYear(date.getFullYear() + 34);
+				var infotime = "<div><b>Time: </b>" + date.toString();
 				var infoyaw = "<div><b>Yaw Rate: </b>" + anomalyList[i].get("Yawrate").toPrecision(4) + " deg/sec";
 
 				var message = infotitle + infoloc + infospd + infotime + infoyaw;
@@ -211,7 +213,7 @@ function SwerveFunc(buttonDown) {
 /**
  * On click of the rapid decel button,
  * run through the list of anomalies,
- * plot the swerves if the button clicked,
+ * plot the rapid decels if the button clicked,
  * or remove the icons if the button is unclicked
  */
 var decelArray = new Array();
@@ -244,7 +246,9 @@ function DecelFunc(buttonDown) {
 
 				var infoloc = "<div><b>Location: </b>" + markPos.toString();
 				var infospd = "<div><b>Speed: </b>" + anomalyList[i].get('Speed').toPrecision(4) + " m/s";
-				var infotime = "<div><b>Time: </b>" + (new Date(anomalyList[i].get('Gentime')).toUTCString());
+				var date = new Date(anomalyList[i].get('Gentime')/1000);
+				date.setFullYear(date.getFullYear() + 34);
+				var infotime = "<div><b>Time: </b>" + date.toString();
 				var infointensity = "<div><b>Intensity: </b>" + (anomalyList[i].get('Ax')/9.8).toPrecision(4) + " G";
 
 				var message = infotitle + infoloc + infospd + infotime + infointensity;
@@ -276,7 +280,7 @@ function DecelFunc(buttonDown) {
 /**
  * On click of the rapid accel button,
  * run through the list of anomalies,
- * plot the swerves if the button clicked,
+ * plot the rapid accels if the button clicked,
  * or remove the icons if the button is unclicked
  */
 var accelArray = new Array();
@@ -309,7 +313,9 @@ function AccelFunc(buttonDown) {
 
 				var infoloc = "<div><b>Location: </b>" + markPos.toString();
 				var infospd = "<div><b>Speed: </b>" + anomalyList[i].get('Speed').toPrecision(4) + " m/s";
-				var infotime = "<div><b>Time: </b>" + (new Date(anomalyList[i].get('Gentime')).toUTCString());
+				var date = new Date(anomalyList[i].get('Gentime')/1000);
+				date.setFullYear(date.getFullYear() + 34);
+				var infotime = "<div><b>Time: </b>" + date.toString();
 				var infointensity = "<div><b>Intensity: </b>" + (anomalyList[i].get('Ax')/9.8).toPrecision(4) + " G";
 
 				var message = infotitle + infoloc + infospd + infotime + infointensity;

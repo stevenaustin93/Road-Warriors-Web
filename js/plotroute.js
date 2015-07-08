@@ -230,7 +230,7 @@ function DisplayRouteInfo(arrayOfPoints, safetyRating, routeTime, routeDistance)
 	// Create an info window and display it at the middle marker
 	routeTime = routeTime.toPrecision(3);
 	routeDistance = routeDistance.toPrecision(3);
-	var contentString =
+	var contentString = 
 		'<h5><b>Route: </b><i>' + $('#start').val() + "</i> to <i>" + $('#end').val() +
 		'</i><br><b>Safety Rating: </b><i>' + safetyRating + '/10</i>' +
 		'</i><br><b>Estimated Time: </b><i>' + routeTime + ' min</i>' +
