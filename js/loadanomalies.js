@@ -2,7 +2,7 @@
 
 //
 // loadanomalies.js
-// This (revamped) script handles the checkbox input of anomalies on the map
+// This (thoroughly revamped) script handles the checkbox input of anomalies on the map
 //
 
 // Icon paths:
@@ -12,15 +12,25 @@ var BRAKING_ICON = "images/braking_icon.png";
 var FAST_ACCEL_ICON = "images/fast_accel_icon.png";
 var GENERAL_ALERT_ICON = "images/general_alert.png";
 
-// List of anomalies queried from server
-//var anomalyList();
+// Global variables
+var anomalyList; 	// list of all anomalies queried from server
+var infowindow = new google.maps.InfoWindow({});;		// moving infowindow that follows marker click
 
 
-// On document ready
+//
+// Wait for document ready
 $(document).ready(function() {
 
 	// Query server for list of all anomalies
-	//PopulateAnomalyArray();
+	PopulateAnomalyArray();
+
+});
+
+//
+// Queries server for list 
+function PopulateAnomalyArray() {
+
+	anomalyList = new Array();
 
 	// Get array of query results from server
 	var realAnomalies = Parse.Object.extend("superTable");
@@ -30,18 +40,11 @@ $(document).ready(function() {
 	query.find({
 
 		success: function(results) {
+			// Add results of anomaly query to our list of anomalies
+			anomalyList = anomalyList.concat(results);
 
-			// Formatted "return" array (actually pushed forward)
-			var anomaliesArray = new Array();
-
-
-			// Do something with the returned Parse.Object values
-			for (var i = 0; i < results.length; i++) {
-				var object = results[i];
-				anomaliesArray.push([object.get('Latitude'), object.get('Longitude'), object.get('class'), object.get('FileId')]);
-			}
-
-			AnomalyQueryCallback(anomaliesArray);
+			// Setup our action listeners
+			SetupListeners();
 		},
 
 		error: function(error) {
@@ -50,221 +53,287 @@ $(document).ready(function() {
 
 	});
 
-});
+}
 
-
-// Function to be called that sets up listeners for stuff
-function AnomalyQueryCallback(anomaliesArray) {
-
-	// Create and populate array for each type of marker
-	var swerveArray = new Array();
-	var rapidAccelArray = new Array();
-	var rapidDecelArray = new Array();
-	var crashArray = new Array();
-
-	
-	// Loop through anomaliesArray and create a marker in respective arrays
-	for (var i = 0; i < anomaliesArray.length; i++) {
-			//GPS Position
-			var markPos = new google.maps.LatLng(anomaliesArray[i][0], anomaliesArray[i][1]);
-
-		// Set icon and title (label) accordingly
-		switch (anomaliesArray[i][2]) {
-			
-			case "S":
-				markIcon = SWERVE_ICON;
-				markTitle = "Swerving event detected here!";
-				markName = "<b>Swerving Event.</b>" 
-				break;
-			case "A1":
-				markIcon = FAST_ACCEL_ICON
-				markTitle = "Fast acceleration event detected here!"
-				markName = "<b>Class 1 Acceleration Event.</b>";
-				break;
-			case "A2":
-				markIcon = FAST_ACCEL_ICON;
-				markTitle = "Acceleration event detected here!";
-				markName = "<b>Class 2 Acceleration Event.</b>";
-				break;
-			case "B1":
-				markIcon = BRAKING_ICON;
-				markTitle = "Rapid braking event detected here!";
-				markName = "<b>Class 1 Braking Event.</b>";
-				break;
-			case "B2":
-				markIcon = BRAKING_ICON;
-				markTitle = "Braking event detected here!";
-				markName = "<b>Class 2 Braking Event.</b>";
-				break;
-			case "C":
-				markIcon = CRASH_ICON;
-				markTitle = "Accident detected here!";
-				markName = "<b>Accident.</b>";
-				break;
-			default:
-				// Do nothing on default case
-		}
-		// Create the marker
-		var marker = new google.maps.Marker({
-			position: markPos,
-			title: markTitle,
-			icon: markIcon,
-			});
-
-//When the user clicks on a marker, an infowindow appears that details the type of anomaly and the exact location (Lat/Lng). 
-		
-        var message = markName.toString() + '<div>' + "<b>Location:</b>" + " " + markPos.toString();
-        //To post FileID as well, add:' + "<div>" + "<b>File ID:</b>" + " " + anomaliesArray[i][3]'
-
-        //Initialize array of infowindows 
-        var infoWindowsArray = new Array();
-
-		function addInfoWindow(marker, message) {
-			//initialize infowindow
-			var infoWindow = new google.maps.InfoWindow({
-				content: message
-			});
-			//add a listener for the infowindow (click)
-			new google.maps.event.addListener(marker, 'click', function(event) {
-				infoWindow.open(map, this);
-				infoWindowsArray.push(infoWindow);
-			});
-
-			for (var i = 0; i < infoWindows.length; i++) {
-			infoWindowsArray[i].setMap(map);
-				if (infoWindowsArray[i] != this) {
-					infoWindowsArray[i].close();
-				}
-			}
-
-			/*function clearOldWindow(marker) {
-				for (var i = 0; i < infoWindows.length; i++){
-					new google.maps.event.addListener(marker, 'click', function(event){
-					infowWindowsArray[i].setMap(null);
-					})
-				}
-			}*/
-		}
-		addInfoWindow(marker, message); 
-
-		
-
-		// Add the marker to respective array
-		switch (anomaliesArray[i][2]) {
-			case "S":
-				swerveArray.push(marker);
-				break;
-			case "A1":
-				rapidAccelArray.push(marker);
-				break;
-			case "A2":
-				//rapidAccelArray.push(marker);
-				break;
-			case "B1":
-				rapidDecelArray.push(marker);
-				break;
-			case "B2":
-				//rapidDecelArray.push(marker);
-				break;		
-			case "C":
-				crashArray.push(marker);
-				break;
-			default:
-				// Do nothing on default case
-		}
-	}
+//
+// Sets up listeners for button clicks
+function SetupListeners() {
 
 	// Swerve checkbox event handler
 	var swerveClicked = false;
 	$('#swerve').click(function() {
-		if (swerveClicked) {
-			swerveClicked = false;
-			for (var i = 0; i < swerveArray.length; i++) {
-				swerveArray[i].setMap(null);
-			}
-			this.blur();
-		}
-		else {
-			swerveClicked = true;
-			for (var i = 0; i < swerveArray.length; i++) {
-				swerveArray[i].setMap(map);
-			}
-		}
-
+		SwerveFunc(swerveClicked);
+		if (swerveClicked) this.blur();
+		swerveClicked = !swerveClicked;
 	});
 
 	// Rapid decel checkbox event handler
 	var decelClicked = false;
 	$('#rapidDecel').click(function() {
-		if (decelClicked) {
-			decelClicked = false;
-			for (var i = 0; i < rapidDecelArray.length; i++) {
-				rapidDecelArray[i].setMap(null);
-			}
-			this.blur();
-		}
-		else {
-			decelClicked = true;
-			for (var i = 0; i < rapidDecelArray.length; i++) {
-				rapidDecelArray[i].setMap(map);
-			}
-		}
+		DecelFunc(decelClicked);
+		if (decelClicked) this.blur();
+		decelClicked = !decelClicked;
 	});
 
 	// Rapid accel checkbox event handler
 	var accelClicked = false;
 	$('#rapidAccel').click(function() {
-		if (accelClicked) {
-			accelClicked = false;
-			for (var i = 0; i < rapidAccelArray.length; i++) {
-				rapidAccelArray[i].setMap(null);
-			}
-			this.blur();
-		}
-		else {
-			accelClicked = true;
-			for (var i = 0; i < rapidAccelArray.length; i++) {
-				rapidAccelArray[i].setMap(map);
-			}
-		}
+		AccelFunc(accelClicked);
+		if (accelClicked) this.blur();
+		accelClicked = !accelClicked;
 	});
 
 	// Crash checkbox event handler
 	var crashClicked = false;
 	$('#crash').click(function() {
-		if (crashClicked) {
-			crashClicked = false;
-			for (var i = 0; i < crashArray.length; i++) {
-				crashArray[i].setMap(null);
-			}
-			this.blur();
-		}
-		else {
-			crashClicked = true;
-			for (var i = 0; i < crashArray.length; i++) {
-				crashArray[i].setMap(map);
-			}
-		}
+		CrashFunc(crashClicked);
+		if (crashClicked) this.blur();
+		crashClicked = !crashClicked;
 	});
+}
 
-	// Clear map event handler
-	$('#clearMap').click(function() {
+/**
+ * On click of the crash button,
+ * run through the list of anomalies,
+ * plot the swerves if the button clicked,
+ * or remove the icons if the button is unclicked
+ */
+var crashArray = new Array();
+function CrashFunc(buttonDown) {
+
+	// If the crash button is not already clicked, create icons for each marker and give them pop-up infowindows
+	if ( !buttonDown ) {
+
+		crashArray.length = 0;
+
+		for (var i = 0; i < anomalyList.length; i++) {
+			if (anomalyList[i].get('class') === "C") {
+
+				var markPos = new google.maps.LatLng(anomalyList[i].get('Latitude'), anomalyList[i].get('Longitude'));
+				var markIcon = CRASH_ICON;
+				var markTitle = "Accident detected here!";
+
+				var marker = new google.maps.Marker({
+					position: markPos,
+					icon: markIcon,
+					title: markTitle
+				});
+
+				var infotitle = "<div><b>Accident</b>";
+				var infoloc = "<div><b>Location: </b>" + markPos.toString();
+
+				var message = infotitle + infoloc;
+
+				marker.message = message;
+
+				new google.maps.event.addListener(marker, 'click', function() {
+					infowindow.setContent(this.message);
+					infowindow.open(map, this);
+				});
+
+				crashArray.push(marker);
+			}
+		}
+
+		
+		for (var i = 0; i < crashArray.length; i++) {
+			crashArray[i].setMap(map);
+		}
+		
+
+	} else { // Else if the button is already clicked, hide all the anomaly icons
+		for (var i = 0; i < crashArray.length; i++) {
+			crashArray[i].setMap(null);
+		}
+	}
+}
+
+/**
+ * On click of the swerve button,
+ * run through the list of anomalies,
+ * plot the swerves if the button clicked,
+ * or remove the icons if the button is unclicked
+ */
+var swerveArray = new Array();
+function SwerveFunc(buttonDown) {
+
+	// If the swerve button is not already clicked, create icons for each marker and give them pop-up infowindows
+	if ( !buttonDown ) {
+
+		swerveArray.length = 0;
+
+		for (var i = 0; i < anomalyList.length; i++) {
+			if (anomalyList[i].get('class') === "S") {
+
+				var markPos = new google.maps.LatLng(anomalyList[i].get('Latitude'), anomalyList[i].get('Longitude'));
+				var markIcon = SWERVE_ICON;
+				var markTitle = "Swerve event detected here!";
+
+				var marker = new google.maps.Marker({
+					position: markPos,
+					icon: markIcon,
+					title: markTitle
+				});
+
+				var infotitle = "<div><b>Swerve</b>";
+				var infoloc = "<div><b>Location: </b>" + markPos.toString();
+				var infospd = "<div><b>Speed: </b>" + anomalyList[i].get('Speed').toPrecision(4) + " m/s";
+				var infotime = "<div><b>Time: </b>" + (new Date(anomalyList[i].get('Gentime')).toUTCString());
+				var infoyaw = "<div><b>Yaw Rate: </b>" + anomalyList[i].get("Yawrate").toPrecision(4) + " deg/sec";
+
+				var message = infotitle + infoloc + infospd + infotime + infoyaw;
+
+				marker.message = message;
+
+				new google.maps.event.addListener(marker, 'click', function() {
+					infowindow.setContent(this.message);
+					infowindow.open(map, this);
+				});
+
+				swerveArray.push(marker);
+			}
+		}
+
+		
 		for (var i = 0; i < swerveArray.length; i++) {
+			swerveArray[i].setMap(map);
+		}
+		
+
+	} else { // Else if the button is already clicked, hide all the anomaly icons
+		for (var i = 0; i < crashArray.length; i++) {
 			swerveArray[i].setMap(null);
 		}
-		for (var i = 0; i < rapidDecelArray.length; i++) {
-			rapidDecelArray[i].setMap(null);
-		}
-		for (var i = 0; i < rapidAccelArray.length; i++) {
-			rapidAccelArray[i].setMap(null);
-		}
-		for (var i = 0; i < generalArray.length; i++) {
-			generalArray[i].setMap(null);
+	}
+}
+
+
+/**
+ * On click of the rapid decel button,
+ * run through the list of anomalies,
+ * plot the swerves if the button clicked,
+ * or remove the icons if the button is unclicked
+ */
+var decelArray = new Array();
+function DecelFunc(buttonDown) {
+
+	// If the swerve button is not already clicked, create icons for each marker and give them pop-up infowindows
+	if ( !buttonDown ) {
+
+		decelArray.length = 0;
+
+		for (var i = 0; i < anomalyList.length; i++) {
+			if ( (anomalyList[i].get('class') === "B1") || (anomalyList[i].get('class') === "B2") ) {
+
+				var markPos = new google.maps.LatLng(anomalyList[i].get('Latitude'), anomalyList[i].get('Longitude'));
+				var markIcon = BRAKING_ICON;
+				var markTitle = "Braking event detected here!";
+
+				var marker = new google.maps.Marker({
+					position: markPos,
+					icon: markIcon,
+					title: markTitle
+				});
+
+				var infotitle;
+				if (anomalyList[i].get('class') === "B1") {
+					infotitle = "<div><b>Class 1 Braking Event</b>"
+				} else {
+					infotitle = "<div><b>Class 2 Braking Event</b>"
+				}
+
+				var infoloc = "<div><b>Location: </b>" + markPos.toString();
+				var infospd = "<div><b>Speed: </b>" + anomalyList[i].get('Speed').toPrecision(4) + " m/s";
+				var infotime = "<div><b>Time: </b>" + (new Date(anomalyList[i].get('Gentime')).toUTCString());
+				var infointensity = "<div><b>Intensity: </b>" + (anomalyList[i].get('Ax')/9.8).toPrecision(4) + " G";
+
+				var message = infotitle + infoloc + infospd + infotime + infointensity;
+
+				marker.message = message;
+
+				new google.maps.event.addListener(marker, 'click', function() {
+					infowindow.setContent(this.message);
+					infowindow.open(map, this);
+				});
+
+				decelArray.push(marker);
+			}
 		}
 
-		$('.chckbx').each(function() {
-			this.checked = false;
-		});
+		
+		for (var i = 0; i < decelArray.length; i++) {
+			decelArray[i].setMap(map);
+		}
+		
 
-	})
+	} else { // Else if the button is already clicked, hide all the anomaly icons
+		for (var i = 0; i < decelArray.length; i++) {
+			decelArray[i].setMap(null);
+		}
+	}
+}
+
+/**
+ * On click of the rapid accel button,
+ * run through the list of anomalies,
+ * plot the swerves if the button clicked,
+ * or remove the icons if the button is unclicked
+ */
+var accelArray = new Array();
+function AccelFunc(buttonDown) {
+
+	// If the swerve button is not already clicked, create icons for each marker and give them pop-up infowindows
+	if ( !buttonDown ) {
+
+		accelArray.length = 0;
+
+		for (var i = 0; i < anomalyList.length; i++) {
+			if ( (anomalyList[i].get('class') === "A1") || (anomalyList[i].get('class') === "A2") ) {
+
+				var markPos = new google.maps.LatLng(anomalyList[i].get('Latitude'), anomalyList[i].get('Longitude'));
+				var markIcon = FAST_ACCEL_ICON;
+				var markTitle = "Acceleration event detected here!";
+
+				var marker = new google.maps.Marker({
+					position: markPos,
+					icon: markIcon,
+					title: markTitle
+				});
+
+				var infotitle;
+				if (anomalyList[i].get('class') === "A1") {
+					infotitle = "<div><b>Class 1 Acceleration Event</b>"
+				} else {
+					infotitle = "<div><b>Class 2 Acceleration Event</b>"
+				}
+
+				var infoloc = "<div><b>Location: </b>" + markPos.toString();
+				var infospd = "<div><b>Speed: </b>" + anomalyList[i].get('Speed').toPrecision(4) + " m/s";
+				var infotime = "<div><b>Time: </b>" + (new Date(anomalyList[i].get('Gentime')).toUTCString());
+				var infointensity = "<div><b>Intensity: </b>" + (anomalyList[i].get('Ax')/9.8).toPrecision(4) + " G";
+
+				var message = infotitle + infoloc + infospd + infotime + infointensity;
+
+				marker.message = message;
+
+				new google.maps.event.addListener(marker, 'click', function() {
+					infowindow.setContent(this.message);
+					infowindow.open(map, this);
+				});
+
+				accelArray.push(marker);
+			}
+		}
+
+		
+		for (var i = 0; i < accelArray.length; i++) {
+			accelArray[i].setMap(map);
+		}
+		
+
+	} else { // Else if the button is already clicked, hide all the anomaly icons
+		for (var i = 0; i < accelArray.length; i++) {
+			accelArray[i].setMap(null);
+		}
+	}
 }

@@ -12,12 +12,15 @@ var BRAKING_ICON = "images/braking_icon.png";
 var FAST_ACCEL_ICON = "images/fast_accel_icon.png";
 var GENERAL_ALERT_ICON = "images/general_alert.png";
 
-//Initialize array of infowindows 
-var infoWindowsArray = new Array();
+// List of anomalies queried from server
+//var anomalyList();
 
 
 // On document ready
 $(document).ready(function() {
+
+	// Query server for list of all anomalies
+	//PopulateAnomalyArray();
 
 	// Get array of query results from server
 	var realAnomalies = Parse.Object.extend("superTable");
@@ -48,6 +51,7 @@ $(document).ready(function() {
 	});
 
 });
+
 
 // Function to be called that sets up listeners for stuff
 function AnomalyQueryCallback(anomaliesArray) {
@@ -112,11 +116,36 @@ function AnomalyQueryCallback(anomaliesArray) {
         var message = markName.toString() + '<div>' + "<b>Location:</b>" + " " + markPos.toString();
         //To post FileID as well, add:' + "<div>" + "<b>File ID:</b>" + " " + anomaliesArray[i][3]'
 
+        //Initialize array of infowindows 
+        var infoWindowsArray = new Array();
 
+		function addInfoWindow(marker, message) {
+			//initialize infowindow
+			var infoWindow = new google.maps.InfoWindow({
+				content: message
+			});
+			//add a listener for the infowindow (click)
+			new google.maps.event.addListener(marker, 'click', function(event) {
+				infoWindow.open(map, this);
+				infoWindowsArray.push(infoWindow);
+			});
 
-		// Add an info window to the marker
-		var markNumber = i;
-		addInfoWindow(marker, message, i); 
+			for (var i = 0; i < infoWindows.length; i++) {
+			infoWindowsArray[i].setMap(map);
+				if (infoWindowsArray[i] != this) {
+					infoWindowsArray[i].close();
+				}
+			}
+
+			/*function clearOldWindow(marker) {
+				for (var i = 0; i < infoWindows.length; i++){
+					new google.maps.event.addListener(marker, 'click', function(event){
+					infowWindowsArray[i].setMap(null);
+					})
+				}
+			}*/
+		}
+		addInfoWindow(marker, message); 
 
 		
 
@@ -240,22 +269,6 @@ function AnomalyQueryCallback(anomaliesArray) {
 	})
 }
 
-function addInfoWindow(marker, message, number) {
-	//initialize infowindow
-	var infoWindow = new google.maps.InfoWindow({
-		content: message
-	});
-
-	//add a listener for the infowindow (click)
-	new google.maps.event.addListener(marker, 'click', function(event) {
-		for (var i = 0; i < infowWindowsArray.length; i++) {
-			if (i === number) {
-				infoWindowsArray[i].open(map, this);
-			} else {
-				infowWindowsArray[i].close();
-			}
-		}
-	});
-
-	infoWindowsArray.push(infoWindow);
+function MakeCrashMarker() {
+	
 }
