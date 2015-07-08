@@ -12,7 +12,7 @@
 
 	.side-bar {
 		width: 295px;
-		/*height: 100%;*/
+		height: 100%;
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -228,6 +228,7 @@
 
 
 	<div id="dashBoardDiv">
+		<div class="container">
 		<div id="sideBar" class="side-bar">
 			<!-- <h3>Traffic Information System</h3>
 			<div>
@@ -298,6 +299,21 @@
 	-->
 	<hr>
 
+	<script>
+	// Cdrag checkbox event handler
+	var dragClicked = false;
+	$('#dragbtn').click(function() {
+		DragFunc(crashClicked);
+		if (dragClicked) this.blur();
+		dragClicked = !dragClicked;
+	});
+
+	</script>
+
+	<button id="dragbtn" type="button" data-toggle="buttons" class="btn btn-default full-width-btn anomBtn"><span class="add-on"></span>Area Selection</button>
+
+	<hr>
+
 	<div id="routeSelection">
 	<!--	<style>
 			fieldset {
@@ -354,6 +370,7 @@
 
 		</div>
 	</div>
+</div>
 </div>
 
 <div id="map-canvas"></div>
