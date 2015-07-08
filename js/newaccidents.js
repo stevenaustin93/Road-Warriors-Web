@@ -22,7 +22,7 @@
 					
 					chart: {
 						renderTo: 'accid',
-						type: 'spline'
+						type: 'line'
 					},
 					
 					title: {
