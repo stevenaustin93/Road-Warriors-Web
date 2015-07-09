@@ -28,21 +28,21 @@ of those sections to manage the look and feel of the site. */
 
 }
 
-.about-section {
+.section1-section {
     height: 100%;
     padding-top: 110px;
     text-align: center;
     background: #eee;
 }
 
-.services-section {
+.section2-section {
     height: 100%;
     padding-top: 150px;
     text-align: center;
     background: #fff;
 }
 
-.contact-section {
+.section3-section {
     height: 100%;
     padding-top: 150px;
     text-align: center;
