@@ -43,6 +43,8 @@ Parse.Cloud.define("route", function(request, response) {
  */
 Parse.Cloud.define("rateSafety", function(request, response) {
 
+	//did this change?
+
 	var shapeArray = request.params.shapeArray;
 
 	// Get all boxes along route
@@ -54,36 +56,43 @@ Parse.Cloud.define("rateSafety", function(request, response) {
 	var boxQuery = Parse.Object.extend("generalTable");
 	var query = new Parse.Query(boxQuery);
 
-	var queryObject = queryList[0];
+	var superResults = new Array();
 
-	var querySize = ((queryObject.maxRow - queryObject.minRow)) * ((queryObject.maxCol - queryObject.minCol));
+	var counter = 0;
 
-	query.lessThan("row", queryObject.maxRow);
-	query.lessThan("col", queryObject.maxCol);
-	query.greaterThan("row", queryObject.minRow);
-	query.greaterThan("col", queryObject.minCol);
-	
-	console.log("Attempting query...");
-	query.limit(querySize);
+	var maxCount = queryList.length-1;
 
-	query.find({
+	console.log("[INFO] Attempting to submit " + queryList.length + " queries...");
 
-		success: function(results) {
+	for (var i = 0; i < queryList.length; i++) {
+		var queryObject = queryList[i];
 
-			var returnValue = AverageSafety(boxList, results);
-			returnValue = returnValue.toPrecision(3);
-			response.success(returnValue);
+		var querySize = ((queryObject.maxRow - queryObject.minRow)) * ((queryObject.maxCol - queryObject.minCol));
 
-		},
+		query.lessThan("row", queryObject.maxRow);
+		query.lessThan("col", queryObject.maxCol);
+		query.greaterThan("row", queryObject.minRow);
+		query.greaterThan("col", queryObject.minCol);
+		
+		console.log("Attempting query...");
+		query.limit(querySize);
 
-		error: function(error) {
+		query.find().then(function(results){
 
-			console.warn("Error: " + error.code + " " + error.message);
-			response.error("Error: " + error.code + " " + error.message);
+			console.log("Query success, # results=" + results.length);
 
-		}
+			superResults = superResults.concat(results);
 
-	});
+		}).then(function(){
+			counter++;
+			if (counter == maxCount) {
+				console.log("Reached end of query list, total # results =" + superResults.length);
+				var returnValue = AverageSafety(boxList, superResults);
+				returnValue = returnValue.toPrecision(3);
+				response.success(returnValue);
+			}
+		});
+	}
 	
 });
 
