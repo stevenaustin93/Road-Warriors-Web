@@ -39,12 +39,7 @@ function QueryForHeatmap() {
 	var rowColPairs = Parse.Object.extend("generalTable");
 	var query = new Parse.Query(rowColPairs);
 
-	if (heatmapCol === "none") {
-
-		// If "none" is selected, cancel the query
-		return;
-
-	} else if (heatmapCol === "cars") {
+	if (heatmapCol === "cars") {
 
 		// Car density querying requires specialized querying function
 		//alert("Selected \"Cars\", redirecting query...");
