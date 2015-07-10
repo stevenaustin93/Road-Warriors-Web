@@ -1,8 +1,6 @@
 //
 // plotroute.js
-// This file takes an array of points and a route time
-// It then passes this array to a cloud function to determine the safety of this route
-// It plots the route on the Google Map using polylines, and displays the route time and route safety rating
+// This file handles route selection, display, and information
 //
 
 // Global variables
@@ -18,7 +16,7 @@ var routed = false;
 $(document).ready(function() {
 	$('#calcRoute').click(function() {
 		if (($('#start').val() === "None") || ($('#end').val() === "None")) {
-			alert("Please select start and end points for your route");
+			$('#myModal').modal('show');
 		} else {
 			if (routed) {
 				ClearRoutes();
@@ -122,7 +120,7 @@ function cloudComputeShapes(startEndArray) {
 		endLocation: endString
 	}, {
 		success: function(result) {
-			alert("Found " + result.length + " route(s), blue representing the fastest.");
+			//alert("Found " + result.length + " route(s), blue representing the fastest.");
 
 			// There may be multiple routes returned
 			var arrayOfRtObjects = new Array();
@@ -176,19 +174,19 @@ function RunSafetyRating(routeObject, iterator) {
 
 	Parse.Cloud.run('rateSafety', {
 
-			shapeArray: routeObject.rtPoints
+		shapeArray: routeObject.rtPoints
 
-		}, {
-			success: function(result) {
+	}, {
+		success: function(result) {
 
-				DisplayRouteInfo(routeObject.rtPoints, result, routeObject.time, routeObject.distance);
-				infoWindows[0].setMap(map);
+			DisplayRouteInfo(routeObject.rtPoints, result, routeObject.time, routeObject.distance);
+			infoWindows[0].setMap(map);
 
-			},
-			error: function(error) {
-				alert("Error: " + error.code + " " + error.message);
-			}
-		});
+		},
+		error: function(error) {
+			alert("Error: " + error.code + " " + error.message);
+		}
+	});
 
 }
 
@@ -230,7 +228,7 @@ function DisplayRouteInfo(arrayOfPoints, safetyRating, routeTime, routeDistance)
 	// Create an info window and display it at the middle marker
 	routeTime = routeTime.toPrecision(3);
 	routeDistance = routeDistance.toPrecision(3);
-	var contentString = 
+	var contentString =
 		'<h5><b>Route: </b><i>' + $('#start').val() + "</i> to <i>" + $('#end').val() +
 		'</i><br><b>Safety Rating: </b><i>' + safetyRating + '/10</i>' +
 		'</i><br><b>Estimated Time: </b><i>' + routeTime + ' min</i>' +
