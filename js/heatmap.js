@@ -15,6 +15,7 @@ $(document).ready(function() {
 			heatDisplayed = false;
 		}
 		heatDisplayed = true;
+		$('#heatdiv').append('<img id="load_spinner" src="images/heat_load.gif"/>');
 		QueryForHeatmap();
 
 	});
@@ -27,48 +28,6 @@ $(document).ready(function() {
 
 	});
 });
-
-/*
-function HeatmapType() {
-	// Get the dropdown menu value
-	var heatmapVal = $('#heatMap').val();
-
-	var returnValue = "";
-
-	// Based on dropdown value, return general table column title
-	switch (heatmapVal) {
-		case "accel1":
-			returnValue = "Accel1";
-			break;
-		case "accel2":
-			returnValue = "Accel2";
-			break;
-		case "accel3":
-			returnValue = "Accel3";
-			break;
-		case "brake1":
-			returnValue = "Break1";
-			break;
-		case "brake2":
-			returnValue = "Break2";
-			break;
-		case "brake3":
-			returnValue = "Break3";
-			break;
-		case "swerve":
-			returnValue = "Swerve";
-			break;
-		case "cars":
-			returnValue = "cars";
-			break;
-		default:
-			returnValue = "none";
-	}
-
-	return (returnValue);
-
-}
-*/
 
 //
 // Query the general table on parse for the specified column
@@ -117,7 +76,11 @@ function QueryForHeatmap() {
 		QueryForVarHeatmap();
 		return;
 
+	} else if (heatmapCol === "swerve") {
+		query.greaterThan("swerve", 0);
+
 	} else {
+		$('#load_spinner').remove();
 		return;
 	}
 
@@ -128,7 +91,7 @@ function QueryForHeatmap() {
 
 		success: function(results) {
 
-			alert("Number of heatmap entries: " + results.length);
+			//alert("Number of heatmap entries: " + results.length);
 
 			// Create array of lat/longs for the heatmap plot
 			var googleLatLngArray = new Array();
@@ -175,7 +138,7 @@ function QueryForVarHeatmap() {
 
 		success: function(results) {
 
-			alert("Number of car heatmap entries: " + results.length);
+			//alert("Number of car heatmap entries: " + results.length);
 
 			// Create array of lat/longs for the heatmap plot
 			var googleLatLngArray = new Array();
@@ -221,7 +184,7 @@ function QueryForCarHeatmap() {
 
 		success: function(results) {
 
-			alert("Number of car heatmap entries: " + results.length);
+			//alert("Number of car heatmap entries: " + results.length);
 
 			// Create array of lat/longs for the heatmap plot
 			var googleLatLngArray = new Array();
@@ -253,6 +216,8 @@ function QueryForCarHeatmap() {
 //
 // Function that takes array of google.maps.LatLng() values and plots a heatmap
 function PlotHeatmap(gLatLngArray) {
+
+	$('#load_spinner').remove();
 
 	var MVCpointArray = new google.maps.MVCArray(gLatLngArray);
 
