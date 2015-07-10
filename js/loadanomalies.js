@@ -138,10 +138,12 @@ function crashFunc(buttonDown) {
 					loc: []
 				};
 
+				marker.information = info;
+
 
 				// Attach infowindow to marker and show on click
 				new google.maps.event.addListener(marker, 'click', function() {
-					makeInfo(this, info);
+					makeInfo(this, this.information);
 				});
 				crashArray.push(marker);
 			}
@@ -215,10 +217,12 @@ function swerveFunc(buttonDown) {
 					yaw: infoyaw
 				};
 
+				marker.information = info;
+
 
 				// Attach infowindow to click of marker
 				new google.maps.event.addListener(marker, 'click', function() {
-					makeInfo(this, info);
+					makeInfo(this, this.information);
 				});
 
 				swerveArray.push(marker);
@@ -298,10 +302,12 @@ function decelFunc(buttonDown) {
 					intensity: infointensity
 				};
 
+				marker.information = info;
+
 
 				// Attach infowindow to marker and show on click
 				new google.maps.event.addListener(marker, 'click', function() {
-					makeInfo(this, info);
+					makeInfo(this, this.information);
 				});
 
 				decelArray.push(marker);
@@ -380,10 +386,12 @@ function accelFunc(buttonDown) {
 					intensity: infointensity
 				};
 
+				marker.information = info;
+
 
 				// Attach infowindow to marker and show on click
 				new google.maps.event.addListener(marker, 'click', function() {
-					makeInfo(this, info);
+					makeInfo(this, this.information);
 				});
 
 				accelArray.push(marker);
