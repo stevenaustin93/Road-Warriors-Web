@@ -1,140 +1,91 @@
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>TMI: Data Analysis Page</title>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
-	</script>
-	<script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
-	<script type="text/javascript" src="js/exporting.js"></script>
-	<!-- <script type="text/javascript" src="js/exporting.js"></script> -->
-	<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js">
-	</script>
-	<script> Parse.initialize("6s0wYYKZR2sQU8zMV304cL8jv5Pdmp3PzOIwKLOp", "7C1XQAKjUdhiH6k25tRIbVOweuNMoFy0n0An4LJf"); 
-	</script>
-</head>
+<html>  
+    <head>
 
-<body>
-	<div id="container" style="width: 800px; height: 400px; margin: 0 auto"></div>
-	<script>
-
-//Load data from accidents.csv and accidentsPerDay.csv into arrays using Parse.
-function QueryServer() {
-
-	//var accidents = Parse.Object.extend("accidents");
-	//var query = new Parse.Query(accidents);
-	var safetyandaccid = Parse.Object.extend("safetyandaccid");
-	var query = new Parse.Query(safetyandaccid);
-
-	query.limit(30);
-	query.find({
-
-		success: function(results) {
-			alert("Results found:" + results.length);
-
-			//Create an accidents array to store the accidents from the accidents.csv file.
-			//var accidentsArray = new Array();
-			//Accidents per day array to store accidents per day from the accidentsPerDay.csv file.
-			/*var accidentsPerDayArray = new Array();
-
-			for (var i = 0; i < results.length; i++){
-				var object = results[i];
-				//accidentsArray.push([object.get('UMTRI_ID'), object.get('Date'), object.get('Accident Month'), object.get('Accident Day'), object.get('Accident Year'), object.get('Time of Day'), object. get('Weather'), object.get('Total Motor Vehicles'), object.get('Gps X Coordinate'), object.get('Gps Y Coordinate')]);
-				accidentsPerDayArray.push([object.get('Date'), object.get('Count')]);
-
-			}*/
-
-			CreateChart(results);
-
-		},
-
-		error: function(error) {
-			alert("Error: " + error.code + " " + error.message);
-		}
-
-	});
-
-}
-
-function CreateChart(results) {
-
-	var options = {
-					
-		chart: {
-		            renderTo: 'container',
-		            type: 'column'
-		        },
-		        title: {
-		            text: 'Percent Change of Accidents and Safety Ratings'
-		        },
-		        xAxis: {
-						type: 'datetime',
-						categories: []
-		        },
-		        yAxis: {
-		            min: 0,
-		            title: {
-		                text: 'Total fruit consumption'
-		            }
-		        },
-		        tooltip: {
-		            formatter: function () {
-		                return '<b>' + this.x + '</b><br/>' +
-		                    this.series.name + ': ' + this.y + '<br/>' +
-		                    'Total: ' + this.point.stackTotal;
-            }
-		        },
-		        plotOptions: {
-		            column: {
-		                stacking: 'normal'
-		            }
-		        },
-		        series: []
-		    };
-			
-					
-					
-				var series0 = {
-		            name: 'safety',
-					data: [],
-					stack: '2011'
-
-				}
-				
-				var series1 = {
-		            name: 'accident',					
-					data: [],
-					stack: '2011'
-				}
-				
+    <script src="jquery.js"></script>
+    <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript" src="js/exporting.js"></script>
 
 
-				for (var i = 0; i < results.length; i++){
-					amount = results[i].get('safe');
-		
-	
-					//months = results[i].get('Month');
+    <div id="container" style="width: 1000px; height: 700px; margin: 0 auto"></div>
 
 
-					//options.xAxis.categories.push(months);
+    </head>
+    <body>
 
-					series0.data.push(amount);				
+        <script>
 
+        $(function () {
+            $('#container').highcharts({
 
-				}
+                chart: {
+                    type: 'column'
+                },
 
+                title: {
+                    text: 'Percent Change of Accidents and Safety Ratings'
+                },
 
+                xAxis: {
+                    type: 'datetime',
+                    categories: ['January ','February','March','April','May','June','July','August','September','October','November','December']
+                },
 
-			options.series.push(series0);
-			var chart = new Highcharts.Chart(options);
-			}
+                yAxis: {
+                    allowDecimals: false,
+                    //min: 0,
+                    title: {
+                        text: 'Percent Change'
+                    }
+                },
 
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.x + '</b><br/>' +
+                            this.series.name + ': ' + this.y + '<br/>' +
+                            'Total: ' + this.point.stackTotal;
+                    }
+                },
 
-			$(document).ready(function() {
-				QueryServer();
-			});
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+                    }
+                },
 
+                credits: {
+                    enabled: false
+                },
 
-		</script>
+                series: [{
+                    name: 'Safety 2011',
+                    data: [0, 0, 22.75, 4.23, 30.166, 35.45, -6.35, 19.58, 62.43, 49.74, 60.85, 62.43],
+                    stack: '2011'
+                }, {
+                    name: 'Accident 2011',
+                    data: [0,0, 49.43, -9.29, 53.77, 50.23, -23.1, 71.34, 40.09, 54.96, 67.96, 72.76],
+                    stack: '2011'
+                }, {
+                    name: 'Safety 2012',
+                    data: [43.39, 28.57, 16.93, 29.1, 33.86, 38.62, 17.99, 36.51, 56.08, 78.31, 44.97, 58.73],
+                    stack: '2012'
+                }, {
+                    name: 'Accident 2012',
+                    data: [-21.22, 26.81, -8.44, 28.36, 28.1, 35.78, 35.67, -0.69, 43.68, 57.75, 30.15, 97.25],
+                    stack: '2012'
+                }, {
+                    name: 'Safety 2013',
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 74.07, 41.8, 12.76, -56.61],
+                    stack: '2013'
+                }, {
+                    name: 'Accident 2013',
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 76.27, 42.01, -23.96, -44.57],
+                    stack: '2013'
+                },
 
-</body>
+                ]
+            });
+        });
+        </script>
+
+    </body>
 </html>
