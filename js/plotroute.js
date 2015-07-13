@@ -1,118 +1,70 @@
 //
-// plotroute.js
-// This file handles route selection, display, and information
+// plotrouteNew.js
+// Display a route, alternative route options, and information about each route
+// (Note this file is a refactor test)
+
+var infowindow;
+var plottedRoutes;
+
 //
+// On document ready, listen for 'show route' button click
+$(document).ready(function(){
 
-// Global variables
-// Used for "clear route" functionality
-var startMarker;
-var endMarker;
-var infoWindows = new Array();
-var plottedRoutes = new Array();
+	var routed = false;
 
-var routed = false;
-
-// On document ready
-$(document).ready(function() {
+	// Swerve button event handler
+	var routeClicked = false;
 	$('#calcRoute').click(function() {
+		
 		if (($('#start').val() === "None") || ($('#end').val() === "None")) {
 			$('#myModal').modal('show');
 		} else {
 			if (routed) {
-				ClearRoutes();
+				clearRoutes();
 				routed = false;
 			}
+			plotRoute(routeClicked);
 			routed = true;
-			calcRouteSuccess();
 		}
+
+		this.blur();
+
 	});
 
 	$('#clearRoute').click(function() {
-		ClearRoutes();
+		clearRoutes();
+		routed = false;
+		this.blur();
 	});
+
 });
 
 //
-// Clears all displayed routes
-function ClearRoutes() {
-	//startMarker.setMap(null);
-	//endMarker.setMap(null);
+// Clears polyline routes and infowindows
+function clearRoutes() {
+	infowindow.setMap(null);
 
-	for (var i = 0; i < infoWindows.length; i++) {
-		infoWindows[i].setMap(null);
-	}
-	infoWindows.length = 0;
 	for (var i = 0; i < plottedRoutes.length; i++) {
 		plottedRoutes[i].setMap(null);
 	}
+
 	plottedRoutes.length = 0;
 }
 
 //
-// When calculate route is clicked successfully
-function calcRouteSuccess() {
-	// Get Start and End from selection box
-	var selectedStart = $('#start').val();
-	var selectedEnd = $('#end').val();
+// plots a route based on the selection boxes
+function plotRoute(routeClicked) {
 
-	// Convert these to coordinates
-	var startLat;
-	var endLat;
-	var startLong;
-	var endLong;
+	// Get start and end gps coordinates
+	var startEndObj = getDestinations();
+	if (!startEndObj.exists) return;
 
-	if (selectedStart === "PF Changs") {
-		startLat = 42.242753;
-		startLong = -83.745882;
-	} else if (selectedStart === "Law Quadrangle") {
-		startLat = 42.274460;
-		startLong = -83.739531;
-	} else {
-		// nothing here?
-	}
+	// Get route shapepoints from server
+	var startString = "" + startEndObj.lat0 + "," + startEndObj.lng0;
+	var endString = "" + startEndObj.lat1 + "," + startEndObj.lng1;
 
-	if (selectedEnd === "Stadium") {
-		endLat = 42.266804;
-		endLong = -83.748016;
-	} else if (selectedEnd === "Miller Nature Area") {
-		endLat = 42.287535;
-		endLong = -83.768593;
-	} else {
-		// nothing here?
-	}
-
-	var startEndArray = new Array();
-	startEndArray.push([startLat, startLong]);
-	startEndArray.push([endLat, endLong]);
-
-	/*
-	// Place markers at start and end
-	var startPosition = new google.maps.LatLng(startLat, startLong);
-	startMarker = new google.maps.Marker({
-		position: startPosition,
-		map: map,
-		title: 'Start: ' + selectedStart
-	});
-
-	var endPosition = new google.maps.LatLng(endLat, endLong);
-	endMarker = new google.maps.Marker({
-		position: endPosition,
-		map: map,
-		title: 'End: ' + selectedEnd
-	});
-	*/
-
-	// Query server for shapepoints between these two points
-	// assume cloud function accepts an array of points
-	cloudComputeShapes(startEndArray);
-}
-
-//
-// Function to call cloud function that takes start/end points and returns shapepoints along a set of routes
-function cloudComputeShapes(startEndArray) {
-	// Convert input array to start and end strings
-	var startString = "" + startEndArray[0][0] + "," + startEndArray[0][1];
-	var endString = "" + startEndArray[1][0] + "," + startEndArray[1][1];
+	// Route results
+	var routeResults = new Array();
 
 	// Run cloud function to get array of GPS points along route
 	Parse.Cloud.run("route", {
@@ -120,10 +72,7 @@ function cloudComputeShapes(startEndArray) {
 		endLocation: endString
 	}, {
 		success: function(result) {
-			//alert("Found " + result.length + " route(s), blue representing the fastest.");
 
-			// There may be multiple routes returned
-			var arrayOfRtObjects = new Array();
 
 			// parse results into array of objects
 			for (var i = 0; i < result.length; i++) {
@@ -131,8 +80,11 @@ function cloudComputeShapes(startEndArray) {
 				var routeObject = {
 					rtPoints: [],
 					time: [],
-					distance: []
+					distance: [],
+					safety: []
 				};
+
+
 
 				// Convert lat/lng objects to 2D array
 				for (var j = 0; j < result[i].lat.length; j++) {
@@ -141,112 +93,101 @@ function cloudComputeShapes(startEndArray) {
 
 				routeObject.time = result[i].time;
 				routeObject.distance = result[i].distance;
+				routeObject.safety = -1;
 
-				arrayOfRtObjects.push(routeObject);
+				routeResults.push(routeObject);
 			}
 
-			ManageRoutes(arrayOfRtObjects);
-
 		},
 		error: function(error) {
 			alert("Error: " + error.code + " " + error.message);
+		}
+	}).then( function() {
+		// After we have found all the routes, rate the safety of each route
+
+		var count = 0;
+		var maxResults = routeResults.length;
+
+		for (var i = 0; i < routeResults.length; i++) {
+
+			Parse.Cloud.run("rateSafety", {
+				shapeArray: routeResults[i].rtPoints
+			}, {
+				success: function(result) {
+
+					console.log("# routes = " + routeResults.length + ", curr=" + count);
+
+					routeResults[count].safety = result;
+					console.log("routeResults[" + count + "].safety = " + routeResults[count].safety);
+
+				},
+				error: function(error) {
+					alert("Error: " + error.code + " " + error.message);
+				}
+			}).then(function() {
+				count++;
+				console.log("Current count=" + count);
+				if (count >= maxResults) {
+					// When finished rating the safety of the routes, display them
+					createInfo(routeResults, startEndObj);
+					plotRoutes(routeResults);
+					return;
+				}
+			});
 		}
 	});
 }
 
 //
-// Function to take JSON object from query and convert it to array of GPS coordinates
-function ManageRoutes(routeObjList) {
+// Given a list of routes, makes an infowindow displaying side-by-side information
+function createInfo(routes, startEndObj) {
 
-	// Display route info for each route
-	for (var i = 0; i < routeObjList.length; i++) {
-
-		RunSafetyRating(routeObjList[i], i);
-
-	}
-
-	// Plot the routes
-	PlotRoutes(routeObjList);
-
-}
-
-function RunSafetyRating(routeObject, iterator) {
-
-	Parse.Cloud.run('rateSafety', {
-
-		shapeArray: routeObject.rtPoints
-
-	}, {
-		success: function(result) {
-
-			DisplayRouteInfo(routeObject.rtPoints, result, routeObject.time, routeObject.distance);
-			infoWindows[0].setMap(map);
-
-		},
-		error: function(error) {
-			alert("Error: " + error.code + " " + error.message);
-		}
-	});
-
-}
-
-//
-// Returns the center of a polyline
-function GetLineCenter(arrayOfPoints) {
-
-	// Determine the middle of the route
-	var middle;
-
-	if ((arrayOfPoints.length % 2) === 1) {
-		// Odd case
-		middle = (arrayOfPoints.length - 1) / 2;
+	// Determine nothernmost point
+	var northLat;
+	var northLng;
+	if (startEndObj.lat0 > startEndObj.lat1) {
+		northLat = startEndObj.lat0;
+		northLng = startEndObj.lng0;
 	} else {
-		// Even case
-		middle = arrayOfPoints.length / 2;
+		northLat = startEndObj.lat1;
+		northLng = startEndObj.lng1;
 	}
 
-	// Create a marker at the middle
-	var middlePosition = new google.maps.LatLng(arrayOfPoints[middle][0], arrayOfPoints[middle][1]);
+	var northPos = new google.maps.LatLng(northLat, northLng);
+	
 
-	return (middlePosition);
+	// Create an infowindow and display it at the northernmost route
+	var message = '<div><h4><b><i>' + $('#start').val() + "</i></b> to <b><i>" + $('#end').val() + '</b></i></div>';
+	for (var i = 0; i < routes.length; i++) {
+		var currString = '<div style=\"float: left; position:relative\">';
+		if (i == 0) {
+			currString += '<p>(blue route)</p>';
+		} else {
+			currString += '<p>(grey route)</p>';
+		}
+		currString += '<b>Safety Rating: </b><i>' + routes[i].safety + '/10</i>' +
+		'</i><br><b>Estimated Time: </b><i>' + routes[i].time.toPrecision(3) + ' min</i>' +
+		'</i><br><b>Approx. Distance: </b><i>' + routes[i].distance + ' miles</i></h5>' + '</div>';
 
-}
-
-// 
-// Function to put the safety rating on the map in an info window attached to a marker
-function DisplayRouteInfo(arrayOfPoints, safetyRating, routeTime, routeDistance) {
-
-	var middlePosition = GetLineCenter(arrayOfPoints);
-	/*
-	var middleMarker = new google.maps.Marker({
-		position: middlePosition,
-		//map: map,
-		title: 'Route Information'
-	});
-	*/
-
-	// Create an info window and display it at the middle marker
-	routeTime = routeTime.toPrecision(3);
-	routeDistance = routeDistance.toPrecision(3);
-	var contentString =
-		'<h5><b>Route: </b><i>' + $('#start').val() + "</i> to <i>" + $('#end').val() +
-		'</i><br><b>Safety Rating: </b><i>' + safetyRating + '/10</i>' +
-		'</i><br><b>Estimated Time: </b><i>' + routeTime + ' min</i>' +
-		'</i><br><b>Approx. Distance: </b><i>' + routeDistance + ' miles</i></h5>';
+		message += currString;
+	}
+	message += '</div>';
 
 	infowindow = new google.maps.InfoWindow({
-		content: contentString,
-		position: middlePosition
+		content: message,
+		position: northPos,
+		map: map
 	});
-
-	infoWindows.push(infowindow);
-
+	
 }
 
 //
-function PlotRoutes(arrayOfRoutes) {
+// Given a list of routes, plot them with shapepoints
+function plotRoutes(routes) {
 
-	for (var j = 0; j < arrayOfRoutes.length; j++) {
+	plottedRoutes = new Array();
+
+	for (var j = 0; j < routes.length; j++) {
 
 		var color = 'Gray';
 		if (j == 0) {
@@ -256,8 +197,8 @@ function PlotRoutes(arrayOfRoutes) {
 		// Array of coordinates
 		var routeCoordinates = new Array();
 
-		for (var i = 0; i < arrayOfRoutes[j].rtPoints.length; i++) {
-			routeCoordinates.push(new google.maps.LatLng(arrayOfRoutes[j].rtPoints[i][0], arrayOfRoutes[j].rtPoints[i][1]));
+		for (var i = 0; i < routes[j].rtPoints.length; i++) {
+			routeCoordinates.push(new google.maps.LatLng(routes[j].rtPoints[i][0], routes[j].rtPoints[i][1]));
 
 		}
 
@@ -267,30 +208,76 @@ function PlotRoutes(arrayOfRoutes) {
 			strokeOpacity: 0.7,
 			strokeWeight: 5
 		}));
+
+		
 	}
 
 	for (var i = 0; i < plottedRoutes.length; i++) {
 		plottedRoutes[i].setMap(map);
-		AddInfowindow(plottedRoutes[i], i);
+
+		google.maps.event.addListener(plottedRoutes[i], 'click', function(event) {
+			infowindow.open(map);
+		});
+	}
+}
+
+//
+// Returns two GPS coordinates based on selection boxes
+function getDestinations() {
+
+	// Get start selection
+	var start = $('#start').val();
+	var end = $('#end').val();
+
+	// Hardcoded reverse-geocode
+	var lat0 = 0;
+	var lng0 = 0;
+	switch (start) {
+		case "PF Changs":
+			lat0 = 42.242753;
+			lng0 = -83.745882;
+			break;
+		case "Law Quadrangle":
+			lat0 = 42.274460;
+			lng0 = -83.739531;
+			break;
+		case "City Hall":
+			lat0 = 42.283308;
+			lng0 = -83.744921;
+			break;
+		default:
+			// do nothing
 	}
 
+	var lat1 = 0;
+	var lng1 = 0;
+	switch (end) {
+		case "Stadium":
+			lat1 = 42.266804;
+			lng1 = -83.748016;
+			break;
+		case "Miller Nature Area":
+			lat1 = 42.287535;
+			lng1 = -83.768593;
+			break;
+		case "Ann Arbor Municipal Airport":
+			lat1 = 42.224220;
+			lng1 = -83.745186;
+			break;
+		default:
+			// do nothing
+	}
 
-}
+	// Check to see if we have an invalid input
+	var exists = !(lat0 == 0 || lng0 == 0 || lat1 == 0 || lng1 == 0);
 
-//
-// Function to add an infowindow to a polyline
-function AddInfowindow(polyline, number) {
-	google.maps.event.addListener(polyline, 'click', function(event) {
-		infoWindows[number].open(map);
-	});
-}
+	var destObject = {
+		exists: exists,
+		lat0: lat0,
+		lng0: lng0,
+		lat1: lat1,
+		lng1: lng1
+	};
 
-//
-// Function to set color coding of route polylines
-function SetRouteColors() {
-
-	// Query server each shape point along route
-
-	// Set a color for each shape point
-
+	return ( destObject );
 }
