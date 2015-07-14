@@ -38,7 +38,7 @@ function clickDragFUNC(isClicked){
     	strokeWeight: 2,
     	fillColor: '#FF0000',
     	fillOpacity: 0.35,
-    	draggable: true,
+    	draggable: false,
     	editable: true
  	 });
     rectangle.setMap(map);
