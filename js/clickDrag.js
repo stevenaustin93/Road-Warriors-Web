@@ -21,7 +21,7 @@ $(document).ready(function() {
 
 
 function clickDragFUNC(isClicked,hasClicked){
-	if(isClicked==false && clicked == true){
+	if(isClicked==false && hasClicked == true){
 		rectangle.setMap(null);
 	}
 	var boundArray = new Array(); //array to hold the lat lng cordinates for the bounds of rectangle
