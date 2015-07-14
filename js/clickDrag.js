@@ -1,10 +1,8 @@
 //click and drag
 $(document).ready(function() {
-	var clickDragButtonCLICKED = false;
+	var clickDragButtonCLICKED = true;
 	var queryClicked = false;
 	$('#dragbtn').click(function(){ 
-		alert("butt");
-		//clickDragButtonCLICKED = !clickDragButtonCLICKED;
 		clickDragFUNC(clickDragButtonCLICKED);
 		if (clickDragButtonCLICKED) this.blur();
 		clickDragButtonCLICKED = !clickDragButtonCLICKED;
@@ -21,6 +19,9 @@ $(document).ready(function() {
 
 
 function clickDragFUNC(isClicked){
+	if(isClicked==false){
+		rectangle.setMap(null);
+	}
 	var boundArray = new Array(); //array to hold the lat lng cordinates for the bounds of rectangle
 	//code for autoCentering the box selector on the users viewport upon creation
 	var center = map.getCenter(); 
