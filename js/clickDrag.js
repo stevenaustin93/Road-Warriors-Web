@@ -21,9 +21,6 @@ $(document).ready(function() {
 
 
 function clickDragFUNC(isClicked,hasClicked){
-	if(isClicked==false && hasClicked == true){
-		rectangle.setMap(null);
-	}
 	var boundArray = new Array(); //array to hold the lat lng cordinates for the bounds of rectangle
 	//code for autoCentering the box selector on the users viewport upon creation
 	var center = map.getCenter(); 
