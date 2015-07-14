@@ -66,9 +66,9 @@ function QueryForHeatmap() {
 
 		query = Parse.Query.or(brake1Query, brake2Query);
 
-	} else if (heatmapCol === "variance") {
+	} else if (heatmapCol === "accidents") {
 
-		QueryForVarHeatmap();
+		QueryForAccidentHeatmap();
 		return;
 
 	} else if (heatmapCol === "swerve") {
@@ -118,18 +118,17 @@ function QueryForHeatmap() {
 
 //
 // Function to query for only top of speed variances
-function QueryForVarHeatmap() {
+function QueryForAccidentHeatmap() {
 
 	// Setup query from general table
-	var rowColPairs = Parse.Object.extend("generalTable");
-	var varQuery = new Parse.Query(rowColPairs);
+	var accQuery = Parse.Object.extend("accidents_1000");
+	var query = new Parse.Query(accQuery);
 
 	// Set query constraints
-	varQuery.descending("speed_variance");
-	varQuery.limit(1000);
+	query.limit(1000);
 
 	// Perform query
-	varQuery.find({
+	query.find({
 
 		success: function(results) {
 
@@ -142,8 +141,8 @@ function QueryForVarHeatmap() {
 				var object = results[i];
 
 				// Convert row/col to lat/lng
-				var GLat = object.get('row') * 0.00005 + 35;
-				var GLng = object.get('col') * 0.00005 - 90;
+				var GLat = object.get('Lat');
+				var GLng = object.get('Lng');
 
 				// Add point to coords array
 				googleLatLngArray.push(new google.maps.LatLng(GLat, GLng));
