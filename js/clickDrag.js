@@ -4,7 +4,7 @@ $(document).ready(function() {
 	var queryClicked = false;
 	$('#dragbtn').click(function(){ 
 		alert("butt");
-		clickDragButtonCLICKED = !clickDragButtonCLICKED;
+		//clickDragButtonCLICKED = !clickDragButtonCLICKED;
 		clickDragFUNC(clickDragButtonCLICKED);
 		if (clickDragButtonCLICKED) this.blur();
 		clickDragButtonCLICKED = !clickDragButtonCLICKED;
