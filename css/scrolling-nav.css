@@ -25,8 +25,7 @@ of those sections to manage the look and feel of the site. */
     background: #fff;
     width: 100%;
     top: 0;
-    -webkit-transition: all 0.3s ease-out; /* Safari<=6 Android<=4.3 */
-    transition: all 0.3s ease-out;
+
 }
 
 .section1-section {
@@ -34,8 +33,6 @@ of those sections to manage the look and feel of the site. */
     padding-top: 110px;
     text-align: center;
     background: #eee;
-    -webkit-transition: all 0.3s ease-out; /* Safari<=6 Android<=4.3 */
-    transition: all 0.3s ease-out;
 }
 
 .section2-section {
@@ -43,8 +40,7 @@ of those sections to manage the look and feel of the site. */
     padding-top: 150px;
     text-align: center;
     background: #fff;
-    -webkit-transition: all 0.3s ease-out; /* Safari<=6 Android<=4.3 */
-    transition: all 0.3s ease-out;
+
 }
 
 .section3-section {
@@ -52,8 +48,7 @@ of those sections to manage the look and feel of the site. */
     padding-top: 150px;
     text-align: center;
     background: #eee;
-    -webkit-transition: all 0.3s ease-out; /* Safari<=6 Android<=4.3 */
-    transition: all 0.3s ease-out;
+
 }
 
 
