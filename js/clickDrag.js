@@ -4,6 +4,7 @@ $(document).ready(function() {
 	var queryClicked = false;
 	$('#dragbtn').click(function(){ 
 		alert("butt");
+		clickDragButtonCLICKED = !clickDragButtonCLICKED;
 		clickDragFUNC(clickDragButtonCLICKED);
 		if (clickDragButtonCLICKED) this.blur();
 		clickDragButtonCLICKED = !clickDragButtonCLICKED;
@@ -14,6 +15,7 @@ $(document).ready(function() {
 		if (queryClicked) this.blur();
 		queryClicked = !queryClicked;
 	})
+
 
 }); 
 
@@ -41,7 +43,12 @@ function clickDragFUNC(isClicked){
     	draggable: false,
     	editable: true
  	 });
-    rectangle.setMap(map);
+	if(isClicked==true){
+		    rectangle.setMap(map);
+	}
+	else
+		    rectangle.setMap(null);
+
     //listens for the bounds to be changed, once they are then it will...
     google.maps.event.addListener(rectangle, 'bounds_changed',function(event){
        gotBounds = rectangle.getBounds(); //get the bounds
