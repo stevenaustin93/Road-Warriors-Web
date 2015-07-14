@@ -19,6 +19,11 @@ $(document).ready(function(){
 		if (($('#start').val() === "None") || ($('#end').val() === "None")) {
 			$('#myModal').modal('show');
 		} else {
+
+			// Disable the button until finished querying to prevent overload of server
+			$('#calcRoute').prop('disabled', true);
+			$('#calcRoute').text("Loading...");
+
 			if (routed) {
 				clearRoutes();
 				routed = false;
@@ -219,6 +224,11 @@ function plotRoutes(routes) {
 			rinfowindow.open(map);
 		});
 	}
+
+	$('#calcRoute').prop('disabled', false);
+	$('#calcRoute').text("Calculate Route");
+	$('#calcRoute').css('font-weight','bold');   
+	
 }
 
 //
