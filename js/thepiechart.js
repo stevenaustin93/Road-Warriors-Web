@@ -37,16 +37,16 @@ function MakePieChart(results) {
             type: 'pie',
             name: 'Contribution to Safety Rating',
             data: [
-                ['Speed Variation',   99.04],
+                ['Speed Variation',   8.868783],
 
                 {
                     name: 'Acceleration',
-                    y: 0.96,
+                    y: 22.87679,
                     sliced: true,
                     selected: true
                 },
-                ['Braking',    0],
-                ['Swerving',     0],
+                ['Braking',    45.50295],
+                ['Swerving',     22.75147],
 
             ]
         }]

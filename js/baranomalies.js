@@ -51,11 +51,6 @@
 					data: []
 					
 				};
-		var series1 = { 
-					name: 'Minor Rapid Acceleration',
-					data: []
-					
-				};
 
 		var series2 = { 
 					name: 'Major Rapid Acceleration',
@@ -63,11 +58,7 @@
 					
 				};
 
-		var series3 = { 
-					name: 'Minor Rapid Braking',
-					data: []
-					
-				};
+
 
 		var series4 = {
 					name: 'Major Rapid Braking', 
@@ -80,19 +71,17 @@
 
 		for (var i = 0; i < results.length; i++) {
 		var Swerving = results[i].get('Swerving');
-		var Accel1 = results[i].get('Accel1');
+		//var Accel1 = results[i].get('Accel1');
 		var Accel2 = results[i].get('Accel2');
 		var Brake1 = results[i].get('Brake1');
 		var Brake2 = results[i].get('Brake2');
 		series0.data.push(Swerving);
-		series1.data.push(Accel1);
 		series2.data.push(Accel2);
-		series3.data.push(Brake1);	
 		series4.data.push(Brake2);
-		//options.xAxis.categories.push(names);			
+		
 		}	
 
-		options.series.push(series0, series1, series2, series3, series4);			
+		options.series.push(series0, series2, series4);			
 			
 
 
