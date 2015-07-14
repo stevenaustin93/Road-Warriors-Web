@@ -50,6 +50,9 @@ function clickDragFUNC(isClicked){
        var neLng = NE.lng();
        var swLat = SW.lat();
        var swLNG = SW.lng();
+       var marker = new google.maps.Marker({
+      	  position: SW
+ 	   });
 
     	if(queryClicked==true){
        	//convert latlong bounds to row col
