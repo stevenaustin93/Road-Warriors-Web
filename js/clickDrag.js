@@ -19,6 +19,9 @@ $(document).ready(function() {
 
 
 function clickDragFUNC(isClicked){
+	if(isClicked==false){
+	map.noClear=false;
+}
 	var boundArray = new Array(); //array to hold the lat lng cordinates for the bounds of rectangle
 	//code for autoCentering the box selector on the users viewport upon creation
 	var center = map.getCenter(); 
@@ -31,7 +34,6 @@ function clickDragFUNC(isClicked){
 	//variable to hold the bounds once user starts editing the box
   	var gotBounds = new google.maps.LatLngBounds();
   	//creates box
-  	if(isClicked==true){
 	var rectangle = new google.maps.Rectangle({
     	bounds: bounds,
     	strokeColor: '#FF0000',
@@ -42,7 +44,7 @@ function clickDragFUNC(isClicked){
     	draggable: false,
     	editable: true
  	 });
-	
+	if(isClicked==true){
 		    rectangle.setMap(map);
 	}
 	else
