@@ -1,8 +1,8 @@
 
 
 	function QueryS() {
-		var BarAnomalies = Parse.Object.extend("BarAnomalies");
-		var query = new Parse.Query(BarAnomalies);
+		var baranomalies = Parse.Object.extend("baranomalies");
+		var query = new Parse.Query(baranomalies);
 		query.limit(1000);
 		query.find({
 		  success: function(results) {
@@ -71,13 +71,11 @@
 
 		for (var i = 0; i < results.length; i++) {
 		var Swerving = results[i].get('Swerving');
-		//var Accel1 = results[i].get('Accel1');
-		var Accel2 = results[i].get('Accel2');
-		var Brake1 = results[i].get('Brake1');
-		var Brake2 = results[i].get('Brake2');
+		var Acceleration = results[i].get('Braking');
+		var Brake= results[i].get('Acceleration');
 		series0.data.push(Swerving);
-		series2.data.push(Accel2);
-		series4.data.push(Brake2);
+		series2.data.push(Acceleration);
+		series4.data.push(Braking);
 		
 		}	
 
