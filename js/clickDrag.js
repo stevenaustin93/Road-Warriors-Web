@@ -19,10 +19,14 @@ $(document).ready(function() {
 
 function clickDragFUNC(isClicked){
 
-	var bounds = new google.maps.LatLngBounds(  ///needs to be changed so it auto sets itself in the users viewport
-      new google.maps.LatLng(51.41859298, 0.089179345),
-      new google.maps.LatLng(51.45, 0.25)
+	var center = map.getCenter();
+  	var centLat = center.lat();
+  	var centLon = center.lng();
+	var bounds = new google.maps.LatLngBounds(  
+      new google.maps.LatLng(centLat-0.0125, centLon-0.025),
+      new google.maps.LatLng(centLat+0.0125, centLon+0.025)
   	);
+
   	var gotBounds = new google.maps.LatLngBounds();
 	var lat1, long1, lat2, long2 = 0;
 	var rectangle = new google.maps.Rectangle({
