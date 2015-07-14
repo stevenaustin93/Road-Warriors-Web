@@ -19,18 +19,18 @@ $(document).ready(function() {
 
 
 function clickDragFUNC(isClicked){
-
-	var center = map.getCenter();
+	var boundArray = new Array(); //array to hold the lat lng cordinates for the bounds of rectangle
+	//code for autoCentering the box selector on the users viewport upon creation
+	var center = map.getCenter(); 
   	var centLat = center.lat();
   	var centLon = center.lng();
 	var bounds = new google.maps.LatLngBounds(  
       new google.maps.LatLng(centLat-0.0125, centLon-0.025),
       new google.maps.LatLng(centLat+0.0125, centLon+0.025)
   	);
-
+	//variable to hold the bounds once user starts editing the box
   	var gotBounds = new google.maps.LatLngBounds();
-
-	var lat1, long1, lat2, long2 = 0;
+  	//creates box
 	var rectangle = new google.maps.Rectangle({
     	bounds: bounds,
     	strokeColor: '#FF0000',
@@ -42,24 +42,24 @@ function clickDragFUNC(isClicked){
     	editable: true
  	 });
     rectangle.setMap(map);
+    //listens for the bounds to be changed, once they are then it will...
     google.maps.event.addListener(rectangle, 'bounds_changed',function(event){
-       gotBounds = rectangle.getBounds();
-       var NE = gotBounds.getNorthEast();
-       var SW = gotBounds.getSouthWest();
-       var neLat = NE.lat();
-       var neLng = NE.lng();
-       var swLat = SW.lat();
-       var swLNG = SW.lng();
-       var marker = new google.maps.Marker({
+       gotBounds = rectangle.getBounds(); //get the bounds
+       var NE = gotBounds.getNorthEast(); //get the north east coordinates
+       var SW = gotBounds.getSouthWest(); //get the south west coordinates
+       var neLat = NE.lat(); //get lat of north east coord
+       var neLng = NE.lng(); //get lng of north east coord
+       var swLat = SW.lat(); //get lat of south west coord
+       var swLNG = SW.lng(); //get lng of south west coord
+       boundArray.push([neLat, neLng], [swLat, swLng]); //adds the lat and lng coords to the bounds array
+       var infoMarker = new google.maps.Marker({ //makes a marker for the info window at the south western coordinate
       	  position: SW
  	   });
 
-    	if(queryClicked==true){
-       	//convert latlong bounds to row col
-       	//adds marker at lower bound
+    	if(queryClicked==true){ //if the user has clicked the query button then it will...
        	//querry
-       	//call info window with query data and marker
-       	queryClicked=false;
+       	makeInfo(queryData,infoMarker); //make and infor window and display the data
+       	queryClicked=false; //turn off the query button
        	}
     });
 
