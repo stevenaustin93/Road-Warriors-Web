@@ -19,7 +19,7 @@ $(document).ready(function() {
 
 
 function clickDragFUNC(isClicked){
-	if(isClicked==false){
+	if(isClicked==true){
 	map.noClear=false;
 }
 	var boundArray = new Array(); //array to hold the lat lng cordinates for the bounds of rectangle
