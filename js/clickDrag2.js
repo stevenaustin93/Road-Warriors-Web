@@ -55,6 +55,10 @@ function clickDragFunc(buttonDown) {
 
 		rectangle.setMap(map);
 
+		google.maps.event.addListener(rectangle, 'bounds_changed', function() {
+			rectInfo.setMap(null);
+		});
+
 		$('#analyzebtn').prop('disabled', false);
 
 		$('#analyzebtn').click(function() {
