@@ -3,7 +3,7 @@
 // Display a route, alternative route options, and information about each route
 // (Note this file is a refactor test)
 
-var infowindow;
+var rinfowindow;
 var plottedRoutes;
 
 //
@@ -40,9 +40,9 @@ $(document).ready(function(){
 });
 
 //
-// Clears polyline routes and infowindows
+// Clears polyline routes and rinfowindows
 function clearRoutes() {
-	infowindow.setMap(null);
+	rinfowindow.setMap(null);
 
 	for (var i = 0; i < plottedRoutes.length; i++) {
 		plottedRoutes[i].setMap(null);
@@ -139,7 +139,7 @@ function plotRoute(routeClicked) {
 }
 
 //
-// Given a list of routes, makes an infowindow displaying side-by-side information
+// Given a list of routes, makes an rinfowindow displaying side-by-side information
 function createInfo(routes, startEndObj) {
 
 	// Determine nothernmost point
@@ -156,7 +156,7 @@ function createInfo(routes, startEndObj) {
 	var northPos = new google.maps.LatLng(northLat, northLng);
 	
 
-	// Create an infowindow and display it at the northernmost route
+	// Create an rrinfowindow and display it at the northernmost route
 	var message = '<div><h4><b><i>' + $('#start').val() + "</i></b> to <b><i>" + $('#end').val() + '</b></i></div>';
 	for (var i = 0; i < routes.length; i++) {
 		var currString = '<div style=\"float: left; position:relative\">';
@@ -173,7 +173,7 @@ function createInfo(routes, startEndObj) {
 	}
 	message += '</div>';
 
-	infowindow = new google.maps.InfoWindow({
+	rinfowindow = new google.maps.InfoWindow({
 		content: message,
 		position: northPos,
 		map: map
@@ -216,7 +216,7 @@ function plotRoutes(routes) {
 		plottedRoutes[i].setMap(map);
 
 		google.maps.event.addListener(plottedRoutes[i], 'click', function(event) {
-			infowindow.open(map);
+			rinfowindow.open(map);
 		});
 	}
 }
