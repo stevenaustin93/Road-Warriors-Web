@@ -2,8 +2,10 @@
 $(document).ready(function() {
 	var clickDragButtonCLICKED = true;
 	var queryClicked = false;
+	var Clicked =false;
 	$('#dragbtn').click(function(){ 
-		clickDragFUNC(clickDragButtonCLICKED);
+		Clicked =true;
+		clickDragFUNC(clickDragButtonCLICKED, Clicked);
 		if (clickDragButtonCLICKED) this.blur();
 		clickDragButtonCLICKED = !clickDragButtonCLICKED;
 	})
@@ -18,8 +20,8 @@ $(document).ready(function() {
 }); 
 
 
-function clickDragFUNC(isClicked){
-	if(isClicked==false){
+function clickDragFUNC(isClicked,hasClicked){
+	if(isClicked==false && clicked == true){
 		rectangle.setMap(null);
 	}
 	var boundArray = new Array(); //array to hold the lat lng cordinates for the bounds of rectangle
