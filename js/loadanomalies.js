@@ -14,6 +14,7 @@ var GENERAL_ALERT_ICON = "images/general_alert.png";
 
 // Global variables
 var anomalyList; // list of all anomalies queried from server
+var accidentList; // list of accidents queried from server
 var infowindow = new google.maps.InfoWindow({});; // moving infowindow that follows marker click
 
 
@@ -23,6 +24,7 @@ $(document).ready(function() {
 
 	// Query server for list of all anomalies
 	populateAnomalyArray();
+	populateAccidentArray();
 
 });
 
@@ -47,6 +49,36 @@ function populateAnomalyArray() {
 
 			// Setup our action listeners
 			setupListeners();
+		},
+
+		error: function(error) {
+			alert("Error: " + error.code + " " + error.message);
+		}
+
+	});
+
+}
+
+//
+// Queries server for list of anomalies and appends to global array 'anomalyList'
+function populateAccidentArray() {
+
+	accidentList = new Array();
+
+	// Get array of query results from server
+	var accidents = Parse.Object.extend("accidents_1000");
+	var query = new Parse.Query(accidents);
+
+	query.descending("Index");
+	query.limit(20);
+	query.find({
+
+		success: function(results) {
+
+			// Add results of anomaly query to our list of anomalies
+			accidentList.length = 0; // reset list
+			accidentList = accidentList.concat(results);
+
 		},
 
 		error: function(error) {
@@ -109,44 +141,58 @@ function crashFunc(buttonDown) {
 
 		crashArray.length = 0;
 
-		for (var i = 0; i < anomalyList.length; i++) {
-			if (anomalyList[i].get('class') === "C") {
+		for (var i = 0; i < accidentList.length; i++) {
 
-				// Create marker
-				var markPos;
-				var markIcon;
-				var markTitle;
-				var marker;
+			// Create marker
+			var markPos;
+			var markIcon;
+			var markTitle;
+			var marker;
 
-				markPos = new google.maps.LatLng(anomalyList[i].get('Latitude'), anomalyList[i].get('Longitude'));
-				markIcon = CRASH_ICON;
-				markTitle = "Accident detected here!";
-				marker = new google.maps.Marker({
-					position: markPos,
-					icon: markIcon,
-					title: markTitle
-				});
-
-
-				// Generate infowindow message
-				var infotitle;
-				var info;
-
-				infotitle = "<div><b>Accident</b>";
-				info = {
-					title: infotitle,
-					loc: []
-				};
-
-				marker.information = info;
+			markPos = new google.maps.LatLng(accidentList[i].get('Lat'), accidentList[i].get('Lng'));
+			markIcon = CRASH_ICON;
+			markTitle = "Accident detected here!";
+			marker = new google.maps.Marker({
+				position: markPos,
+				icon: markIcon,
+				title: markTitle
+			});
 
 
-				// Attach infowindow to marker and show on click
-				new google.maps.event.addListener(marker, 'click', function() {
-					makeInfo(this, this.information);
-				});
-				crashArray.push(marker);
-			}
+			// Generate infowindow message
+			var infotitle;
+			var infoangle;
+			var infodate;
+			var infoinjury;
+			var inforoadcond;
+			var infoweather;
+			var info;
+
+			infotitle = "<div><h4><b>Accident</h4></b>";
+			infoangle = "<div><b>Angle: </b>" + accidentList[i].get('Angle');
+			infodate = "<div><b>Date - Time: </b>" + accidentList[i].get('Date') + " - " + accidentList[i].get('Time');
+			infoinjury = "<div><b>Injury: </b>" + accidentList[i].get('Injury');
+			inforoadcond = "<div><b>Road Condition: </b>" + accidentList[i].get('RoadCond');
+			infoweather = "<div><b>Weather: </b>" + accidentList[i].get('Weather');
+
+			info = {
+				title: infotitle,
+				loc: [],
+				angle: infoangle,
+				date: infodate,
+				injury: infoinjury,
+				roadcond: inforoadcond,
+				weather: infoweather
+			};
+
+			marker.information = info;
+
+
+			// Attach infowindow to marker and show on click
+			new google.maps.event.addListener(marker, 'click', function() {
+				makeInfo(this, this.information);
+			});
+			crashArray.push(marker);
 		}
 
 		// Place all the markers on the map
@@ -203,7 +249,7 @@ function swerveFunc(buttonDown) {
 				var infoyaw;
 				var info;
 
-				infotitle = "<div><b>Swerve Event</b>";
+				infotitle = "<div><h4><b>Swerve Event</h4></b>";
 				infospd = "<div><b>Speed: </b>" + anomalyList[i].get('Speed').toPrecision(4) + " m/s";
 				var date = new Date(anomalyList[i].get('Gentime') / 1000);
 				date.setFullYear(date.getFullYear() + 34);
@@ -285,9 +331,9 @@ function decelFunc(buttonDown) {
 				var info;
 
 				if (anomalyList[i].get('class') === "B1") {
-					infotitle = "<div><b>Class 1 Braking Event</b>"
+					infotitle = "<div><h4><b>Class 1 Braking Event</b></h4>"
 				} else {
-					infotitle = "<div><b>Class 2 Braking Event</b>"
+					infotitle = "<div><h4><b>Class 2 Braking Event</b></h4>"
 				}
 				infospd = "<div><b>Speed: </b>" + anomalyList[i].get('Speed').toPrecision(4) + " m/s";
 				var date = new Date(anomalyList[i].get('Gentime') / 1000);
@@ -369,9 +415,9 @@ function accelFunc(buttonDown) {
 				var info;
 
 				if (anomalyList[i].get('class') === "A1") {
-					infotitle = "<div><b>Class 1 Acceleration Event</b>"
+					infotitle = "<div><h4><b>Class 1 Acceleration Event</b></h4>"
 				} else {
-					infotitle = "<div><b>Class 2 Acceleration Event</b>"
+					infotitle = "<div><h4><b>Class 2 Acceleration Event</b></h4>"
 				}
 				infospd = "<div><b>Speed: </b>" + anomalyList[i].get('Speed').toPrecision(4) + " m/s";
 				var date = new Date(anomalyList[i].get('Gentime') / 1000);
@@ -428,10 +474,10 @@ function makeInfo(marker, info) {
 
 			// iterate through the info object and generate message
 			for (prop in info) {
-			    if (!info.hasOwnProperty(prop)) {
-			        continue;
-			    }
-			    message += info[prop];
+				if (!info.hasOwnProperty(prop)) {
+					continue;
+				}
+				message += info[prop];
 			}
 
 			// make an infowindow
