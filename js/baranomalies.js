@@ -72,7 +72,7 @@
 		for (var i = 0; i < results.length; i++) {
 		var Swerving = results[i].get('Swerving');
 		var Acceleration = results[i].get('Braking');
-		var Brake= results[i].get('Acceleration');
+		var Braking= results[i].get('Acceleration');
 		series0.data.push(Swerving);
 		series2.data.push(Acceleration);
 		series4.data.push(Braking);
