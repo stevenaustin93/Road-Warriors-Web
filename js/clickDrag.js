@@ -1,3 +1,26 @@
+
+  		//code for autoCentering the box selector on the users viewport upon creation
+	var center = map.getCenter(); 
+  	var centLat = center.lat();
+  	var centLon = center.lng();
+	var bounds = new google.maps.LatLngBounds(  
+      new google.maps.LatLng(centLat-0.0125, centLon-0.025),
+      new google.maps.LatLng(centLat+0.0125, centLon+0.025)
+  	);
+  	//creates box
+	var rectangle = new google.maps.Rectangle({
+    	bounds: bounds,
+    	strokeColor: '#FF0000',
+    	strokeOpacity: 0.8,
+    	strokeWeight: 2,
+    	fillColor: '#FF0000',
+    	fillOpacity: 0.35,
+    	draggable: false,
+    	editable: true,
+    	visible: false
+ 	 });
+	rectangle.setMap(map);
+
 //click and drag
 $(document).ready(function() {
 	var clickDragButtonCLICKED = true;
@@ -19,36 +42,17 @@ $(document).ready(function() {
 
 
 function clickDragFUNC(isClicked){
-	if(isClicked==true){
-	map.noClear=false;
-}
+	
 	var boundArray = new Array(); //array to hold the lat lng cordinates for the bounds of rectangle
-	//code for autoCentering the box selector on the users viewport upon creation
-	var center = map.getCenter(); 
-  	var centLat = center.lat();
-  	var centLon = center.lng();
-	var bounds = new google.maps.LatLngBounds(  
-      new google.maps.LatLng(centLat-0.0125, centLon-0.025),
-      new google.maps.LatLng(centLat+0.0125, centLon+0.025)
-  	);
+
 	//variable to hold the bounds once user starts editing the box
   	var gotBounds = new google.maps.LatLngBounds();
-  	//creates box
-	var rectangle = new google.maps.Rectangle({
-    	bounds: bounds,
-    	strokeColor: '#FF0000',
-    	strokeOpacity: 0.8,
-    	strokeWeight: 2,
-    	fillColor: '#FF0000',
-    	fillOpacity: 0.35,
-    	draggable: false,
-    	editable: true
- 	 });
+
 	if(isClicked==true){
-		    rectangle.setMap(map);
+		    rectangle.setVisible(true);
 	}
 	else
-		    rectangle.setMap(null);
+		    rectangle.setVisible(false);
 
     //listens for the bounds to be changed, once they are then it will...
     google.maps.event.addListener(rectangle, 'bounds_changed',function(event){
