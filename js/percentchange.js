@@ -45,9 +45,12 @@ function makeChart(results) {
             },
 
             title: {
-                text: 'Safety Rating vs. Number of Accidents Over Time'
+                text: 'Safety Rating vs. Number of Crashes'
 
             },
+            subtitle: {
+                            text: 'Representing Correlation and Change Over Time'
+                        },
 
             yAxis: {
                 labels: {
