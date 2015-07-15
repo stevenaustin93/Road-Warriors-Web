@@ -17,7 +17,7 @@
 -->
 
     <script src="http://code.highcharts.com/stock/highstock.js"></script>
-<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
 
     <!-- Parse -->
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.4.2.min.js"></script>
@@ -167,7 +167,6 @@
 <div id="fullpage">
 
 
-
 <!-- Accidents and Safety Section -->
 <section id="intro" data-anchor="firstPage" class="section intro-section" style="background-color: #ecf0f1">
     <div class="container">
@@ -208,10 +207,13 @@
 </section>
 
 <!-- Safety Rating Breakdown Section -->
-<section id="section3" data-anchor="4thPage" class="section section3-section" style="background-color: #ecf0f1">
+<section id="section3" data-anchor="4thPage" class="section section3-section" style="background-color: #337ab7">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
+                <div id ="percentchange" style="width: 1200px; height: 600px">
+                    <p><script type="text/javascript" src="js/percentchange.js"></script></p>
+                </div>
             </div>
         </div>
     </div>
@@ -221,7 +223,8 @@
 
 <script src="js/jquery.easing.min.js"></script>
 <script src="js/scrolling-nav.js"></script>
-<script type="text/javascript">
+
+<script>
     $(document).ready(function() {
     $('#fullpage').fullpage({
         //Navigation
