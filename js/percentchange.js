@@ -73,9 +73,7 @@ function makeChart(results) {
             subtitle: {
                 text: 'Representing Relationship as Percent Change Over Time'
             },
-            subtitle: {
-                            text: 'Representing Correlation and Change Over Time'
-                        },
+      
 
             yAxis: {
                 labels: {
