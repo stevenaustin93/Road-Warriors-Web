@@ -40,13 +40,37 @@ function makeChart(results) {
 
         $('#percentchange').highcharts('StockChart', {
 
-            rangeSelector: {
-                selected: 5
+            rangeSelector : {
+                allButtonsEnabled: true,
+                 buttons: [{
+                    type: 'month',
+                    count: 6,
+                    text: '6m'
+                }, {
+                    type: 'ytd',
+                    text: 'YTD'
+                }, {
+                    type: 'year',
+                    count: 1,
+                    text: '1y'
+                }, {
+                    type: 'all',
+                    text: 'All'
+                }], 
+                buttonTheme: {
+                    width: 60
+                },
+                selected: 4
             },
 
-            title: {
-                text: 'Safety Rating vs. Number of Accidents Over Time'
 
+            title: {
+                text: 'Safety Rating vs. Number of Crashes'
+
+            },
+
+            subtitle: {
+                text: 'Representing Relationship as Percent Change Over Time'
             },
 
             yAxis: {
