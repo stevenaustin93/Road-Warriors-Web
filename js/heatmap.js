@@ -71,6 +71,11 @@ function QueryForHeatmap() {
 		QueryForAccidentHeatmap();
 		return;
 
+	} else if (heatmapCol === "lowSafety") {
+
+		QueryForSafetyHeatmap();
+		return;
+
 	} else if (heatmapCol === "swerve") {
 		query.greaterThan("swerve", 0);
 
@@ -172,6 +177,52 @@ function QueryForCarHeatmap() {
 	// Set query constraints
 	carQuery.descending("cars");
 	carQuery.limit(1000);
+
+	// Perform query
+	carQuery.find({
+
+		success: function(results) {
+
+			//alert("Number of car heatmap entries: " + results.length);
+
+			// Create array of lat/longs for the heatmap plot
+			var googleLatLngArray = new Array();
+
+			for (var i = 0; i < results.length; i++) {
+				var object = results[i];
+
+				// Convert row/col to lat/lng
+				var GLat = object.get('row') * 0.00005 + 35;
+				var GLng = object.get('col') * 0.00005 - 90;
+
+				// Add point to coords array
+				googleLatLngArray.push(new google.maps.LatLng(GLat, GLng));
+			}
+
+			// Send coords array to plotting function
+			PlotHeatmap(googleLatLngArray);
+
+		},
+
+		error: function(error) {
+			alert("Error: " + error.code + " " + error.message);
+		}
+
+	});
+
+}
+
+//
+// Function to query for lowest safety ratings
+function QueryForSafetyHeatmap() {
+
+	// Setup query from general table
+	var rowColPairs = Parse.Object.extend("generalTable");
+	var carQuery = new Parse.Query(rowColPairs);
+
+	// Set query constraints
+	carQuery.ascending("safety");
+	carQuery.limit(100);
 
 	// Perform query
 	carQuery.find({

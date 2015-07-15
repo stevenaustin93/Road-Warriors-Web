@@ -66,12 +66,18 @@ function makeChart(results) {
 
             title: {
                 text: 'Safety Rating vs. Number of Crashes'
+<<<<<<< HEAD
 
             },
+=======
+>>>>>>> origin/master
 
             subtitle: {
                 text: 'Representing Relationship as Percent Change Over Time'
             },
+            subtitle: {
+                            text: 'Representing Correlation and Change Over Time'
+                        },
 
             yAxis: {
                 labels: {
