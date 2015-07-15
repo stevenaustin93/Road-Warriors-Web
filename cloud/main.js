@@ -36,6 +36,42 @@ Parse.Cloud.define("route", function(request, response) {
 	});
 });
 
+/**
+* Gets the posted speed limit of a road if exists.
+* Uses latitude and longitude. If the posted
+* speed limit is not known, 999 is returned.
+*/
+Parse.Cloud.define("speedLimit", function(request, response) {
+        var lat = request.params.lat;
+        var lng = request.params.lng;
+        var waypoint = lat + "," + lng;
+ 
+        var METERS_PER_SECOND_TO_MILES_PER_HOUR = 2.23694;
+ 
+        Parse.Cloud.httpRequest({
+                url: 'https://route.st.nlp.nokia.com/routing/6.2/getlinkinfo.json',
+                headers:{
+                        'Content-Type':'application/json'
+                },
+                params: {
+                        waypoint: waypoint,
+                        app_id: 'CKyYbS8jSu3supUT965r',
+                        app_code: 'arqPVZK-UAoZZ1lUx4Q45w'
+                }
+        }).then(function(httpResponse) {
+                var link = httpResponse['data']['Response']['Link'][0];
+                var speedLimit = 999;
+               
+                if (link.hasOwnProperty('SpeedLimit')) {
+                        var speedLimitMetersPerSecond = link['SpeedLimit'];
+                        speedLimit = Math.ceil(speedLimitMetersPerSecond * METERS_PER_SECOND_TO_MILES_PER_HOUR);
+                }
+                response.success(speedLimit);
+        }, function(httpResponse) {
+                response.error(httpResponse.error);
+        });
+ 
+});
 
 /**
  * Calls the RateSafety function and responds with a number
