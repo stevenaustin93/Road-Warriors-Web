@@ -26,7 +26,7 @@
 				type: 'column'
 			},
 			title: {
-				text: 'Current Anomalies of Ann Arbor'
+				text: 'Current Anomalies Along Current Route'
 			},
 			xAxis: {
 				categories: ['Live Data']
@@ -34,8 +34,9 @@
 			},
 			yAxis: {
 				title: {
-					text: 'Units'
-				}
+					text: 'Number'
+				},
+				tickInterval: 1
 			},
 
             credits: {
@@ -81,19 +82,6 @@
 
 		options.series.push(series0, series2, series4);			
 			
-
-
-		
-		
-
-
-
-			
-
-		
-
-
-
 		var chart = new Highcharts.Chart(options);
 	}
 	

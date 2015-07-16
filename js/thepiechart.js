@@ -11,7 +11,7 @@ function MakePieChart(results) {
         plotShadow: false
         },
         title: {
-            text: 'Safety Rating'
+            text: 'Safety Rating Breakdown'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
