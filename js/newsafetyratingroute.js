@@ -74,7 +74,7 @@ function QueryServer() {
 
                     var series1 = {
                         name: 'Safety Rating of Entire Route',
-                        color: 'red'.
+                        color: 'red',
                         data:[]
                     };
 
