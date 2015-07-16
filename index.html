@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Traffic Management</title>
+	<title>TIS: Dashboard</title>
 
 	<style>
 	html, body, #map-canvas, #dashBoardDiv {
@@ -62,8 +62,6 @@
 		height: 200px;
 	}
 
-	
-
 	#topBar {
 		margin-left: 0px;
 		position: absolute;
@@ -120,39 +118,39 @@
 	}
 
 	#closeButton {
-    margin-right: 10px;
-    font-size: 2em;
-    padding: .2em .4em;
-    font-family: sans-serif;
-    background-color: white;
-    z-index: 10;
+	    margin-right: 10px;
+	    font-size: 2em;
+	    padding: .2em .4em;
+	    font-family: sans-serif;
+	    background-color: white;
+	    z-index: 10;
 	}
 
 	.modal {
-  text-align: center;
-}
+		text-align: center;
+	}
 
-@media screen and (min-width: 768px) { 
-  .modal:before {
-    display: inline-block;
-    vertical-align: middle;
-    content: " ";
-    height: 100%;
-  }
-}
+	@media screen and (min-width: 768px) { 
+	  .modal:before {
+	    display: inline-block;
+	    vertical-align: middle;
+	    content: " ";
+	    height: 100%;
+	  }
+	}
 
-.modal-dialog {
-  display: inline-block;
-  text-align: left;
-  vertical-align: middle;
-}
+	.modal-dialog {
+	  display: inline-block;
+	  text-align: left;
+	  vertical-align: middle;
+	}
 
 	</style>
 
-	<!-- Google maps -->
+	<!-- Google Maps API -->
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZCvB7znSd96KaA7vxEAumHmvweDXVRMU&libraries=visualization"></script>
 
-	<!-- Latest compiled and minified CSS -->
+	<!-- Latest compiled and minified Bootstrap CSS -->
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
 	<!-- jQuery library -->
@@ -161,7 +159,7 @@
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/smoothness/jquery-ui.css">
   
 
-	<!-- Latest compiled JavaScript -->
+	<!-- Bootstrap library -->
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 	<!-- Parse Scripts -->
@@ -169,106 +167,19 @@
 
 	<!-- Parse initialization -->
 	<script>
-	Parse.initialize("6s0wYYKZR2sQU8zMV304cL8jv5Pdmp3PzOIwKLOp", "7C1XQAKjUdhiH6k25tRIbVOweuNMoFy0n0An4LJf");
+		Parse.initialize("6s0wYYKZR2sQU8zMV304cL8jv5Pdmp3PzOIwKLOp", "7C1XQAKjUdhiH6k25tRIbVOweuNMoFy0n0An4LJf");
 	</script>
 
 	<!-- Local Scripts -->
-	<!-- <script type="text/javascript" src="js/mapinit.js"></script> -->
-	<!-- <script type="text/javascript" src="js/jquery-csv.js"></script> -->
+	<script type="text/javascript" src="js/mapinit.js"></script>
 	<script type="text/javascript" src="js/loadanomalies.js"></script>
 	<script type="text/javascript" src="js/colorroute.js"></script>
 	<script type="text/javascript" src="js/brakemap.js"></script>
 	<script type="text/javascript" src="js/heatmap.js"></script>
 	<script type="text/javascript" src="js/plotroute.js"></script>
 	<script type="text/javascript" src="js/clickDrag.js"></script>
-	<!--<script type="text/javascript" src="js/safetyRatingLibrary.js"></script>-->
+	<script type="text/javascript" src="js/mouseover.js"></script>
 
-	<!--<script type="text/javascript" src="js/GERSTLETABLERANGE.js"></script>-->
-
-	<script>
-
-	var map;
-
-	function initialize() {
-		var mapOptions = {
-			zoom: 12,
-			center: new google.maps.LatLng(42.2813, -83.7483),
-			mapTypeControl: true,
-			mapTypeControlOptions: {
-				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-				position: google.maps.ControlPosition.BOTTOM_CENTER
-			},
-			zoomControl: true,
-			zoomControlOptions: {
-				style: google.maps.ZoomControlStyle.SMALL,
-				position: google.maps.ControlPosition.RIGHT_CENTER
-			},
-			scaleControl: true,
-			streetViewControl: true,
-			streetViewControlOptions: {
-				position: google.maps.ControlPosition.RIGHT_CENTER
-
-
-			},
-			panControl: true,
-			panControlOptions:{
-				position:google.maps.ControlPosition.RIGHT_CENTER
-			}
-		}
-
-		map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-		//apply the map-settings for panControl and zoomControl to the streetView:
-		map.get('streetView')
-		.setOptions({
-			panControlOptions:  map.get('panControlOptions'),
-			zoomControlOptions: map.get('zoomControlOptions')});
-
-
-		var center;
-		function calculateCenter() {
-			center = map.getCenter();
-		}
-		console.log(map);
-		google.maps.event.addDomListener(map, 'idle', function() {
-
-			calculateCenter();
-		});
-		google.maps.event.addDomListener(window, 'resize', function() {
-			map.setCenter(center);
-		});
-
-		$('#closeButton').hide();
-
-		var streetView = map.getStreetView();
-
-		var closeButton = document.querySelector('#closeButton'),
-        controlPosition = google.maps.ControlPosition.RIGHT_TOP;
-
-	    streetView.setOptions({ enableCloseButton: false });
-
-	    // Add to street view
-	    streetView.controls[ controlPosition ].push( closeButton );
-
-		google.maps.event.addDomListener(streetView, 'visible_changed', function(){
-
-			
-
-	       	if (streetView.getVisible()) {
-	       		$('#closeButton').show();
-	       		$('#closeButton').click(function() {
-	       			streetView.setVisible(false);
-	       		});
-	       	}
-	    });
-	}
-
-
-
-	google.maps.event.addDomListener(window, 'load', initialize);
-
-
-	</script>
 
 </head>
 <body>
@@ -276,8 +187,8 @@
 		<h2 id="TIS"><em>Traffic Information System</em></h2>
 		<ul id="navTabs" class="nav nav-tabs" data-step="1" data-intro="Welcome To The Traffic Navigation System">
 
-			<li role="presentation" class="active"><a href="index.html"><strong>Dashboard</strong></a></li>
-			<li role="presentation"><a href="data.html"><strong>Data Analytics</strong></a></li>
+			<li title="Displays an interactive map with controls to view various safety aspects." role="presentation" class="active"><a href="index.html"><strong>Dashboard</strong></a></li>
+			<li title="Displays an analysis of the selected route or box." role="presentation"><a href="data.html"><strong>Data Analytics</strong></a></li>
 
 		</ul>
 	</div>
@@ -286,67 +197,34 @@
 	<div id="dashBoardDiv">
 		<div class="container">
 		<div id="sideBar" class="side-bar">
-			<!-- <h3>Traffic Information System</h3>
-			<div>
-				<ul class="nav nav-tabs">
-					<li role="presentation" class="active"><a href="#" data-toggle="tab">Dashboard</a></li>
-					<li role="presentation"><a href="#" data-toggle="tab">Data Analytics</a></li>
-				</ul>
-			</div> -->
 			<div id="heatdiv" class="dropdown">
 				<h4>Heat Map</h4>
-				<select id = "heatMap" name="heatMap" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background-color:white">
+				<select title="Displays a heatmap of instances of the selected option." id = "heatMap" name="heatMap" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background-color:white">
 					<option value="none" selected="selected">None</option>
 					<option value="accel">High Acceleration</option>
 					<option value="brake">Hard Braking</option>
 					<option value="swerve">High Swerving</option>
 					<option value="cars">Highest Car Density</option>
 					<option value="accidents">Crashes</option>
-					<!-- <span class="caret"></span> -->
 				</select>
-				<!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-					<li id="heatMap"><a href="#">Speed</a></li>
-					<li id="hazard"><a href="#">Acceleration</a></li>
-					<li id="traffic"><a>Yaw Rate</a></li>
-				</ul> -->
 			</div>	
 
 			<hr>
 
 			<div>
 				<h4> Display Events</h4>
-				<button id="swerve" type="button" data-toggle="buttons" class="btn btn-default full-width-btn"><span class="add-on"><img src="images/swerve_icon.png" align="left"></span>Swerve</button>
+				<button id="swerve" title="Displays markers on the map where a driver swerved." type="button" data-toggle="buttons" class="btn btn-default full-width-btn"><span class="add-on"><img src="images/swerve_icon.png" align="left"></span>Swerve</button>
 
-				<button id="rapidAccel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn"><span class="add-on"><img src="images/fast_accel_icon.png" align="left"></span>Acceleration</button>
+				<button title="Displays markers on the map where a driver accelerated rapidly." id="rapidAccel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn"><span class="add-on"><img src="images/fast_accel_icon.png" align="left"></span>Acceleration</button>
 
-				<button id="rapidDecel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn"><span class="add-on"><img src="images/braking_icon.png" align="left"></span>Braking</button>
+				<button title="Displays markers on the map where a driver braked suddenly."id="rapidDecel" type="button" data-toggle="buttons" class="btn btn-default full-width-btn"><span class="add-on"><img src="images/braking_icon.png" align="left"></span>Braking</button>
 
-				<button id="crash" type="button" data-toggle="buttons" class="btn btn-default full-width-btn"><span class="add-on"><img src="images/crash_icon.png" align="left"></span>Crashes</button>
+				<button title="Displays markers on the map where a vehicle crash occured." id="crash" type="button" data-toggle="buttons" class="btn btn-default full-width-btn"><span class="add-on"><img src="images/crash_icon.png" align="left"></span>Crashes</button>
 			</div>
-		<!--
-		<div class="dropdown">
-			<h4>Start:</h4>
-			<button id="dropdownbutton" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Select
-				<span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-				<li id="heatMap"><a href="#">PF Changs</a></li>
-			</ul>
-			<div class="dropdown">
-				<h4>End:</h4>
-				<button id="dropdownbutton" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Select
-					<span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-					<li id="heatMap"><a href="#">Stadium</a></li>
-				</ul>
-			</div>
-		</div>
-	-->
 	<hr>
 
-	<button id="dragbtn" type="button" data-toggle="buttons" class="btn btn-default full-width-btn" style="color: #337ab7"><span class="add-on"></span><strong>Area Selection</strong></button>
-	<button id="analyzebtn" type="button" class="btn btn-default full-width-btn" style="color: #337ab7"><span class="add-on"></span><strong>Analyze</strong></button>
+	<button title="Places a draggable box which can then be used to query a specific section of the map." id="dragbtn" type="button" data-toggle="buttons" class="btn btn-default full-width-btn" style="color: #337ab7"><span class="add-on"></span><strong>Area Selection</strong></button>
+	<button title="Analyzes the area inside the box and displays resulting information." id="analyzebtn" type="button" class="btn btn-default full-width-btn" style="color: #337ab7"><span class="add-on"></span><strong>Analyze</strong></button>
 
 
 	<hr>
@@ -354,24 +232,10 @@
 	<div id="routeSelection">
 	
 		<h4>Route Selection</h4>
-		<!-- <div class="dropdown">
-			
-			<h4>Route View:</h4>
-			<select name="routeOptions" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background-color:white">
-				<option id="none" selected="selected">None</option>
-				<option id="speed">Speed</option>
-				<option id="acceleration">Acceleration</a></option>
-				<option id="yaw">Yaw Rate</option>
-				<option id="traffic">Traffic</option>
-
-			</select>
-
-		</div>
- -->
 		
 		<label for="start"><h4>A</h4></label>
 
-		<select name="start" id="start" class="btn btn-default" style="background-color: white; width: 200px">
+		<select title="Select a starting point for a route to analyze." name="start" id="start" class="btn btn-default" style="background-color: white; width: 200px">
 			<option selected="selected">None</option>y
 			<option>PF Changs</option>
 			<option>Law Quadrangle</option>
@@ -380,7 +244,7 @@
 		<br>
 		<label for="end"><h4>B</h4></label>
 
-		<select name="end" id="end" class="btn btn-default" style="width:200px; background-color: white">
+		<select title="Select an ending point for a route to analyze." name="end" id="end" class="btn btn-default" style="width:200px; background-color: white">
 			<option selected="selected">None</option>
 			<option>Stadium</option>
 			<option>Miller Nature Area</option>
@@ -389,8 +253,8 @@
 
 		<p></p>
 		<div id="routeButtons" style="padding-top: 5px">
-			<button id="calcRoute" type="button" class="btn btn-default full-width-btn" style="color: #337ab7"><strong>Calculate Route</strong></button>
-	        <button id="clearRoute" type="button" class="btn btn-default full-width-btn" style="color: #337ab7"><strong>Clear Route</strong></button>
+			<button title="Finds routes between the start-and-end points and displays resulting information."id="calcRoute" type="button" class="btn btn-default full-width-btn" style="color: #337ab7"><strong>Calculate Route</strong></button>
+	        <button title="Removes routes from the map."id="clearRoute" type="button" class="btn btn-default full-width-btn" style="color: #337ab7"><strong>Clear Route</strong></button>
 		</div>
 	</div>
 </div>
