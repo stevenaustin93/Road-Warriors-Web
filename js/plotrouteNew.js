@@ -306,9 +306,17 @@ function plotRoutes(routes) {
 		plottedRoutes[i].setMap(map);
 
 		google.maps.event.addListener(plottedRoutes[i], 'click', function(event) {
-			rinfowindow.open(map);
+			rinfowindow.open(map, startMark);
 		});
 	}
+
+	google.maps.event.addListener(startMark, 'click', function(event) {
+			rinfowindow.open(map, startMark);
+		});
+
+	google.maps.event.addListener(endMark, 'click', function(event) {
+			rinfowindow.open(map, startMark);
+		});
 
 	$('#calcRoute').prop('disabled', false);
 	$('#calcRoute').text("Calculate Route");
