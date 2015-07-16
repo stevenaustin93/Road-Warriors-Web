@@ -40,11 +40,14 @@
 
 <!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
 
-<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+<body id="page-top" data-spy="scroll" data-target="#listTabs">
     <style type="text/css">
 
     html, body, section {
         height: 100%;
+    }
+    body{
+        position: relative;
     }
 
     #topBar {
@@ -146,15 +149,12 @@
                 </button>
             </div>
 
-         <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul id="subNavTabs" class="nav navbar-nav nav-pills topnav">
-                <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-                    <li class="hidden">
-                        <a class="page-scroll" href="#page-top"></a>
-                    </li>
-                <li><a href="#firstPage">Safety Ratings of Current Route</a></li>
-                <li><a href="#secondPage">Breakdown of Safety Rating</a></li>
-                <li><a href="#3rdPage">Current Anomalies</a></li>
+         <div id="listTabs">
+            <ul id="subNavTabs" class="nav nav-tabs navbar-nav topnav" role="tablist">
+                    
+                <li><a href="#firstPage">Breakdown of Safety Rating</a></li>
+                <li><a href="#secondPage">Current Anomalies</a></li>
+                <li><a href="#3rdPage">Safety Ratings of Current Route</a></li>
                 <li><a href="#4thPage">Safety Rating vs. Number of Crashes</a></li>
           </ul>
       </div>
