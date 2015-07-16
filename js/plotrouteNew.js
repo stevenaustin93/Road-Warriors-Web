@@ -18,11 +18,15 @@ $(document).ready(function(){
 	var routed = false;
 
 	$('#calcRoute').prop('disabled', true);
+	$('#clearRoute').prop('disabled', true);
 
 	var routeClicked = false;
 	$('#routeSelect').click(function() {
 		placeRouteMarks(routeClicked);
-		if (routeClicked) this.blur();
+		if (routeClicked) {
+			this.blur();
+			$('#clearRoute').prop('disabled', true);
+		}
 		routeClicked = !routeClicked;
 
 	});
@@ -32,11 +36,17 @@ $(document).ready(function(){
 			$('#myModal').modal('show');
 		} else {
 			if (routed) clearRoutes();
-			plotRoute(routed);
 			this.blur();
+			plotRoute(routed);
 			routed = true;
 			startMarkInfo.setMap(null);
 		}
+	});
+
+	$('#clearRoute').click(function() {
+		this.blur();
+		clearRoutes();
+		$('#clearRoute').prop('disabled', true);
 	});
 
 });
@@ -270,6 +280,8 @@ function createInfo(routes, startEndObj) {
 	});
 
 	rinfowindow.open(map, startMark);
+
+	$('#clearRoute').prop('disabled', false);
 	
 }
 
