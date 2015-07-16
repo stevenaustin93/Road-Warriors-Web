@@ -28,15 +28,55 @@ $(document).ready(function(){
 	});
 
 	$('#calcRoute').click(function() {
-		if (routed) clearRoutes();
-		plotRoute(routed);
-		this.blur();
-		routed = true;
-		startMarkInfo.setMap(null);
+		if (!validBounds()) {
+			$('#myModal').modal('show');
+		} else {
+			if (routed) clearRoutes();
+			plotRoute(routed);
+			this.blur();
+			routed = true;
+			startMarkInfo.setMap(null);
+		}
 	});
 
 });
 
+//
+// Checks to see if the markers are close enough to Ann Arbor to calculate
+function validBounds() {
+	var bounds = getMarksPos();
+	var maxLat = 42.435361;
+	var minLng = -84.023722;
+	var minLat = 42.138680;
+	var maxLng = -83.560553;
+
+	var valid = true;
+
+	/*
+	console.log( bounds.lat0 > maxLat );
+	console.log( bounds.lat1 > maxLat );
+	console.log( bounds.lat1 > maxLat );
+	console.log( bounds.lat1 < minLat );
+
+	console.log( bounds.lng0 > maxLng );
+	console.log( bounds.lng1 > maxLng );
+	console.log( bounds.lng0 < minLng );
+	console.log( bounds.lng1 < minLng );
+	*/
+
+	if (bounds.lat0 > maxLat) valid = false;
+	if (bounds.lat1 > maxLat) valid = false;
+	if (bounds.lat0 < minLat) valid = false;
+	if (bounds.lat1 < minLat) valid = false;
+
+	if (bounds.lng0 > maxLng) valid = false;
+	if (bounds.lng1 > maxLng) valid = false;
+	if (bounds.lng0 < minLng) valid = false;
+	if (bounds.lng1 < minLng) valid = false;
+
+	return ( valid );
+
+}
 
 
 //
@@ -145,6 +185,9 @@ function plotRoute(routeClicked) {
 		},
 		error: function(error) {
 			alert("Error: " + error.code + " " + error.message);
+			$('#calcRoute').prop('disabled', false);
+			$('#calcRoute').text("Calculate Route");
+			$('#calcRoute').css('font-weight', 'bold');
 		}
 	}).then( function() {
 		// After we have found all the routes, rate the safety of each route
@@ -167,6 +210,9 @@ function plotRoute(routeClicked) {
 				},
 				error: function(error) {
 					alert("Error: " + error.code + " " + error.message);
+						$('#calcRoute').prop('disabled', false);
+						$('#calcRoute').text("Calculate Route");
+						$('#calcRoute').css('font-weight','bold');  
 				}
 			}).then(function() {
 				count++;

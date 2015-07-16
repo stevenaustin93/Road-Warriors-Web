@@ -96,7 +96,13 @@ Parse.Cloud.define("rateSafety", function(request, response) {
 
 	var counter = 0;
 
-	var maxCount = queryList.length-1;
+	var maxCount;
+
+	if ((queryList.length - 1) > 20) {
+		maxCount = 20;
+	} else {
+		maxCount = queryList.length-1;
+	}
 
 	console.log("[INFO] Attempting to submit " + queryList.length + " queries...");
 
@@ -122,7 +128,7 @@ Parse.Cloud.define("rateSafety", function(request, response) {
 		}).then(function(){
 			counter++;
 			// limit the max # of queries to 20
-			if ((counter >= maxCount) || (counter > 20)) {
+			if (counter == maxCount) {
 				console.log("Reached end of query list, total # results =" + superResults.length);
 				var returnValue = AverageSafety(boxList, superResults);
 				returnValue = returnValue.toPrecision(3);
