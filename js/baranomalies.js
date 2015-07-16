@@ -26,7 +26,7 @@
 				type: 'column'
 			},
 			title: {
-				text: 'Current Anomalies of Ann Arbor'
+				text: 'Current Anomalies of Route'
 			},
 			xAxis: {
 				categories: ['Live Data']
