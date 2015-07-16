@@ -228,13 +228,15 @@ function makeRectInfo(results) {
 	avgsafety = avgsafety / results.length;
 
 	var message = "";
+	var tooltip = "Driving irregularities including rapid acceleration, hard braking, or swerving, are found using Connected Vehicle data.";
 
 	message += "<div><h4><b>Area Selection Information</b></h4>";
 	message += "<div><b>Bounds: </b> (" + ne.lat().toPrecision(4) + "," + ne.lng().toPrecision(4) + ") to (" +
 		sw.lat().toPrecision(4) + "," + sw.lng().toPrecision(4) + ")";
 	message += "<div><b>Average Safety Rating: </b> " + avgsafety.toPrecision(2) +"/10";
-	message += "<div style='max-width: 200px'><b>Summary: </b>Connected Vehicle data indicates that " + numincidents +
-	 " driving irregularities have occured in this area, including rapid acceleration, hard braking, or swerving.";
+	message += "<div title='Driving irregularities, including rapid acceleration, hard braking, and swerving, \nare found using Connected Vehicle data.'><b>Driving Irregularities*: </b> " + numincidents;
+
+	//$('#irreg').title = tooltip;
 	/*
 	message += "<div><b>Rapid Accelerations: </b> " + numaccels;
 	message += "<div><b>Driver Swerves: </b> " + numswerves;
