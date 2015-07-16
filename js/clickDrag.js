@@ -235,17 +235,8 @@ function makeRectInfo(results) {
 		sw.lat().toPrecision(4) + "," + sw.lng().toPrecision(4) + ")";
 	message += "<div><b>Average Safety Rating: </b> " + avgsafety.toPrecision(2) +"/10";
 	message += "<div title='Driving irregularities, including rapid acceleration, hard braking, and swerving, \nare found using Connected Vehicle data.'><b>Driving Irregularities*: </b> " + numincidents;
+	message += '<div><b><u><a href="data.html">Further Analysis</a></u></b></div>';
 
-	//$('#irreg').title = tooltip;
-	/*
-	message += "<div><b>Rapid Accelerations: </b> " + numaccels;
-	message += "<div><b>Driver Swerves: </b> " + numswerves;
-	message += "<div><b>Hard Brakes: </b> " + numbrakes;
-	//message += "<div><b>Average Car Density: </b> " + avgcar.toPrecision(4);
-	message += "<div><b>Average Safety Rating: </b> " + avgsafety.toPrecision(2);
-	*/
-
-	// Set the info window's content and position.
 	rectInfo.setContent(message);
 	rectInfo.setPosition(ne);
 

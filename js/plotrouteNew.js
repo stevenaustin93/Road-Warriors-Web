@@ -249,7 +249,7 @@ function createInfo(routes, startEndObj) {
 	// Create an rrinfowindow and display it at the northernmost route
 	var message = '<div><h4><b>Route Information</b></div>';
 	for (var i = 0; i < routes.length; i++) {
-		var currString = '<div style=\"float: left; padding-left: 5px; position:relative\">';
+		var currString = '<div style=\"float: left; padding-right: 5px; position:relative\">';
 		if (i == 0) {
 			currString += '<div>(blue route)';
 		} else {
@@ -262,6 +262,8 @@ function createInfo(routes, startEndObj) {
 		message += currString;
 	}
 	message += '</div>';
+
+	message += '<div><b><u><a href="data.html">Further Analysis</a></u></b></div>';
 
 	rinfowindow = new google.maps.InfoWindow({
 		content: message
