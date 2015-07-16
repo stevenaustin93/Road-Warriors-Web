@@ -88,7 +88,7 @@ function placeRouteMarks(clicked) {
 		$('#calcRoute').prop('disabled', false);
 
 		startMarkInfo = new google.maps.InfoWindow({
-			content: "Drag me around to select a start and end point for your route!"
+			content: "Start: Drag me around to select a start and end point for your route!"
 		});
 
 		startMark = new google.maps.Marker({
