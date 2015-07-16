@@ -6,7 +6,7 @@ function MakePieChart(results) {
 		
         chart: {
         renderTo: 'pie',
-        plotBackgroundColor: null,
+        backgroundColor: 'transparent',
         plotBorderWidth: null,
         plotShadow: false
         },
@@ -59,7 +59,7 @@ function MakePieChart(results) {
 
 
 
-$(document).ready(function() {
+$(document).ready(function(){
 
         MakePieChart();
     

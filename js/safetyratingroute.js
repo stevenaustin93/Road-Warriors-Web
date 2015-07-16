@@ -27,17 +27,19 @@ function QueryServer() {
                             renderTo: 'safetyratingroute',
                             type: 'line',
                             zoomType: 'x'
+        
                         },
                         title: {
-                            text: 'Safety Rating Along Current Route'
+                            text: '<h4>Safety Rating Along Current Route</h4>',
+                            margin: 40,
+                            y: 35,
+                            useHTML: true
+
                         },
-                        subtitle: {
-                            text: document.ontouchstart === undefined ?
-                                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
-                        },
+        
                         xAxis: {
                             title:{
-                                text: 'Current Route'
+                                text: 'Current Route',
                             },
                                         
                             categories: [],
