@@ -9,43 +9,124 @@ var plottedRoutes;
 var startMark;
 var endMark;
 
+var startMarkInfo;
+
 //
 // On document ready, listen for 'show route' button click
 $(document).ready(function(){
 
 	var routed = false;
 
-	// Swerve button event handler
+	$('#calcRoute').prop('disabled', true);
+	$('#clearRoute').prop('disabled', true);
+
 	var routeClicked = false;
+	$('#routeSelect').click(function() {
+		placeRouteMarks(routeClicked);
+		if (routeClicked) {
+			this.blur();
+			$('#clearRoute').prop('disabled', true);
+		}
+		routeClicked = !routeClicked;
+
+	});
+
 	$('#calcRoute').click(function() {
-		
-		if (($('#start').val() === "None") || ($('#end').val() === "None")) {
+		if (!validBounds()) {
 			$('#myModal').modal('show');
 		} else {
-
-			// Disable the button until finished querying to prevent overload of server
-			$('#calcRoute').prop('disabled', true);
-			$('#calcRoute').text("Loading...");
-
-			if (routed) {
-				clearRoutes();
-				routed = false;
-			}
-			plotRoute(routeClicked);
+			if (routed) clearRoutes();
+			this.blur();
+			plotRoute(routed);
 			routed = true;
+			startMarkInfo.setMap(null);
 		}
-
-		this.blur();
-
 	});
 
 	$('#clearRoute').click(function() {
-		clearRoutes();
-		routed = false;
 		this.blur();
+		clearRoutes();
+		$('#clearRoute').prop('disabled', true);
 	});
 
 });
+
+//
+// Checks to see if the markers are close enough to Ann Arbor to calculate
+function validBounds() {
+	var bounds = getMarksPos();
+	var maxLat = 42.435361;
+	var minLng = -84.023722;
+	var minLat = 42.138680;
+	var maxLng = -83.560553;
+
+	var valid = true;
+
+	/*
+	console.log( bounds.lat0 > maxLat );
+	console.log( bounds.lat1 > maxLat );
+	console.log( bounds.lat1 > maxLat );
+	console.log( bounds.lat1 < minLat );
+
+	console.log( bounds.lng0 > maxLng );
+	console.log( bounds.lng1 > maxLng );
+	console.log( bounds.lng0 < minLng );
+	console.log( bounds.lng1 < minLng );
+	*/
+
+	if (bounds.lat0 > maxLat) valid = false;
+	if (bounds.lat1 > maxLat) valid = false;
+	if (bounds.lat0 < minLat) valid = false;
+	if (bounds.lat1 < minLat) valid = false;
+
+	if (bounds.lng0 > maxLng) valid = false;
+	if (bounds.lng1 > maxLng) valid = false;
+	if (bounds.lng0 < minLng) valid = false;
+	if (bounds.lng1 < minLng) valid = false;
+
+	return ( valid );
+
+}
+
+
+//
+// places start and end markers on the map
+function placeRouteMarks(clicked) {
+
+	if (!clicked) {
+
+		$('#calcRoute').prop('disabled', false);
+
+		startMarkInfo = new google.maps.InfoWindow({
+			content: "Start: Drag me around to select a start and end point for your route!"
+		});
+
+		startMark = new google.maps.Marker({
+			position: new google.maps.LatLng(42.287535, -83.768593),
+			icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+			title: "Start Marker",
+			draggable: true,
+			map: map
+		});
+
+		startMarkInfo.open(map, startMark);
+
+		endMark = new google.maps.Marker({
+			position: new google.maps.LatLng(42.242753, -83.745882),
+			icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+			title: "End Marker",
+			draggable: true,
+			map: map
+		});
+
+	} else {
+		$('#calcRoute').prop('disabled', true);
+		startMark.setMap(null);
+		endMark.setMap(null);
+		clearRoutes();
+		routed = false;
+	}
+}
 
 //
 // Clears polyline routes and rinfowindows
@@ -59,13 +140,18 @@ function clearRoutes() {
 	plottedRoutes.length = 0;
 }
 
+
 //
 // plots a route based on the selection boxes
 function plotRoute(routeClicked) {
 
+	$('#calcRoute').prop('disabled', true);
+	$('#calcRoute').text("Calculating..."); 
+	
+
 	// Get start and end gps coordinates
-	var startEndObj = getDestinations();
-	if (!startEndObj.exists) return;
+	var startEndObj = getMarksPos();
+	//if (!startEndObj.exists) return;
 
 	// Get route shapepoints from server
 	var startString = "" + startEndObj.lat0 + "," + startEndObj.lng0;
@@ -109,6 +195,9 @@ function plotRoute(routeClicked) {
 		},
 		error: function(error) {
 			alert("Error: " + error.code + " " + error.message);
+			$('#calcRoute').prop('disabled', false);
+			$('#calcRoute').text("Calculate Route");
+			$('#calcRoute').css('font-weight', 'bold');
 		}
 	}).then( function() {
 		// After we have found all the routes, rate the safety of each route
@@ -131,6 +220,9 @@ function plotRoute(routeClicked) {
 				},
 				error: function(error) {
 					alert("Error: " + error.code + " " + error.message);
+						$('#calcRoute').prop('disabled', false);
+						$('#calcRoute').text("Calculate Route");
+						$('#calcRoute').css('font-weight','bold');  
 				}
 			}).then(function() {
 				count++;
@@ -165,9 +257,9 @@ function createInfo(routes, startEndObj) {
 	
 
 	// Create an rrinfowindow and display it at the northernmost route
-	var message = '<div><h4><b>' + $('#start').val() + "</b> to <b>" + $('#end').val() + '</b></div>';
+	var message = '<div><h4><b>Route Information</b></div>';
 	for (var i = 0; i < routes.length; i++) {
-		var currString = '<div style=\"float: left; padding-left: 5px; position:relative\">';
+		var currString = '<div style=\"float: left; padding-right: 5px; position:relative\">';
 		if (i == 0) {
 			currString += '<div>(blue route)';
 		} else {
@@ -181,11 +273,15 @@ function createInfo(routes, startEndObj) {
 	}
 	message += '</div>';
 
+	message += '<div><b><u><a href="data.html">Further Analysis</a></u></b></div>';
+
 	rinfowindow = new google.maps.InfoWindow({
-		content: message,
-		position: northPos,
-		map: map
+		content: message
 	});
+
+	rinfowindow.open(map, startMark);
+
+	$('#clearRoute').prop('disabled', false);
 	
 }
 
@@ -224,9 +320,17 @@ function plotRoutes(routes) {
 		plottedRoutes[i].setMap(map);
 
 		google.maps.event.addListener(plottedRoutes[i], 'click', function(event) {
-			rinfowindow.open(map);
+			rinfowindow.open(map, startMark);
 		});
 	}
+
+	google.maps.event.addListener(startMark, 'click', function(event) {
+			rinfowindow.open(map, startMark);
+		});
+
+	google.maps.event.addListener(endMark, 'click', function(event) {
+			rinfowindow.open(map, startMark);
+		});
 
 	$('#calcRoute').prop('disabled', false);
 	$('#calcRoute').text("Calculate Route");
@@ -235,62 +339,15 @@ function plotRoutes(routes) {
 }
 
 //
-// Returns two GPS coordinates based on selection boxes
-function getDestinations() {
-
-	// Get start selection
-	var start = $('#start').val();
-	var end = $('#end').val();
-
-	// Hardcoded reverse-geocode
-	var lat0 = 0;
-	var lng0 = 0;
-	switch (start) {
-		case "PF Changs":
-			lat0 = 42.242753;
-			lng0 = -83.745882;
-			break;
-		case "Law Quadrangle":
-			lat0 = 42.274460;
-			lng0 = -83.739531;
-			break;
-		case "City Hall":
-			lat0 = 42.283308;
-			lng0 = -83.744921;
-			break;
-		default:
-			// do nothing
-	}
-
-	var lat1 = 0;
-	var lng1 = 0;
-	switch (end) {
-		case "Stadium":
-			lat1 = 42.266804;
-			lng1 = -83.748016;
-			break;
-		case "Miller Nature Area":
-			lat1 = 42.287535;
-			lng1 = -83.768593;
-			break;
-		case "Ann Arbor Municipal Airport":
-			lat1 = 42.224220;
-			lng1 = -83.745186;
-			break;
-		default:
-			// do nothing
-	}
-
-	// Check to see if we have an invalid input
-	var exists = !(lat0 == 0 || lng0 == 0 || lat1 == 0 || lng1 == 0);
+// returns the position of the two markers as an object
+function getMarksPos() {
 
 	var destObject = {
-		exists: exists,
-		lat0: lat0,
-		lng0: lng0,
-		lat1: lat1,
-		lng1: lng1
-	};
+		lat0: startMark.getPosition().lat(),
+		lng0: startMark.getPosition().lng(),
+		lat1: endMark.getPosition().lat(),
+		lng1: endMark.getPosition().lng()
+	}; 
 
 	return ( destObject );
 }
