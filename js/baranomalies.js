@@ -26,7 +26,7 @@
 				type: 'column'
 			},
 			title: {
-				text: 'Current Anomalies Along Current Route'
+				text: 'Current Anomalies Along Route'
 			},
 			xAxis: {
 				categories: ['Live Data']
