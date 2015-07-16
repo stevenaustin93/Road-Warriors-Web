@@ -162,17 +162,17 @@ function createInfo(routes, startEndObj) {
 	
 
 	// Create an rrinfowindow and display it at the northernmost route
-	var message = '<div><h4><b><i>' + $('#start').val() + "</i></b> to <b><i>" + $('#end').val() + '</b></i></div>';
+	var message = '<div><h4><b>' + $('#start').val() + "</b> to <b>" + $('#end').val() + '</b></div>';
 	for (var i = 0; i < routes.length; i++) {
-		var currString = '<div style=\"float: left; position:relative\">';
+		var currString = '<div style=\"float: left; padding-left: 5px; position:relative\">';
 		if (i == 0) {
-			currString += '<p>(blue route)</p>';
+			currString += '<div>(blue route)';
 		} else {
-			currString += '<p>(grey route)</p>';
+			currString += '<div>(grey route)';
 		}
-		currString += '<b>Safety Rating: </b><i>' + routes[i].safety + '/10</i>' +
-		'</i><br><b>Estimated Time: </b><i>' + routes[i].time.toPrecision(3) + ' min</i>' +
-		'</i><br><b>Approx. Distance: </b><i>' + routes[i].distance + ' miles</i></h5>' + '</div>';
+		currString += '<div><b>Safety Rating: </b>' + parseFloat(routes[i].safety).toPrecision(2) + '/10' +
+		'<br><b>Estimated Time: </b>' + routes[i].time.toPrecision(2) + ' min' +
+		'<br><b>Approx. Distance: </b>' + routes[i].distance.toPrecision(2) + ' miles</h5>' + '</div></div></div>';
 
 		message += currString;
 	}

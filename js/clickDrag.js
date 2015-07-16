@@ -222,6 +222,8 @@ function makeRectInfo(results) {
 		avgsafety += results[i].get("safety");
 	}
 
+	var numincidents = numaccels + numbrakes + numswerves;
+
 	avgcar = avgcar / results.length;
 	avgsafety = avgsafety / results.length;
 
@@ -230,11 +232,16 @@ function makeRectInfo(results) {
 	message += "<div><h4><b>Area Selection Information</b></h4>";
 	message += "<div><b>Bounds: </b> (" + ne.lat().toPrecision(4) + "," + ne.lng().toPrecision(4) + ") to (" +
 		sw.lat().toPrecision(4) + "," + sw.lng().toPrecision(4) + ")";
-	message += "<div><b>Acceleration Events: </b> " + numaccels;
-	message += "<div><b>Swerve Events: </b> " + numswerves;
-	message += "<div><b>Braking Events: </b> " + numbrakes;
+	message += "<div><b>Average Safety Rating: </b> " + avgsafety.toPrecision(2) +"/10";
+	message += "<div style='max-width: 200px'><b>Summary: </b>Connected vehicles have reported " + numincidents +
+	 " incidents in this area, meaning rapid acceleration, hard braking, or swerving.";
+	/*
+	message += "<div><b>Rapid Accelerations: </b> " + numaccels;
+	message += "<div><b>Driver Swerves: </b> " + numswerves;
+	message += "<div><b>Hard Brakes: </b> " + numbrakes;
 	//message += "<div><b>Average Car Density: </b> " + avgcar.toPrecision(4);
-	message += "<div><b>Average Safety Rating: </b> " + avgsafety.toPrecision(4);
+	message += "<div><b>Average Safety Rating: </b> " + avgsafety.toPrecision(2);
+	*/
 
 	// Set the info window's content and position.
 	rectInfo.setContent(message);

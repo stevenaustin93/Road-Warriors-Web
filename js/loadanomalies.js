@@ -250,7 +250,7 @@ function swerveFunc(buttonDown) {
 				var info;
 
 				infotitle = "<div><h4><b>Swerve Event</h4></b>";
-				infospd = "<div><b>Speed: </b>" + anomalyList[i].get('Speed').toPrecision(4) + " m/s";
+				infospd = "<div><b>Speed: </b>" + (anomalyList[i].get('Speed')/0.447).toPrecision(2) + " mph";
 				var date = new Date(anomalyList[i].get('Gentime') / 1000);
 				date.setFullYear(date.getFullYear() + 34);
 				infotime = "<div><b>Time: </b>" + date.toString();
@@ -335,7 +335,7 @@ function decelFunc(buttonDown) {
 				} else {
 					infotitle = "<div><h4><b>Class 2 Braking Event</b></h4>"
 				}
-				infospd = "<div><b>Speed: </b>" + anomalyList[i].get('Speed').toPrecision(4) + " m/s";
+				infospd = "<div><b>Speed: </b>" + (anomalyList[i].get('Speed')/0.447).toPrecision(2) + " mph";
 				var date = new Date(anomalyList[i].get('Gentime') / 1000);
 				date.setFullYear(date.getFullYear() + 34);
 				infotime = "<div><b>Time: </b>" + date.toString();
@@ -419,7 +419,7 @@ function accelFunc(buttonDown) {
 				} else {
 					infotitle = "<div><h4><b>Class 2 Acceleration Event</b></h4>"
 				}
-				infospd = "<div><b>Speed: </b>" + anomalyList[i].get('Speed').toPrecision(4) + " m/s";
+				infospd = "<div><b>Speed: </b>" + (anomalyList[i].get('Speed')/0.447).toPrecision(2) + " mph";
 				var date = new Date(anomalyList[i].get('Gentime') / 1000);
 				date.setFullYear(date.getFullYear() + 34);
 				infotime = "<div><b>Time: </b>" + date.toString();
