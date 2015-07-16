@@ -221,8 +221,6 @@
 			</div>
 	<hr>
 
-	<h4>Area Selection</h4>
-
 	<button title="Places a draggable box which can then be used to query a specific section of the map." id="dragbtn" type="button" data-toggle="buttons" class="btn btn-default full-width-btn" style="color: #337ab7"><span class="add-on"></span><strong>Area Selection</strong></button>
 	<button title="Analyzes the area inside the box and displays resulting information." id="analyzebtn" type="button" class="btn btn-default full-width-btn" style="color: #337ab7"><span class="add-on"></span><strong>Analyze</strong></button>
 
@@ -230,12 +228,33 @@
 	<hr>
 
 	<div id="routeSelection">
-
+	
 		<h4>Route Selection</h4>
+		
+		<label for="start"><h4>A</h4></label>
+
+		<select title="Select a starting point for a route to analyze." name="start" id="start" class="btn btn-default" style="background-color: white; width: 200px">
+			<option selected="selected">None</option>y
+			<option>PF Changs</option>
+			<option>Law Quadrangle</option>
+			<option>City Hall</option>
+		</select>
+		<br>
+		<label for="end"><h4>B</h4></label>
+
+		<select title="Select an ending point for a route to analyze." name="end" id="end" class="btn btn-default" style="width:200px; background-color: white">
+			<option selected="selected">None</option>
+			<option>Stadium</option>
+			<option>Miller Nature Area</option>
+			<option>Ann Arbor Municipal Airport</option>
+		</select>
+
 		<p></p>
 		<div id="routeButtons" style="padding-top: 5px">
-			<button data-toggle="buttons" title="Places start and end markers on the map."id="routeSelect" type="button" class="btn btn-default full-width-btn" style="color: #337ab7"><strong>Route Selection</strong></button>
+			<button title="Places start and end markers on the map."id="routeSelect" type="button" class="btn btn-default full-width-btn" style="color: #337ab7"><strong>Route Selection</strong></button>
 			<button title="Finds routes between the start-and-end points and displays resulting information."id="calcRoute" type="button" class="btn btn-default full-width-btn" style="color: #337ab7"><strong>Calculate Route</strong></button>
+			<!--
+	        <button title="Removes routes from the map."id="clearRoute" type="button" class="btn btn-default full-width-btn" style="color: #337ab7"><strong>Clear Route</strong></button>-->
 		</div>
 	</div>
 </div>
