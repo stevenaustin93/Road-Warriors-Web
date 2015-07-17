@@ -123,7 +123,7 @@ function placeRouteMarks(clicked) {
 		$('#calcRoute').prop('disabled', true);
 		startMark.setMap(null);
 		endMark.setMap(null);
-		clearRoutes();
+		if (plottedRoutes != null) clearRoutes();
 		routed = false;
 	}
 }
