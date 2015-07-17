@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>TIS: Dashboard</title>
+	<title>TMI: Dashboard</title>
 
 	<style>
 	html, body, #map-canvas, #dashBoardDiv {
@@ -68,7 +68,7 @@
 		z-index: 1;
 		height: 50px;
 		width: 100%;
-		background-color: rgba(255, 255, 255, 0.99);
+		background-color: rgba(255, 255, 255, 1);
 		pointer-events: none;
 
 	}
@@ -97,15 +97,15 @@
 	}
 
 	#TIS {
-		margin-bottom: auto;
-		margin-top: 6.5px;
-		padding-left: 5px;
-		margin-left: 44%;
-		line-height: 1.1;
-		color: dimgrey;
+        margin-bottom: auto;
+        margin-top: 6.5px;
+        padding-left: 5px;
+        margin-left: 35%;
         font-family: 'Century Gothic', helvetica;
-
-	}
+        font-weight: normal; 
+        color: dimgrey; 
+        font-size: 30px;      
+    }
 
 	#routeSelection {
 		padding-top: 0px;
@@ -182,7 +182,7 @@
 </head>
 <body>
 	<div id="topBar">
-		<h2 id="TIS"><em>Traffic Information System</em></h2>
+		<h2 id="TIS">Traffic Management Information</h2>
 		<ul id="navTabs" class="nav nav-tabs" data-step="1" data-intro="Welcome To The Traffic Navigation System">
 
 			<li title="Displays an interactive map with controls to view various safety aspects." role="presentation" class="active"><a href="index.html"><strong>Dashboard</strong></a></li>
